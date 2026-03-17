@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo — ZonaPixel</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="../index.html" class="navbar-brand"><span class="logo-dot"></span>ZonaPixel</a>
+    <div class="nav-links">
+      <a href="../index.html">Inicio</a>
+      <a href="./catalogo.html" class="active">Catálogo</a>
+      <a href="./resenas.html">Reseñas</a>
+      <a href="./opiniones.html">Opiniones</a>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-icon-btn"><i class="fas fa-search"></i></button>
+      <a href="carrito.html" class="nav-icon-btn"><i class="fas fa-shopping-cart"></i><span class="badge-count">3</span></a>
+      <a href="login.html" class="btn-nav-login">Iniciar sesión</a>
+    </div>
+    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-overlay"></div>
+  <div class="mobile-nav-drawer">
+    <button class="mobile-nav-close" id="mobileNavClose"><i class="fas fa-times"></i></button>
+    <div class="mobile-nav-links">
+      <a href="../index.html">Inicio</a>
+      <a href="./catalogo.html">Catálogo</a>
+      <a href="./resenas.html">Reseñas</a>
+      <a href="./opiniones.html">Opiniones</a>
+    </div>
+  </div>
+</div>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb-nav">
+      <a href="../index.html">Inicio</a><span>/</span><span style="color:var(--white)">Catálogo</span>
+    </div>
+    <h1 class="page-hero-title">Catálogo completo</h1>
+    <p class="page-hero-sub">+8,000 productos — Videojuegos, periféricos y hardware gamer</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="catalog-layout">
+
+    <!-- SIDEBAR FILTERS -->
+    <aside class="filters-sidebar">
+      <div class="filter-card">
+        <div class="filter-title">Categoría <span class="filter-arrow" style="transition:transform 0.3s"><i class="fas fa-chevron-down" style="font-size:11px"></i></span></div>
+        <div class="filter-group">
+          <label class="filter-check"><input type="checkbox" checked /> Videojuegos</label>
+          <label class="filter-check"><input type="checkbox" /> Periféricos</label>
+          <label class="filter-check"><input type="checkbox" /> Hardware</label>
+          <label class="filter-check"><input type="checkbox" /> Accesorios</label>
+          <label class="filter-check"><input type="checkbox" /> Consolas</label>
+        </div>
+      </div>
+      <div class="filter-card">
+        <div class="filter-title">Plataforma</div>
+        <div class="filter-group">
+          <label class="filter-check"><input type="checkbox" checked /> PlayStation 5</label>
+          <label class="filter-check"><input type="checkbox" checked /> Xbox Series X</label>
+          <label class="filter-check"><input type="checkbox" /> Nintendo Switch</label>
+          <label class="filter-check"><input type="checkbox" /> PC / Steam</label>
+          <label class="filter-check"><input type="checkbox" /> PlayStation 4</label>
+        </div>
+      </div>
+      <div class="filter-card">
+        <div class="filter-title">Género</div>
+        <div class="filter-group">
+          <label class="filter-check"><input type="checkbox" /> Acción / Aventura</label>
+          <label class="filter-check"><input type="checkbox" /> RPG</label>
+          <label class="filter-check"><input type="checkbox" /> Terror / Survival</label>
+          <label class="filter-check"><input type="checkbox" /> Deportes</label>
+          <label class="filter-check"><input type="checkbox" /> Estrategia</label>
+          <label class="filter-check"><input type="checkbox" /> Indie</label>
+        </div>
+      </div>
+      <div class="filter-card">
+        <div class="filter-title">Precio (COP)</div>
+        <div class="price-range-wrap">
+          <input type="range" class="price-range" min="0" max="1500000" value="1500000" />
+          <div class="price-labels"><span>$0</span><span>$1.500.000</span></div>
+        </div>
+      </div>
+      <div class="filter-card">
+        <div class="filter-title">Calificación</div>
+        <div class="filter-group">
+          <label class="filter-check"><input type="checkbox" /> ★★★★★ (9+)</label>
+          <label class="filter-check"><input type="checkbox" /> ★★★★☆ (7-9)</label>
+          <label class="filter-check"><input type="checkbox" /> ★★★☆☆ (5-7)</label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="catalog-main">
+      <div class="category-strip" style="margin-bottom:20px">
+        <button class="cat-chip active">Todos</button>
+        <button class="cat-chip">Videojuegos</button>
+        <button class="cat-chip">Periféricos</button>
+        <button class="cat-chip">Hardware</button>
+        <button class="cat-chip">Ofertas</button>
+      </div>
+
+      <div class="catalog-toolbar">
+        <span class="catalog-count">Mostrando <strong style="color:var(--white)">48</strong> de 8,241 productos</span>
+        <div class="catalog-sort">
+          <select class="sort-select">
+            <option>Más populares</option>
+            <option>Precio: menor a mayor</option>
+            <option>Precio: mayor a menor</option>
+            <option>Más recientes</option>
+            <option>Mejor calificación</option>
+          </select>
+          <div class="view-btns">
+            <button class="view-btn active" title="Cuadrícula"><i class="fas fa-th-large"></i></button>
+            <button class="view-btn" title="Lista"><i class="fas fa-list"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="products-grid">
+        <!-- 8 product cards -->
+        <a href="producto.html" class="product-card">
+          <div class="product-img-wrap">
+            <span class="product-badge"><span class="badge badge-new">Nuevo</span></span>
+            <button class="product-wishlist"><i class="far fa-heart"></i></button>
+            <img src="https://upload.wikimedia.org/wikipedia/en/f/fb/The_Legend_of_Zelda_Tears_of_the_Kingdom_cover.jpg" alt="Zelda" />
+            <div class="product-overlay"><button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button></div>
+          </div>
+          <div class="product-body">
+            <div class="product-platform">Nintendo Switch</div>
+            <div class="product-name">Zelda: Tears of the Kingdom</div>
+            <div class="product-footer">
+              <div><span class="product-price">$219.900</span></div>
+              <div class="product-rating"><span class="star">★</span> 9.8</div>
+            </div>
+          </div>
+        </a>
+        <a href="producto.html" class="product-card">
+          <div class="product-img-wrap">
+            <span class="product-badge"><span class="badge badge-sale">-25%</span></span>
+            <button class="product-wishlist"><i class="far fa-heart"></i></button>
+            <img src="https://image.api.playstation.com/vulcan/ap/rnd/202306/1219/e66c4ae18c5d8e3986a24599b293162a6f5c9eba22968d2c.jpg" alt="Spider-Man 2" />
+            <div class="product-overlay"><button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button></div>
+          </div>
+          <div class="product-body">
+            <div class="product-platform">PlayStation 5</div>
+            <div class="product-name">Marvel's Spider-Man 2</div>
+            <div class="product-footer">
+              <div><span class="product-price">$179.900</span> <span class="product-price-old">$239.900</span></div>
+              <div class="product-rating"><span class="star">★</span> 9.1</div>
+            </div>
+          </div>
+        </a>
+        <a href="producto.html" class="product-card">
+          <div class="product-img-wrap">
+            <span class="product-badge"><span class="badge badge-hot">Hot</span></span>
+            <button class="product-wishlist"><i class="far fa-heart"></i></button>
+            <img src="https://image.api.playstation.com/vulcan/ap/rnd/202302/2321/ba706e54d68d10a0eb6ab7c36cdad9178c58b7fb7bb03d28.png" alt="BG3" />
+            <div class="product-overlay"><button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button></div>
+          </div>
+          <div class="product-body">
+            <div class="product-platform">PC / PS5</div>
+            <div class="product-name">Baldur's Gate 3</div>
+            <div class="product-footer">
+              <div><span class="product-price">$189.900</span></div>
+              <div class="product-rating"><span class="star">★</span> 9.6</div>
+            </div>
+          </div>
+        </a>
+        <a href="producto.html" class="product-card">
+          <div class="product-img-wrap">
+            <button class="product-wishlist"><i class="far fa-heart"></i></button>
+            <img src="https://cdn1.epicgames.com/offer/c4763f236d08423eb47b4c3008779c84/EGS_AlanWake2_RemedyEntertainment_S2_1200x1600-c7c8091ddac0f9669c8e5905bca88aaa" alt="Alan Wake 2" />
+            <div class="product-overlay"><button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button></div>
+          </div>
+          <div class="product-body">
+            <div class="product-platform">PC / PS5 / Xbox</div>
+            <div class="product-name">Alan Wake 2</div>
+            <div class="product-footer">
+              <div><span class="product-price">$159.900</span></div>
+              <div class="product-rating"><span class="star">★</span> 9.0</div>
+            </div>
+          </div>
+        </a>
+        <a href="producto.html" class="product-card">
+          <div class="product-img-wrap">
+            <span class="product-badge"><span class="badge badge-new">Nuevo</span></span>
+            <button class="product-wishlist"><i class="far fa-heart"></i></button>
+            <img src="https://images.unsplash.com/photo-1527814050087-3793815479db?w=500&q=80" alt="Teclado" />
+            <div class="product-overlay"><button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button></div>
+          </div>
+          <div class="product-body">
+            <div class="product-platform">Teclado Mecánico</div>
+            <div class="product-name">HyperX Alloy Origins Core TKL</div>
+            <div class="product-footer">
+              <div><span class="product-price">$289.900</span></div>
+              <div class="product-rating"><span class="star">★</span> 9.2</div>
+            </div>
+          </div>
+        </a>
+        <a href="producto.html" class="product-card">
+          <div class="product-img-wrap">
+            <span class="product-badge"><span class="badge badge-sale">-20%</span></span>
+            <button class="product-wishlist"><i class="far fa-heart"></i></button>
+            <img src="https://images.unsplash.com/photo-1596443686812-2f45229eebc3?w=500&q=80" alt="Mouse" />
+            <div class="product-overlay"><button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button></div>
+          </div>
+          <div class="product-body">
+            <div class="product-platform">Mouse Gaming</div>
+            <div class="product-name">Logitech G Pro X Superlight 2</div>
+            <div class="product-footer">
+              <div><span class="product-price">$359.900</span> <span class="product-price-old">$449.900</span></div>
+              <div class="product-rating"><span class="star">★</span> 9.5</div>
+            </div>
+          </div>
+        </a>
+        <a href="producto.html" class="product-card">
+          <div class="product-img-wrap">
+            <button class="product-wishlist"><i class="far fa-heart"></i></button>
+            <img src="https://image.api.playstation.com/vulcan/ap/rnd/202210/0706/EVWyZD63pahuh95eKloFaJuC.png" alt="RE4" />
+            <div class="product-overlay"><button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button></div>
+          </div>
+          <div class="product-body">
+            <div class="product-platform">PS5 / Xbox / PC</div>
+            <div class="product-name">Resident Evil 4 Remake</div>
+            <div class="product-footer">
+              <div><span class="product-price">$139.900</span></div>
+              <div class="product-rating"><span class="star">★</span> 9.3</div>
+            </div>
+          </div>
+        </a>
+        <a href="producto.html" class="product-card">
+          <div class="product-img-wrap">
+            <span class="product-badge"><span class="badge badge-hot">Hot</span></span>
+            <button class="product-wishlist"><i class="far fa-heart"></i></button>
+            <img src="https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/store/software/switch/70010000068688/1c5583f6bbce5bccdc923c25c35ba8f42128b55df84f4a2fbeea74b6d1d1516e" alt="Mario Wonder" />
+            <div class="product-overlay"><button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button></div>
+          </div>
+          <div class="product-body">
+            <div class="product-platform">Nintendo Switch</div>
+            <div class="product-name">Super Mario Bros. Wonder</div>
+            <div class="product-footer">
+              <div><span class="product-price">$199.900</span></div>
+              <div class="product-rating"><span class="star">★</span> 9.4</div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="pagination-wrap">
+        <button class="page-btn"><i class="fas fa-chevron-left"></i></button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">...</button>
+        <button class="page-btn">24</button>
+        <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <span class="footer-copy">© 2025 ZonaPixel. Todos los derechos reservados.</span>
+      <div class="footer-legal">
+        <a href="#">Privacidad</a><a href="#">Términos</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="../js/main.js"></script>
+</body>
+</html>

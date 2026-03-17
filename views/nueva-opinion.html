@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nueva Opinión — ZonaPixel</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="../index.html" class="navbar-brand"><span class="logo-dot"></span>ZonaPixel</a>
+    <div class="nav-links"><a href="../index.html">Inicio</a><a href="./catalogo.html">Catálogo</a><a href="./opiniones.html">Opiniones</a></div>
+    <div class="nav-actions"><a href="carrito.html" class="nav-icon-btn"><i class="fas fa-shopping-cart"></i></a></div>
+  </div>
+</nav>
+
+<div class="page-hero" style="padding:24px 0 20px">
+  <div class="container">
+    <div class="breadcrumb-nav">
+      <a href="../index.html">Inicio</a><span>/</span><a href="opiniones.html">Opiniones</a><span>/</span><span style="color:var(--white)">Nueva opinión</span>
+    </div>
+    <h1 class="page-hero-title">Escribe tu opinión</h1>
+    <p class="page-hero-sub">Comparte tu experiencia con la comunidad</p>
+  </div>
+</div>
+
+<section class="section-gap">
+  <div class="container" style="max-width:700px">
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-xl); padding:40px">
+
+      <div class="form-field">
+        <label>Producto</label>
+        <select class="form-input" style="cursor:pointer">
+          <option value="">Selecciona un producto...</option>
+          <option>Baldur's Gate 3</option>
+          <option>Zelda: Tears of the Kingdom</option>
+          <option>Alan Wake 2</option>
+          <option>Resident Evil 4 Remake</option>
+          <option>Spider-Man 2</option>
+          <option>Logitech G Pro X Superlight 2</option>
+          <option>HyperX Alloy Origins TKL</option>
+          <option>Otro...</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label>Plataforma</label>
+        <div class="option-chips" style="margin-top:0">
+          <button class="option-chip active">PC</button>
+          <button class="option-chip">PlayStation 5</button>
+          <button class="option-chip">Xbox Series X</button>
+          <button class="option-chip">Nintendo Switch</button>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label>Tu calificación</label>
+        <div style="display:flex; gap:8px; margin-top:4px; font-size:28px; color:var(--border-light)" id="starRating">
+          <span style="cursor:pointer" data-val="1">★</span>
+          <span style="cursor:pointer" data-val="2">★</span>
+          <span style="cursor:pointer" data-val="3">★</span>
+          <span style="cursor:pointer" data-val="4">★</span>
+          <span style="cursor:pointer" data-val="5">★</span>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label>Título de tu opinión</label>
+        <input type="text" class="form-input" placeholder="Ej: La mejor compra del año" />
+      </div>
+
+      <div class="form-field">
+        <label>Tu opinión</label>
+        <textarea class="form-input" rows="6" placeholder="Cuéntanos tu experiencia con el producto. Sé honesto y detallado..." style="resize:vertical"></textarea>
+      </div>
+
+      <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:8px">
+        <a href="./opiniones.html" class="btn-secondary" style="display:inline-flex; align-items:center; gap:6px; text-decoration:none">Cancelar</a>
+        <button class="btn-primary"><i class="fas fa-paper-plane"></i> Publicar opinión</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-bottom" style="border-top:1px solid var(--border); padding-top:24px">
+      <span class="footer-copy">© 2025 ZonaPixel.</span>
+      <div class="footer-legal"><a href="#">Privacidad</a><a href="#">Términos</a></div>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="../js/main.js"></script>
+</body>
+</html>

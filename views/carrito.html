@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carrito — ZonaPixel</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="../index.html" class="navbar-brand"><span class="logo-dot"></span>ZonaPixel</a>
+    <div class="nav-links">
+      <a href="../index.html">Inicio</a>
+      <a href="./catalogo.html">Catálogo</a>
+      <a href="./resenas.html">Reseñas</a>
+      <a href="./opiniones.html">Opiniones</a>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-icon-btn"><i class="fas fa-search"></i></button>
+      <a href="carrito.html" class="nav-icon-btn"><i class="fas fa-shopping-cart"></i><span class="badge-count">3</span></a>
+      <a href="login.html" class="btn-nav-login">Iniciar sesión</a>
+    </div>
+    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-overlay"></div>
+  <div class="mobile-nav-drawer">
+    <button class="mobile-nav-close" id="mobileNavClose"><i class="fas fa-times"></i></button>
+    <div class="mobile-nav-links"><a href="../index.html">Inicio</a><a href="catalogo.html">Catálogo</a></div>
+  </div>
+</div>
+
+<div class="page-hero pt-0 pb-20">
+  <div class="container">
+    <div class="breadcrumb-nav">
+      <a href="../index.html">Inicio</a><span>/</span><span class="text-white">Carrito de compras</span>
+    </div>
+    <h1 class="page-hero-title">Tu carrito</h1>
+    <p class="page-hero-sub">3 productos seleccionados</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="cart-layout">
+
+    <!-- ITEMS -->
+    <div>
+      <div class="cart-table-header">
+        <span>Producto</span>
+        <span>Precio</span>
+        <span>Cantidad</span>
+        <span>Total</span>
+        <span></span>
+      </div>
+
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <img src="https://image.api.playstation.com/vulcan/ap/rnd/202302/2321/ba706e54d68d10a0eb6ab7c36cdad9178c58b7fb7bb03d28.png" class="cart-item-img" alt="" />
+          <div>
+            <div class="cart-item-name">Baldur's Gate 3 — Edición Estándar</div>
+            <div class="cart-item-platform">PC (Steam)</div>
+          </div>
+        </div>
+        <div class="cart-item-price">$189.900</div>
+        <div>
+          <div class="qty-control">
+            <button class="qty-btn qty-minus h-36">−</button>
+            <input type="number" class="qty-input" value="1" class="h-36" />
+            <button class="qty-btn qty-plus h-36">+</button>
+          </div>
+        </div>
+        <div class="cart-item-total">$189.900</div>
+        <button class="cart-remove"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <img src="https://upload.wikimedia.org/wikipedia/en/f/fb/The_Legend_of_Zelda_Tears_of_the_Kingdom_cover.jpg" class="cart-item-img" alt="" />
+          <div>
+            <div class="cart-item-name">Zelda: Tears of the Kingdom</div>
+            <div class="cart-item-platform">Nintendo Switch</div>
+          </div>
+        </div>
+        <div class="cart-item-price">$219.900</div>
+        <div>
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" style="height:36px">−</button>
+            <input type="number" class="qty-input" value="1" style="height:36px" />
+            <button class="qty-btn qty-plus" style="height:36px">+</button>
+          </div>
+        </div>
+        <div class="cart-item-total">$219.900</div>
+        <button class="cart-remove"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <img src="https://images.unsplash.com/photo-1596443686812-2f45229eebc3?w=500&q=80" class="cart-item-img" alt="" />
+          <div>
+            <div class="cart-item-name">Logitech G Pro X Superlight 2</div>
+            <div class="cart-item-platform">Periférico — Mouse Gaming</div>
+          </div>
+        </div>
+        <div class="cart-item-price">$359.900</div>
+        <div>
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" style="height:36px">−</button>
+            <input type="number" class="qty-input" value="1" style="height:36px" />
+            <button class="qty-btn qty-plus" style="height:36px">+</button>
+          </div>
+        </div>
+        <div class="cart-item-total">$359.900</div>
+        <button class="cart-remove"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div style="margin-top:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px">
+<a href="./catalogo.html" class="btn-secondary" style="display:inline-flex; align-items:center; gap:8px; text-decoration:none">
+          <i class="fas fa-arrow-left"></i> Seguir comprando
+        </a>
+      </div>
+    </div>
+
+    <!-- ORDER SUMMARY -->
+    <div>
+      <div class="order-summary">
+        <div class="order-summary-title">Resumen del pedido</div>
+        <div class="summary-row"><span>Subtotal (3 ítems)</span><span>$769.700</span></div>
+        <div class="summary-row"><span>Envío</span><span style="color:#22c55e">Gratis</span></div>
+        <div class="summary-row"><span>Descuento aplicado</span><span style="color:var(--red)">−$50.000</span></div>
+        <div class="summary-row total"><span>Total</span><span>$719.700</span></div>
+
+        <div class="promo-input-row">
+          <input type="text" class="promo-input" placeholder="Código promocional" />
+          <button class="btn-apply">Aplicar</button>
+        </div>
+
+        <button class="btn-checkout">
+          <i class="fas fa-lock"></i> &nbsp;Proceder al pago
+        </button>
+
+        <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-top:16px; font-size:12px; color:var(--muted)">
+          <i class="fas fa-shield-alt"></i> Pago 100% seguro con SSL
+        </div>
+
+        <div style="display:flex; gap:8px; justify-content:center; margin-top:12px; font-size:11px; color:var(--muted)">
+          <span>💳 Visa</span><span>💳 Mastercard</span><span>💳 PSE</span><span>💳 Nequi</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-bottom" style="border-top:1px solid var(--border); padding-top:24px; margin-top:32px">
+      <span class="footer-copy">© 2025 ZonaPixel.</span>
+      <div class="footer-legal"><a href="#">Privacidad</a><a href="#">Términos</a></div>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="../js/main.js"></script>
+</body>
+</html>

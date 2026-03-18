@@ -6,11 +6,13 @@ export function initDashboardNav() {
   const dashContent = document.getElementById('dashContent');
   const iframeUsuarios = document.getElementById('dashIframeUsuarios');
   const iframeProductos = document.getElementById('dashIframeProductos');
+  const iframeResenas = document.getElementById('dashIframeResenas');
 
   const hideAll = () => {
     dashContent?.classList.add('is-hidden');
     iframeUsuarios?.classList.add('is-hidden');
     iframeProductos?.classList.add('is-hidden');
+    iframeResenas?.classList.add('is-hidden');
   };
 
   const show = (section) => {
@@ -18,6 +20,8 @@ export function initDashboardNav() {
     if (section === 'usuarios') iframeUsuarios?.classList.remove('is-hidden');
     else if (section === 'productos')
       iframeProductos?.classList.remove('is-hidden');
+    else if (section === 'resenas')
+      iframeResenas?.classList.remove('is-hidden');
     else dashContent?.classList.remove('is-hidden');
   };
 

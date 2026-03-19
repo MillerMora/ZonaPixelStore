@@ -778,6 +778,33 @@ footer {
   border: 1px solid var(--border);
 }
 
+/* Bootstrap table dark overrides */
+.dashboard-page .table {
+  --bs-table-bg: var(--black);
+  --bs-table-color: var(--white);
+  background-color: var(--black) !important;
+  color: var(--white) !important;
+}
+.dashboard-page .table th {
+  background-color: var(--surface) !important;
+  color: var(--white) !important;
+  border-color: var(--border) !important;
+}
+.dashboard-page .table td {
+  background-color: transparent !important;
+  color: var(--white) !important;
+  border-color: rgba(42,42,51,0.5) !important;
+}
+.dashboard-page tbody tr {
+  background-color: var(--surface-2) !important;
+}
+.dashboard-page tbody tr:nth-child(even) {
+  background-color: var(--surface-3) !important;
+}
+.dashboard-page tbody tr:hover {
+  background-color: var(--surface) !important;
+}
+
 .dashboard-page .form-label {
   font-size: .85rem;
   font-weight: 600;

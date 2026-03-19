@@ -44,9 +44,11 @@ function actualizar_producto ($id, $categoria, $marca, $nombre, $descripcion_cor
 
 function eliminar_producto ($id){
     global $BD;
+    mysqli_query($BD, "SET FOREIGN_KEY_CHECKS = 0");
     $sql = mysqli_prepare($BD, "DELETE FROM productos WHERE id_producto = ?");
     mysqli_stmt_bind_param($sql, "i", $id);
     $resultado = mysqli_stmt_execute($sql);
+    mysqli_query($BD, "SET FOREIGN_KEY_CHECKS = 1");
     return $resultado ;
 }
 

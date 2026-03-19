@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Baldur's Gate 3 — ZonaPixel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
@@ -38,13 +39,13 @@
   </div>
 </div>
 
-<div class="page-hero" style="padding:24px 0 20px">
+<div class="page-hero py-4">
   <div class="container">
     <div class="breadcrumb-nav">
       <a href="../index.html">Inicio</a><span>/</span>
       <a href="catalogo.html">Catálogo</a><span>/</span>
       <a href="catalogo.html">RPG</a><span>/</span>
-      <span style="color:var(--white)">Baldur's Gate 3</span>
+      <span class="text-white">Baldur's Gate 3</span>
     </div>
   </div>
 </div>
@@ -76,7 +77,7 @@
     <!-- INFO -->
     <div class="product-detail-info">
       <div class="product-detail-platform">
-        <span>RPG</span> <span style="color:var(--border)">·</span>
+        <span>RPG</span> <span class="text-muted">·</span>
         <span class="badge badge-hot">GOTY 2023</span>
       </div>
       <h1 class="product-detail-title">Baldur's Gate 3</h1>
@@ -126,23 +127,23 @@
         <li><span class="meta-key">Lanzamiento</span> 3 agosto 2023</li>
         <li><span class="meta-key">Idioma</span> Español incluido</li>
         <li><span class="meta-key">Multijugador</span> Co-op hasta 4 jugadores</li>
-        <li><span class="meta-key">Envío</span> <span style="color:#22c55e"><i class="fas fa-check"></i> Gratis · 24–48 h</span></li>
+        <li><span class="meta-key">Envío</span> <span class="fg-success"><i class="fas fa-check"></i> Gratis · 24–48 h</span></li>
       </ul>
     </div>
   </div>
 
   <!-- OPINIONS SECTION -->
-  <section style="padding:40px 0 80px">
+  <section class="py-5">
     <div class="section-header">
       <div>
         <div class="section-label">Comunidad</div>
         <h2 class="section-title">Opiniones de usuarios</h2>
       </div>
-      <a href="nueva-opinion.html" class="btn-primary" style="text-decoration:none">
+      <a href="nueva-opinion.html" class="btn-primary text-decoration-none">
         <i class="fas fa-pen"></i> Escribir opinión
       </a>
     </div>
-    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:20px">
+    <div class="d-grid gap-3" style="grid-template-columns:repeat(auto-fill, minmax(280px,1fr));">
       <div class="opinion-card">
         <div class="opinion-card-header">
           <div class="opinion-avatar">PM</div>
@@ -174,8 +175,8 @@
         <p class="opinion-text">"El juego que más me ha enganchado en años. Algunos bugs menores al inicio pero Larian los fue arreglando rápido. Muy recomendado."</p>
       </div>
     </div>
-    <div style="text-align:center; margin-top:28px">
-      <a href="opiniones.html" class="btn-secondary" style="display:inline-flex; align-items:center; gap:8px">
+    <div class="text-center mt-4">
+      <a href="opiniones.html" class="btn-secondary d-inline-flex align-items-center gap-2">
         Ver todas las opiniones <i class="fas fa-arrow-right"></i>
       </a>
     </div>
@@ -192,5 +193,6 @@
 </footer>
 
 <script type="module" src="../js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

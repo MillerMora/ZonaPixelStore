@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Catálogo — ZonaPixel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
@@ -43,7 +44,7 @@
 <div class="page-hero">
   <div class="container">
     <div class="breadcrumb-nav">
-      <a href="../index.html">Inicio</a><span>/</span><span style="color:var(--white)">Catálogo</span>
+      <a href="../index.html">Inicio</a><span>/</span><span class="text-white">Catálogo</span>
     </div>
     <h1 class="page-hero-title">Catálogo completo</h1>
     <p class="page-hero-sub">+8,000 productos — Videojuegos, periféricos y hardware gamer</p>
@@ -56,7 +57,7 @@
     <!-- SIDEBAR FILTERS -->
     <aside class="filters-sidebar">
       <div class="filter-card">
-        <div class="filter-title">Categoría <span class="filter-arrow" style="transition:transform 0.3s"><i class="fas fa-chevron-down" style="font-size:11px"></i></span></div>
+        <div class="filter-title">Categoría <span class="filter-arrow"><i class="fas fa-chevron-down" style="font-size:11px"></i></span></div>
         <div class="filter-group">
           <label class="filter-check"><input type="checkbox" checked /> Videojuegos</label>
           <label class="filter-check"><input type="checkbox" /> Periféricos</label>
@@ -105,7 +106,7 @@
 
     <!-- MAIN CONTENT -->
     <div class="catalog-main">
-      <div class="category-strip" style="margin-bottom:20px">
+      <div class="category-strip mb-3">
         <button class="cat-chip active">Todos</button>
         <button class="cat-chip">Videojuegos</button>
         <button class="cat-chip">Periféricos</button>
@@ -114,7 +115,7 @@
       </div>
 
       <div class="catalog-toolbar">
-        <span class="catalog-count">Mostrando <strong style="color:var(--white)">48</strong> de 8,241 productos</span>
+        <span class="catalog-count">Mostrando <strong class="text-white">48</strong> de 8,241 productos</span>
         <div class="catalog-sort">
           <select class="sort-select">
             <option>Más populares</option>
@@ -275,7 +276,7 @@
 
 <footer>
   <div class="container">
-    <div class="footer-bottom" style="border-top:none;padding-top:0">
+    <div class="footer-bottom pt-0" style="border-top:none;">
       <span class="footer-copy">© 2025 ZonaPixel. Todos los derechos reservados.</span>
       <div class="footer-legal">
         <a href="#">Privacidad</a><a href="#">Términos</a>
@@ -285,5 +286,6 @@
 </footer>
 
 <script type="module" src="../js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

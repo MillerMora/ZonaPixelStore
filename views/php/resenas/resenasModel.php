@@ -29,8 +29,8 @@ function crear_resena($imagen,$id_producto,$autor, $titulo,$resumen,$contenido,$
 }
 function actualizar_resena($id,$imagen,$id_producto,$autor, $titulo,$resumen,$contenido,$calificacion,$publicada){
     global $BD;
-    $sql = mysqli_prepare($BD, "UPDATE `resenas` SET `producto_id`=?,`autor_id`=?,`titulo`=?,`resumen`=?,`contenido`=?,`calificacion`=?,`imagen_portada`=?,`publicada`=?' WHERE id_resena = ?");
-    mysqli_stmt_bind_param($sql, "iisssdsis", $id_producto,$autor,$titulo,$resumen,$contenido,$calificacion,$imagen,$publicada,$id);
+    $sql = mysqli_prepare($BD, "UPDATE `resenas` SET `producto_id`=?,`autor_id`=?,`titulo`=?,`resumen`=?,`contenido`=?,`calificacion`=?,`imagen_portada`=?,`publicada`=? WHERE id_resena = ?");
+    mysqli_stmt_bind_param($sql, "iisssdsii", $id_producto,$autor,$titulo,$resumen,$contenido,$calificacion,$imagen,$publicada,$id);
     $resultado = mysqli_stmt_execute($sql);
     return $resultado;
 }

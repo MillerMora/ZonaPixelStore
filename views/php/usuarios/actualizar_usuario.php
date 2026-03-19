@@ -11,10 +11,11 @@ $fila = consultar_usuarios_id($id);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actualizar Usuario — ZonaPixel Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../../css/style.css">
 </head>
-<body>
+<body class="dashboard-page">
 
 <div class="page-hero">
     <div class="container">
@@ -28,11 +29,11 @@ $fila = consultar_usuarios_id($id);
     </div>
 </div>
 
-<div class="container" style="padding:40px 0 80px">
+<div class="container dashboard-section">
     <div class="dash-card">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px">
-            <span style="font-family:var(--font-display); font-weight:800; font-size:1.1rem">Editar Usuario</span>
-            <a href="./usuario.php" class="btn-primary" style="font-size:13px; padding:8px 20px">
+        <div class="dashboard-card-header d-flex align-items-center justify-content-between">
+            <span class="dashboard-card-title">Editar Usuario</span>
+            <a href="./usuario.php" class="btn-primary btn btn-sm" style="font-size:13px; padding:8px 20px">
                 <i class="fas fa-arrow-left"></i> Volver a Usuarios
             </a>
         </div>
@@ -41,56 +42,51 @@ $fila = consultar_usuarios_id($id);
             <input type="hidden" name="id_usuario" value="<?= $fila['id_usuario'] ?>">
             
             <div class="form-field">
-                <label style="display:block; font-size:.85rem; font-weight:600; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.5px;">Nombre</label>
-                <input type="text" name="nombre" value="<?= htmlspecialchars($fila['nombre']) ?>" required 
-                       style="width:100%; padding:12px 16px; background:var(--surface-2); border:1px solid var(--border); color:var(--white); border-radius:10px; font-size:.95rem; transition:border-color var(--transition);">
+                <label class="form-label">Nombre</label>
+                <input type="text" name="nombre" value="<?= htmlspecialchars($fila['nombre']) ?>" required class="form-control">
             </div>
 
             <div class="form-field">
-                <label style="display:block; font-size:.85rem; font-weight:600; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.5px;">Apellido</label>
-                <input type="text" name="apellido" value="<?= htmlspecialchars($fila['apellido']) ?>" required 
-                       style="width:100%; padding:12px 16px; background:var(--surface-2); border:1px solid var(--border); color:var(--white); border-radius:10px; font-size:.95rem; transition:border-color var(--transition);">
+                <label class="form-label">Apellido</label>
+                <input type="text" name="apellido" value="<?= htmlspecialchars($fila['apellido']) ?>" required class="form-control">
             </div>
 
             <div class="form-field">
-                <label style="display:block; font-size:.85rem; font-weight:600; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.5px;">Username</label>
-                <input type="text" name="username" value="<?= htmlspecialchars($fila['username']) ?>" required 
-                       style="width:100%; padding:12px 16px; background:var(--surface-2); border:1px solid var(--border); color:var(--white); border-radius:10px; font-size:.95rem; transition:border-color var(--transition);">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" value="<?= htmlspecialchars($fila['username']) ?>" required class="form-control">
             </div>
 
             <div class="form-field">
-                <label style="display:block; font-size:.85rem; font-weight:600; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.5px;">Correo Electrónico</label>
-                <input type="email" name="email" value="<?= htmlspecialchars($fila['email']) ?>" required 
-                       style="width:100%; padding:12px 16px; background:var(--surface-2); border:1px solid var(--border); color:var(--white); border-radius:10px; font-size:.95rem; transition:border-color var(--transition);">
+                <label class="form-label">Correo Electrónico</label>
+                <input type="email" name="email" value="<?= htmlspecialchars($fila['email']) ?>" required class="form-control">
             </div>
 
             <div class="form-field">
-                <label style="display:block; font-size:.85rem; font-weight:600; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.5px;">Nueva Contraseña (dejar vacía para no cambiar)</label>
-                <input type="password" name="password" placeholder="Nueva contraseña" 
-                       style="width:100%; padding:12px 16px; background:var(--surface-2); border:1px solid var(--border); color:var(--white); border-radius:10px; font-size:.95rem; transition:border-color var(--transition);">
-                <small style="color:var(--muted);">Dejar vacío para mantener la contraseña actual</small>
+                <label class="form-label">Nueva Contraseña (dejar vacía para no cambiar)</label>
+                <input type="password" name="password" placeholder="Nueva contraseña" class="form-control">
+                <small class="form-text">Dejar vacío para mantener la contraseña actual</small>
             </div>
 
             <div class="form-field">
-                <label style="display:block; font-size:.85rem; font-weight:600; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.5px;">Rol</label>
-                <select name="rol_id" required 
-                        style="width:100%; padding:12px 16px; background:var(--surface-2); border:1px solid var(--border); color:var(--white); border-radius:10px; font-size:.95rem; transition:border-color var(--transition);">
+                <label class="form-label">Rol</label>
+                <select name="rol_id" required class="form-select">
                     <option value="1" <?= ($fila['rol_id'] == 1) ? 'selected' : '' ?>>Administrador</option>
                     <option value="2" <?= ($fila['rol_id'] == 2) ? 'selected' : '' ?>>Usuario / Cliente</option>
                     <option value="3" <?= ($fila['rol_id'] == 3) ? 'selected' : '' ?>>Editor</option>
                 </select>
             </div>
 
-            <div style="display:flex; gap:12px; margin-top:28px">
-                <button type="submit" class="btn-primary" style="padding:14px 28px; font-weight:700; font-size:14px;">
+            <div class="d-flex gap-2 mt-4 flex-wrap">
+                <button type="submit" class="btn-primary btn">
                     <i class="fas fa-save"></i> Guardar Cambios
                 </button>
-                <a href="./usuario.php" style="padding:14px 28px; border-radius:var(--radius); border:1px solid var(--border-light); background:transparent; color:var(--white); font-weight:500; font-size:14px; display:inline-flex; align-items:center; justify-content:center; transition:all var(--transition);">Cancelar</a>
+                <a href="./usuario.php" class="btn-outline-theme btn">Cancelar</a>
             </div>
         </form>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 

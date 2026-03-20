@@ -3,7 +3,7 @@
    Dark gaming aesthetic, editorial grid
    ============================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
   --black:       #0a0a0b;
@@ -19,8 +19,8 @@
   --cyan:        #00d4ff;
   --white:       #f5f5f7;
   --muted:       #888898;
-  --font-display:'Syne', sans-serif;
-  --font-body:   'DM Sans', sans-serif;
+--font-display:'Poppins', sans-serif;
+--font-body:   'Inter', sans-serif;
   --radius:      10px;
   --radius-lg:   16px;
   --radius-xl:   24px;
@@ -81,10 +81,15 @@ button, input, select, textarea { font-family: inherit; }
   font-size: 1.4rem;
   font-weight: 800;
   letter-spacing: -0.5px;
+  color: var(--white);
   display: flex;
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
+  transition: color var(--transition);
+}
+.navbar-brand:hover {
+  color: #1e3a8a;
 }
 .navbar-brand .logo-dot { 
   width:8px; height:8px; border-radius:50%; 

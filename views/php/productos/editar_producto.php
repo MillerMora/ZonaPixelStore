@@ -64,9 +64,7 @@ $fila = consultar_producto_id($id);
             </div>
 
             <div class="form-field">
-                <label class="form-label">Descripción Corta</label>
-                <textarea name="descripcion_corta" required rows="2" class="form-control"><?= htmlspecialchars($fila['descripcion_corta'] ?? '') ?></textarea>
-            </div>
+
 
             <div class="form-field">
                 <label class="form-label">Descripción</label>

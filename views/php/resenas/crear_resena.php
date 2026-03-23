@@ -67,9 +67,7 @@ include './resenasModel.php';
             </div>
 
             <div class="form-field">
-                <label class="form-label">Resumen</label>
-                <textarea name="resumen" required rows="3" class="form-control"></textarea>
-            </div>
+
 
             <div class="form-field">
                 <label class="form-label">Contenido</label>

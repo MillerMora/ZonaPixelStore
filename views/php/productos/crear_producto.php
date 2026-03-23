@@ -61,12 +61,7 @@ include './productoModel.php';
             </div>
 
             <div class="form-field">
-                <label class="form-label">Descripción Corta</label>
-                <textarea name="descripcion_corta" required rows="2" class="form-control"></textarea>
-            </div>
 
-            <div class="form-field">
-                <label class="form-label">Descripción</label>
                 <textarea name="descripcion" required rows="5" class="form-control"></textarea>
             </div>
 

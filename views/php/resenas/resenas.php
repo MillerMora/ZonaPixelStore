@@ -40,7 +40,6 @@ $consulta = consultar_resenas() ;
                         <th>Producto</th>
                         <th>autor</th>
                         <th>titulo</th>
-                        <th>resumen</th>
                         <th>contenido</th>
                         <th>calificaciones</th>
                         <th>publicada</th>
@@ -59,7 +58,6 @@ $consulta = consultar_resenas() ;
                             </span>
                         </td>
                         <td><?= $filas['titulo'] ?></td>
-                        <td><?= $filas['resumen'] ?></td>
                         <td><?= $filas['contenido'] ?></td>
                         <td><?= $filas['calificacion'] ?></td>
                         <td><?= $filas['publicada'] ?></td>

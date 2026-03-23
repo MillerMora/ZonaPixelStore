@@ -22,22 +22,22 @@ function consultar_producto_id ($id){
 
 // CRUD
 
-function crear_producto ($categoria, $marca, $nombre, $descripcion_corta, $descripcion, $precio, $precio_original, $stock, $imagen, $destacado, $activo){
+function crear_producto ($categoria, $marca, $nombre, $descripcion, $precio, $precio_original, $stock, $imagen, $destacado, $activo){
     
     global $BD;
-    $sql = mysqli_prepare($BD, "INSERT INTO `productos`(`categoria_id`, `marca_id`, `nombre`, `descripcion_corta`, `descripcion`, `precio`, `precio_original`, `stock`, `imagen_principal`, `destacado`, `activo`) VALUES (?,?,?,?,?,?,?,?,?,?,?)");  
-    mysqli_stmt_bind_param($sql, 'iisssddisii', $categoria, $marca, $nombre, $descripcion_corta, $descripcion, $precio, $precio_original, $stock, $imagen, $destacado, $activo);
+    $sql = mysqli_prepare($BD, "INSERT INTO `productos`(`categoria_id`, `marca_id`, `nombre`, `descripcion`, `precio`, `precio_original`, `stock`, `imagen_principal`, `destacado`, `activo`) VALUES (?,?,?,?,?,?,?,?,?,?)");  
+    mysqli_stmt_bind_param($sql, 'iissddisii', $categoria, $marca, $nombre, $descripcion, $precio, $precio_original, $stock, $imagen, $destacado, $activo);
     $resultado = mysqli_stmt_execute($sql);
     return $resultado;
 }
 
-function actualizar_producto ($id, $categoria, $marca, $nombre, $descripcion_corta, $descripcion, $precio, $precio_original, $stock, $imagen, $destacado, $activo){
+function actualizar_producto ($id, $categoria, $marca, $nombre, $descripcion, $precio, $precio_original, $stock, $imagen, $destacado, $activo){
 
     global $BD;
 
-    $sql = mysqli_prepare($BD, "UPDATE `productos` SET `categoria_id` = ?, `marca_id` = ?, `nombre` = ?, `descripcion_corta` = ?, `descripcion` = ?, `precio` = ?, `precio_original` = ?, `stock` = ?, `imagen_principal` = ?, `destacado` = ?, `activo` = ? WHERE `id_producto` = ?");
+    $sql = mysqli_prepare($BD, "UPDATE `productos` SET `categoria_id` = ?, `marca_id` = ?, `nombre` = ?, `descripcion` = ?, `precio` = ?, `precio_original` = ?, `stock` = ?, `imagen_principal` = ?, `destacado` = ?, `activo` = ? WHERE `id_producto` = ?");
 
-    mysqli_stmt_bind_param($sql, 'iisssddisiii', $categoria, $marca, $nombre, $descripcion_corta, $descripcion, $precio, $precio_original, $stock, $imagen, $destacado, $activo, $id);
+    mysqli_stmt_bind_param($sql, 'iissddisiii', $categoria, $marca, $nombre, $descripcion, $precio, $precio_original, $stock, $imagen, $destacado, $activo, $id);
     $resultado = mysqli_stmt_execute($sql);
     return $resultado;
 }
@@ -58,3 +58,4 @@ if (isset($_GET["eliminar"])){
 }
 
 ?>
+

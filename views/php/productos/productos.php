@@ -38,7 +38,6 @@ $consulta = consultar_productos() ;
                         <th>ID</th>
                         <th>imagen</th>
                         <th>Nombre producto</th>
-                        <th>Descripcion corta</th>
                         <th>Descripcion</th>
                         <th>precio</th>
                         <th>stock</th>
@@ -55,7 +54,6 @@ $consulta = consultar_productos() ;
                         <td class="table-id"><?= $filas['id_producto'] ?></td>
                         <td><img src="<?= $filas['imagen_principal'] ?>" alt="imagen" class="table-preview-img"></td>
                         <td><strong><?= $filas['nombre'] ?></strong></td>
-                        <td class="text-accent-strong"><?= $filas['descripcion_corta'] ?></td>
                         <td><?= $filas['descripcion'] ?></td>
                         <td><?= $filas['precio'] ?></td>
                         <td><?= $filas['stock'] ?></td>

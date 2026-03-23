@@ -20,17 +20,19 @@ function consultar_resenas_id($id){
 }
 
 // CRUD
-function crear_resena($imagen,$id_producto,$autor, $titulo,$resumen,$contenido,$calificacion,$publicada){
+function crear_resena($imagen,$id_producto,$autor, $titulo,$contenido,$calificacion,$publicada){
     global $BD;
-    $sql = mysqli_prepare($BD, "INSERT INTO `resenas`(`producto_id`, `autor_id`, `titulo`, `resumen`, `contenido`, `calificacion`, `imagen_portada`, `publicada`) VALUES (?,?,?,?,?,?,?,?)");
-    mysqli_stmt_bind_param($sql, "iisssdsi", $id_producto, $autor, $titulo, $resumen, $contenido, $calificacion, $imagen, $publicada);
+    $sql = mysqli_prepare($BD, "INSERT INTO `resenas`(`producto_id`, `autor_id`, `titulo`, `contenido`, `calificacion`, `imagen_portada`, `publicada`) VALUES (?,?,?,?,?,?,?)");
+    if (!$sql) return false;
+    mysqli_stmt_bind_param($sql, "iissdsi", $id_producto, $autor, $titulo, $contenido, $calificacion, $imagen, $publicada);
     $resultado = mysqli_stmt_execute($sql);
     return $resultado;
 }
-function actualizar_resena($id,$imagen,$id_producto,$autor, $titulo,$resumen,$contenido,$calificacion,$publicada){
+function actualizar_resena($id,$imagen,$id_producto,$autor, $titulo,$contenido,$calificacion,$publicada){
     global $BD;
-    $sql = mysqli_prepare($BD, "UPDATE `resenas` SET `producto_id`=?,`autor_id`=?,`titulo`=?,`resumen`=?,`contenido`=?,`calificacion`=?,`imagen_portada`=?,`publicada`=? WHERE id_resena = ?");
-    mysqli_stmt_bind_param($sql, "iisssdsii", $id_producto,$autor,$titulo,$resumen,$contenido,$calificacion,$imagen,$publicada,$id);
+    $sql = mysqli_prepare($BD, "UPDATE `resenas` SET `producto_id`=?,`autor_id`=?,`titulo`=?,`contenido`=?,`calificacion`=?,`imagen_portada`=?,`publicada`=? WHERE id_resena = ?");
+    if (!$sql) return false;
+mysqli_stmt_bind_param($sql, "iissdsii", $id_producto,$autor,$titulo,$contenido,$calificacion,$imagen,$publicada,$id);
     $resultado = mysqli_stmt_execute($sql);
     return $resultado;
 }

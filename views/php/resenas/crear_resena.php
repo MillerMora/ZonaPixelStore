@@ -1,5 +1,9 @@
 <?php 
 include './resenasModel.php';
+require_once '../productos/productoModel.php';
+require_once '../usuarios/usuarioModel.php';
+$productos = consultar_productos();
+$usuarios = consultar_usuarios();
 ?>
 
 <!DOCTYPE html>
@@ -46,18 +50,19 @@ include './resenasModel.php';
                 <label class="form-label">ID Producto</label>
                 <select name="id_producto" required class="form-select">
                     <option value="">Seleccionar producto</option>
-                    <option value="1">Producto 1</option>
-                    <option value="2">Producto 2</option>
-                    <!-- Add more as needed -->
+                    <?php while ($producto = mysqli_fetch_assoc($productos)): ?>
+                    <option value=<?= $producto['id_producto'];  ?> ><?= $producto['nombre'] ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 
             <div class="form-field">
                 <label class="form-label">Autor ID</label>
                 <select name="autor" required class="form-select">
-                    <option value="">Seleccionar autor</option>
-                    <option value="1">Admin</option>
-                    <option value="2">Usuario</option>
+                    <option value="">Seleccionar Autor</option>
+                    <?php while ($usuario = mysqli_fetch_assoc($usuarios)): ?>
+                    <option value=<?= $usuario['id_usuario'];  ?> ><?= $usuario['nombre']; ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 

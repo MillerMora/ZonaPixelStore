@@ -1,5 +1,12 @@
 <?php 
 include './pedidoModel.php';
+require_once '../usuarios/usuarioModel.php';
+require_once '../estados_pedido/estadoPedidoModel.php';
+require_once '../metodos_pago/metodoPagoModel.php';
+
+$usuarios = consultar_usuarios();
+$estados = consultar_estados_pedido();
+$metodos = consultar_metodos_pago();
 ?>
 
 <!DOCTYPE html>
@@ -41,8 +48,9 @@ include './pedidoModel.php';
                 <label class="form-label">Usuario ID</label>
                 <select name="usuario_id" required class="form-select">
                     <option value="">Seleccionar usuario</option>
-                    <option value="1">Admin (1)</option>
-                    <option value="2">Cliente (2)</option>
+                    <?php while ($usuario = mysqli_fetch_assoc($usuarios)): ?>
+                    <option value="<?= $usuario['id_usuario'] ?>"><?= htmlspecialchars($usuario['nombre']) ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 
@@ -50,8 +58,9 @@ include './pedidoModel.php';
                 <label class="form-label">Estado ID</label>
                 <select name="estado_id" required class="form-select">
                     <option value="">Seleccionar estado</option>
-                    <option value="1">Pendiente</option>
-                    <option value="2">Procesando</option>
+                    <?php while ($estado  = mysqli_fetch_assoc($estados)): ?>
+                    <option value="<?= $estado['id_estado_pedido'] ?>"><?= htmlspecialchars($estado['nombre']) ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 
@@ -59,8 +68,9 @@ include './pedidoModel.php';
                 <label class="form-label">Método Pago ID</label>
                 <select name="metodo_pago_id" class="form-select">
                     <option value="">Seleccionar método</option>
-                    <option value="1">Visa</option>
-                    <option value="2">Mastercard</option>
+                    <?php while ($metodo = mysqli_fetch_assoc($metodos)): ?>
+                    <option value="<?= $metodo['id_metodo_pago'] ?>"><?= htmlspecialchars($metodo['nombre']) ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 

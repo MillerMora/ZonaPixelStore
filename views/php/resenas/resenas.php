@@ -1,5 +1,7 @@
 <?php
 include './resenasModel.php';
+require_once '../productos/productoModel.php';
+require_once '../usuarios/usuarioModel.php';
 $consulta = consultar_resenas() ;
 ?>
 
@@ -51,10 +53,10 @@ $consulta = consultar_resenas() ;
                     <tr>
                         <td class="table-id"><?= $filas['id_resena'] ?></td>
                         <td><img src="<?= $filas['imagen_portada'] ?>" alt="" class="table-preview-img"></td>
-                        <td class="text-accent-strong"><?= $filas['producto_id'] ?></td>
+                        <td class="text-accent-strong"><?php $producto = consultar_producto_id($filas['producto_id']); echo $producto ? htmlspecialchars($producto['nombre']) : 'Producto no encontrado'; ?></td>
                         <td>
                             <span class="pill-muted">
-                                <?= $filas['autor_id'] ?>
+                                <?php $usuario = consultar_usuarios_id($filas['autor_id']); echo $usuario ? htmlspecialchars($usuario ['nombre']) : 'Autor no encontrado'; ?>
                             </span>
                         </td>
                         <td><?= $filas['titulo'] ?></td>

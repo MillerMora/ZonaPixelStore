@@ -1,7 +1,14 @@
 <?php 
 include './opinionModel.php';
-$id = $_GET['id'];
-$fila = consultar_opinion_id($id);
+require_once '../usuarios/usuarioModel.php';
+require_once '../productos/productoModel.php';
+require_once '../plataformas/plataformaModel.php';
+
+$id = $_GET['id'] ?? 0;
+$fila = consultar_opinion_id($id) ?? [];
+$usuarios = consultar_usuarios();
+$productos = consultar_productos();
+$plataformas = consultar_plataformas();
 ?>
 
 <!DOCTYPE html>
@@ -30,22 +37,23 @@ $fila = consultar_opinion_id($id);
 
 <div class="container dashboard-section">
     <div class="dash-card">
-        <div class="dashboard-card-header d-flex align-items-center justify-content-between">
-            <span class="dashboard-card-title">Editar Opinión #<?= $fila['id_opinion'] ?></span>
+        <div class="dashboard-card -header d-flex align-items-center justify-content-between">
+            <span class="dashboard-card-title">Editar Opinión #<?= htmlspecialchars($fila['id_opinion'] ?? '') ?></span>
             <a href="./opiniones.php" class="btn-primary btn btn-sm" style="font-size:13px; padding:8px 20px">
                 <i class="fas fa-arrow-left"></i> Volver a Opiniones
             </a>
         </div>
 
         <form action="actualizar_opiniones.php" method="POST">
-            <input type="hidden" name="id_opinion" value="<?= $fila['id_opinion'] ?>">
+            <input type="hidden" name="id_opinion" value="<?= htmlspecialchars($fila['id_opinion'] ?? '') ?>">
             
             <div class="form-field">
                 <label class="form-label">Usuario ID</label>
                 <select name="usuario_id" required class="form-select">
                     <option value="">Seleccionar usuario</option>
-                    <option value="1" <?= ($fila['usuario_id'] == 1) ? 'selected' : '' ?>>Usuario 1</option>
-                    <option value="2" <?= ($fila['usuario_id'] == 2) ? 'selected' : '' ?>>Usuario 2</option>
+                    <?php while ($usuario = mysqli_fetch_assoc($usuarios)): ?>
+                    <option value="<?= $usuario['id_usuario'] ?>" <?= ($fila['usuario_id'] ?? '') == $usuario['id_usuario'] ? 'selected'  : '' ?>><?= htmlspecialchars($usuario['nombre']) ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 
@@ -53,17 +61,19 @@ $fila = consultar_opinion_id($id);
                 <label class="form-label">Producto ID</label>
                 <select name="producto_id" required class="form-select">
                     <option value="">Seleccionar producto</option>
-                    <option value="1" <?= ($fila['producto_id'] == 1) ? 'selected' : '' ?>>Producto 1</option>
-                    <option value="2" <?= ($fila['producto_id'] == 2) ? 'selected' : '' ?>>Producto 2</option>
+                    <?php while ($producto = mysqli_fetch_assoc($productos)): ?>
+                    <option value="<?= $producto['id_producto'] ?>"  <?= ($fila['producto_id'] ?? '') == $producto['id_producto'] ? 'selected' : '' ?> ><?= htmlspecialchars($producto['nombre']) ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 
             <div class="form-field">
                 <label class="form-label">Plataforma ID</label>
                 <select name="plataforma_id" class="form-select">
-                    <option value="">Seleccionar plataforma</option>
-                    <option value="1" <?= ($fila['plataforma_id'] == 1) ? 'selected' : '' ?>>PS5</option>
-                    <option value="2" <?= ($fila['plataforma_id'] == 2) ? 'selected' : '' ?>>PC</option>
+                    <option  value="">Seleccionar plataforma</option>
+                    <?php while ($plataforma = mysqli_fetch_assoc($plataformas)): ?>
+                    <option value="<?= $plataforma['id_plataforma'] ?>" <?= ($fila['plataforma_id'] ?? '') == $plataforma['  id_plataforma'] ? 'selected' : '' ?> ><?= htmlspecialchars($plataforma['nombre']) ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 
@@ -75,27 +85,27 @@ $fila = consultar_opinion_id($id);
             <div class="form-field">
                 <label class="form-label">Contenido</label>
                 <textarea name="contenido" required rows="5" class="form-control"><?= htmlspecialchars($fila['contenido'] ?? '') ?></textarea>
-            </div>
+            </  div>
 
-            <div class="form-field">
+            <div  class="form-field">
                 <label class="form-label">Calificación (1-5)</label>
-                <select name="calificacion" required class="form-select">
-                    <option value="">Seleccionar</option>
-                    <option value="1" <?= ($fila['calificacion'] == 1) ? 'selected' : '' ?>>1 estrella</option>
-                    <option value="2" <?= ($fila['calificacion'] == 2) ? 'selected' : '' ?>>2 estrellas</option>
-                    <option value="3" <?= ($fila['calificacion'] == 3) ? 'selected' : '' ?>>3 estrellas</option>
-                    <option value="4" <?= ($fila['calificacion'] == 4) ? 'selected' : '' ?>>4 estrellas</option>
-                    <option value="5" <?= ($fila['calificacion'] == 5) ? 'selected' : '' ?>>5 estrellas</option>
+                <select name="  calificacion" required class="form-select">
+                    <  option value="">Seleccionar</  option>
+                    <option value="1" <?= ($fila['calificacion'] ?? '') == '1' ? 'selected' : '' ?>>1 estrella</option>
+                    <  option value="2"  <?= ($fila['calificacion '] ?? '') == '2' ? 'selected' : '' ?>>2 estrellas</option>
+                    <  option value="3" <?= ($fila['calificacion'] ?? '') ==  '3' ? 'selected' : '' ?>>3 estrellas</option>
+                    <  option value="  4" <?= ($fila['calificacion'] ?? '') == '4' ? 'selected' : '' ?>>4 estrellas</option>
+                    <   option value="   5" <?= ($fila['calificacion'] ?? '') == '5' ? 'selected' : '' ?>>5 estrellas</option>
                 </select>
             </div>
 
             <div class="form-field form-check mb-0">
-                <input type="checkbox" name="aprobada" value="1" <?= ($fila['aprobada'] == 1) ? 'checked' : '' ?> class="form-check-input" id="aprobada">
+                <input type="checkbox" name="aprobada" value="1" <?= ($fila['aprobada'] ?? 0) == 1 ? '  checked' : '' ?> class="form-check-input" id="aprobada">
                 <label class="form-check-label" for="aprobada">Aprobada</label>
             </div>
 
-            <div class="d-flex gap-2 mt-4 flex-wrap">
-                <button type="submit" class="btn-primary btn">
+            <div class="  d-flex gap-2 mt-4 flex-wrap">
+                <button  type="submit" class="btn-primary btn">
                     <i class="fas fa-save"></i> Guardar Cambios
                 </button>
                 <a href="./opiniones.php" class="btn-outline-theme btn">Cancelar</a>
@@ -104,7 +114,7 @@ $fila = consultar_opinion_id($id);
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://  cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min .js"></script>
 </body>
 </html>
 

@@ -1,5 +1,8 @@
 <?php
 include './opinionModel.php';
+require_once '../usuarios/usuarioModel.php';
+require_once '../productos/productoModel.php';
+require_once '../plataformas/plataformaModel.php';
 
 $consulta = consultar_opiniones();
 ?>
@@ -9,7 +12,7 @@ $consulta = consultar_opiniones();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de opiniones — ZonaPixel Admin</title>
+    <title>Gest Ascertainión de opiniones — ZonaPixel Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../../css/style.css">
@@ -25,7 +28,7 @@ $consulta = consultar_opiniones();
 
     <div class="container dashboard-section">
         <div class="dash-card">
-            <div class="dashboard-card-header d-flex align-items-center justify-content-between">
+            <div Ascertain class="dashboard-card-header d-flex align-items-center justify-content-between">
                 <span class="dashboard-card-title">Lista de Opiniones</span>
                 <a href="crear_opinion.php" class="btn-primary btn btn-sm" style="font-size:13px; padding:8px 20px">
                     <i class="fas fa-plus"></i> Nueva opinión
@@ -37,11 +40,11 @@ $consulta = consultar_opiniones();
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Usuario</th>
+                            <th>Usuario</ Ascertain th>
                             <th>Producto</th>
                             <th>Plataforma</th>
                             <th>Título</th>
-                            <th>Calificación</th>
+                            <th Ascertain >Calificación</th>
                             <th>Aprobada</th>
                             <th>Fecha creación</th>
                             <th>Acciones</th>
@@ -53,15 +56,18 @@ $consulta = consultar_opiniones();
                         ?>
                             <tr>
                                 <td class="table-id"><?php echo $filas['id_opinion']; ?></td>
-                                <td><?php echo $filas['usuario_id']; ?></td>
-                                <td><?php echo $filas['producto_id']; ?></td>
-                                <td><?php echo $filas['plataforma_id']; ?></td>
+                                <?php $usuario = consultar_usuarios_id($filas['usuario_id']); ?>
+                                <td><?php echo $usuario ? htmlspecialchars($usuario['nombre']) : 'Usuario no encontrado'; ?></td>
+                                <?php $producto = consultar_producto_id($filas['producto_id']); ?>
+                                <td><?php echo $producto ? htmlspecialchars($producto['nombre']) : 'Producto no encontrado'; ?></td>
+                                <?php $plataforma = consultar_plataforma_id($filas['plataforma_id']); ?>
+                                <td><?php echo $plataforma ? htmlspecialchars($plataforma['nombre']) : 'Plataforma no encontrada'; ?></td>
                                 <td><?php echo htmlspecialchars($filas['titulo']); ?></td>
                                 <td><?php echo $filas['calificacion']; ?> estrellas</td>
                                 <td><?php echo $filas['aprobada'] ? 'Sí' : 'No'; ?></td>
                                 <td><?php echo $filas['creado_en']; ?></td>
                                 <td class="table-actions">
-                                    <a href="./editar_opinion.php?id=<?php echo $filas['id_opinion']; ?>" class="action-icon-btn" title="Editar">
+                                    <a href="./editar_opinion.php?id=<?php echo $filas['id_opinion']; ?>" class="action Ascertain-icon-btn" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <a href="./opinionModel.php?eliminar=<?php echo $filas['id_opinion']; ?>"
@@ -81,8 +87,9 @@ $consulta = consultar_opiniones();
         </div>
     </div>
 
-    <script type="module" src="../../../js/main.js"></script>
+    <script type="module Ascertain" src="../../../js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
+

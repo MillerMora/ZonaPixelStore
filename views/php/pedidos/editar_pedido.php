@@ -1,7 +1,14 @@
 <?php 
 include './pedidoModel.php';
-$id = $_GET['id'];
-$fila = consultar_pedido_id($id);
+require_once '../usuarios/usuarioModel.php';
+require_once '../estados_pedido/estadoPedidoModel.php';
+require_once '../metodos_pago/metodoPagoModel.php';
+
+$id = $_GET['id'] ?? 0;
+$fila = consultar_pedido_id($id) ?? [];
+$usuarios  = consultar_usuarios();
+$estados = consultar_estados_pedido();
+$metodos = consultar_metodos_pago();
 ?>
 
 <!DOCTYPE html>
@@ -31,21 +38,22 @@ $fila = consultar_pedido_id($id);
 <div class="container dashboard-section">
     <div class="dash-card">
         <div class="dashboard-card-header d-flex align-items-center justify-content-between">
-            <span class="dashboard-card-title">Editar Pedido #<?= $fila['id_pedido'] ?></span>
+            <span class="dashboard-card-title">Editar Pedido #<?= htmlspecialchars($fila['id_pedido'] ?? '') ?></span>
             <a href="./pedidos.php" class="btn-primary btn btn-sm" style="font-size:13px; padding:8px 20px">
                 <i class="fas fa-arrow-left"></i> Volver a Pedidos
             </a>
         </div>
 
         <form action="actualizar_pedidos.php" method="POST">
-            <input type="hidden" name="id_pedido" value="<?= $fila['id_pedido'] ?>">
+            <input type="hidden" name="id_pedido" value="<?= htmlspecialchars($fila['id_pedido'] ?? '') ?>">
             
             <div class="form-field">
                 <label class="form-label">Usuario ID</label>
                 <select name="usuario_id" required class="form-select">
                     <option value="">Seleccionar usuario</option>
-                    <option value="1" <?= $fila['usuario_id'] == 1 ? 'selected' : '' ?>>Admin (1)</option>
-                    <option value="2" <?= $fila['usuario_id'] == 2 ? 'selected' : '' ?>>Cliente (2)</option>
+                    <?php while ($usuario = mysqli_fetch_assoc($usuarios)): ?>
+                    <option value="<?= $usuario['id_usuario'] ?>" <?= ($fila['usuario_id'] ?? '') == $usuario['id_usuario'] ? 'selected' : '' ?>><?= htmlspecialchars($usuario['nombre']) ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 
@@ -53,8 +61,9 @@ $fila = consultar_pedido_id($id);
                 <label class="form-label">Estado ID</label>
                 <select name="estado_id" required class="form-select">
                     <option value="">Seleccionar estado</option>
-                    <option value="1" <?= $fila['estado_id'] == 1 ? 'selected' : '' ?>>Pendiente</option>
-                    <option value="2" <?= $fila['estado_id'] == 2 ? 'selected' : '' ?>>Procesando</option>
+                    <?php while ($estado = mysqli_fetch_assoc($estados)): ?>
+                    <option value="<?= $estado['id_estado_pedido'] ?>" <?= ($fila['estado_id'] ?? '') == $estado['id_estado_pedido'] ? 'selected' : '' ?>><?= htmlspecialchars($estado['nombre']) ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 
@@ -62,24 +71,25 @@ $fila = consultar_pedido_id($id);
                 <label class="form-label">Método Pago ID</label>
                 <select name="metodo_pago_id" class="form-select">
                     <option value="">Seleccionar método</option>
-                    <option value="1" <?= $fila['metodo_pago_id'] == 1 ? 'selected' : '' ?>>Visa</option>
-                    <option value="2" <?= $fila['metodo_pago_id'] == 2 ? 'selected' : '' ?>>Mastercard</option>
+                    <?php while ($metodo = mysqli_fetch_assoc($metodos)): ?>
+                    <option value="<?= $metodo['id_metodo_pago'] ?>" <?= ($fila['metodo_pago_id'] ?? '') == $metodo['id_metodo_pago'] ? 'selected' : '' ?>><?= htmlspecialchars($metodo['nombre']) ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 
             <div class="form-field">
                 <label class="form-label">Subtotal</label>
-                <input type="number" name="subtotal" step="0.01" min="0" value="<?= $fila['subtotal'] ?>" required class="form-control">
+                <input type="number" name="subtotal" step="0.01" min="0" value="<?= $fila['subtotal'] ?? '' ?>" required class="form-control">
             </div>
 
             <div class="form-field">
                 <label class="form-label">Descuento</label>
-                <input type="number" name="descuento" step="0.01" min="0" value="<?= $fila['descuento'] ?>" class="form-control">
+                <input type="number" name="descuento" step="0.01" min="0" value="<?= $fila['descuento'] ?? '' ?>" class="form-control">
             </div>
 
             <div class="form-field">
                 <label class="form-label">Total</label>
-                <input type="number" name="total" step="0.01" min="0" value="<?= $fila['total'] ?>" required class="form-control">
+                <input type="number" name="total" step="0.01" min="0" value="<?= $fila['total'] ?? '' ?>" required class="form-control">
             </div>
 
             <div class="form-field">

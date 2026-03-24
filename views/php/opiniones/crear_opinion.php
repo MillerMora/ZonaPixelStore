@@ -1,5 +1,12 @@
-<?php 
+<?php
 include './opinionModel.php';
+require_once '../usuarios/usuarioModel.php';
+require_once '../productos/productoModel.php';
+require_once '../plataformas/plataformaModel.php';
+
+$usuarios = consultar_usuarios();
+$productos = consultar_productos();
+$plataformas = consultar_plataformas();
 ?>
 
 <!DOCTYPE html>
@@ -36,13 +43,13 @@ include './opinionModel.php';
         </div>
 
         <form action="actualizar_opiniones.php?crear=1" method="POST">
-            
             <div class="form-field">
                 <label class="form-label">Usuario ID</label>
                 <select name="usuario_id" required class="form-select">
                     <option value="">Seleccionar usuario</option>
-                    <option value="1">Usuario 1</option>
-                    <option value="2">Usuario 2</option>
+                    <?php while ($usuario = mysqli_fetch_assoc($usuarios)): ?>
+                    <option value="<?= $usuario['id_usuario'] ?>"><?= htmlspecialchars($usuario['nombre']) ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 
@@ -50,8 +57,9 @@ include './opinionModel.php';
                 <label class="form-label">Producto ID</label>
                 <select name="producto_id" required class="form-select">
                     <option value="">Seleccionar producto</option>
-                    <option value="1">Producto 1</option>
-                    <option value="2">Producto 2</option>
+                    <?php while ($producto = mysqli_fetch_assoc($productos)): ?>
+                    <option value="<?= $producto['id_producto'] ?>"><?= htmlspecialchars($producto['nombre']) ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 
@@ -59,8 +67,9 @@ include './opinionModel.php';
                 <label class="form-label">Plataforma ID</label>
                 <select name="plataforma_id" class="form-select">
                     <option value="">Seleccionar plataforma</option>
-                    <option value="1">PS5</option>
-                    <option value="2">PC</option>
+                    <?php while ($plataforma = mysqli_fetch_assoc($plataformas)): ?>
+                    <option value="<?= $plataforma['id_plataforma'] ?>"><?= htmlspecialchars($plataforma['nombre']) ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 

@@ -1,8 +1,12 @@
 <?php 
 include './resenasModel.php';
+require_once '../productos/productoModel.php';
+require_once '../usuarios/usuarioModel.php';
 $id = $_GET['id'] ?? 0;
 $resultado = consultar_resenas_id($id);
 $fila = mysqli_fetch_assoc($resultado) ?? [];
+$productos = consultar_productos();
+$usuarios = consultar_usuarios();
 ?>
 
 <!DOCTYPE html>
@@ -57,8 +61,9 @@ $fila = mysqli_fetch_assoc($resultado) ?? [];
                 <label class="form-label">ID Producto</label>
                 <select name="id_producto" required class="form-select">
                     <option value="">Seleccionar producto</option>
-                    <option value="1" <?= ($fila['producto_id'] ?? '' ) == '1' ? 'selected' : '' ?>>Producto 1</option>
-                    <option value="2" <?= ($fila['producto_id'] ?? '' ) == '2' ? 'selected' : '' ?>>Producto 2</option>
+                    <?php while ($producto = mysqli_fetch_assoc($productos)): ?>
+                    <option value=<?= $producto['id_producto'];  ?> <?= ($fila['producto_id'] ?? '' ) == $producto['id_producto'] ? 'selected' : '' ?>><?= $producto['nombre'] ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 
@@ -66,8 +71,9 @@ $fila = mysqli_fetch_assoc($resultado) ?? [];
                 <label class="form-label">Autor ID</label>
                 <select name="autor" required class="form-select">
                     <option value="">Seleccionar autor</option>
-                    <option value="1" <?= ($fila['autor_id'] ?? '' ) == '1' ? 'selected' : '' ?>>Admin</option>
-                    <option value="2" <?= ($fila['autor_id'] ?? '' ) == '2' ? 'selected' : '' ?>>Usuario</option>
+                    <?php while ($usuario = mysqli_fetch_assoc($usuarios)): ?>
+                    <option value=<?= $usuario['id_usuario'];  ?>  <?= ($fila['autor_id'] ?? '' ) == $usuario['id_usuario'] ? 'selected' : '' ?>><?= $usuario['nombre']; ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 

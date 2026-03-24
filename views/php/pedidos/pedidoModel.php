@@ -1,6 +1,6 @@
 <?php
 
-require '../conexion/conexion.php';
+require_once '../conexion/conexion.php';
 if (!isset($BD)){
     $BD = connection() ;
 }

@@ -1,6 +1,8 @@
 <?php
 include "../conexion/conexion.php";
-$BD = connection() ;
+if (!isset($BD)){
+    $BD = connection() ;
+}
 function crear_usuario($nombre, $apellido, $username, $email, $password_hash)
 {
     global $BD;
@@ -31,9 +33,11 @@ function actualizar_usuario($id, $nombre, $apellido, $usuario, $correo, $contras
 function eliminar_usuario($id)
 {
     global $BD;
+    mysqli_query($BD,"SET FOREIGN_KEY_CHECKS = 0");
     $sql = mysqli_prepare($BD, 'DELETE FROM usuarios WHERE id_usuario = ?');
     mysqli_stmt_bind_param($sql, 'i', $id);
     $resultado = mysqli_stmt_execute($sql);
+    mysqli_query($BD,"SET FOREIGN_KEY_CHECKS = 0");
     return $resultado;
 }
 

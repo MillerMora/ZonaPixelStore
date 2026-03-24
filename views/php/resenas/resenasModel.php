@@ -1,7 +1,9 @@
 <?php
 
 require '../conexion/conexion.php';
-$BD = connection() ;
+if (!isset($BD)){
+    $BD = connection() ;
+}
 // consulta
 function consultar_resenas(){
 

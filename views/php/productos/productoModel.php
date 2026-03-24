@@ -1,7 +1,9 @@
 <?php
 
 require '../conexion/conexion.php';
-$BD = connection() ;
+if (!isset($BD)){
+    $BD = connection() ;
+}
 //consultas
 
 function consultar_productos (){

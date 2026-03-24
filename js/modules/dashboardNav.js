@@ -7,21 +7,25 @@ export function initDashboardNav() {
   const iframeUsuarios = document.getElementById('dashIframeUsuarios');
   const iframeProductos = document.getElementById('dashIframeProductos');
   const iframeResenas = document.getElementById('dashIframeResenas');
+  const iframePedidos = document.getElementById('dashIframePedidos');
+  const iframeOpiniones = document.getElementById('dashIframeOpiniones');
 
   const hideAll = () => {
     dashContent?.classList.add('is-hidden');
     iframeUsuarios?.classList.add('is-hidden');
     iframeProductos?.classList.add('is-hidden');
     iframeResenas?.classList.add('is-hidden');
+    iframePedidos?.classList.add('is-hidden');
+    iframeOpiniones?.classList.add('is-hidden');
   };
 
   const show = (section) => {
     hideAll();
     if (section === 'usuarios') iframeUsuarios?.classList.remove('is-hidden');
-    else if (section === 'productos')
-      iframeProductos?.classList.remove('is-hidden');
-    else if (section === 'resenas')
-      iframeResenas?.classList.remove('is-hidden');
+    else if (section === 'productos') iframeProductos?.classList.remove('is-hidden');
+    else if (section === 'resenas') iframeResenas?.classList.remove('is-hidden');
+    else if (section === 'pedidos') iframePedidos?.classList.remove('is-hidden');
+    else if (section === 'opiniones') iframeOpiniones?.classList.remove('is-hidden');
     else dashContent?.classList.remove('is-hidden');
   };
 

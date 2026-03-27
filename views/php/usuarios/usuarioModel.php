@@ -59,6 +59,24 @@ function consultar_usuarios_id($id)
     $resultado = mysqli_stmt_get_result($sql); 
     return mysqli_fetch_assoc($resultado);
 }
+function consultar_usuarios_correo($email)
+{
+    global $BD;
+    $sql =  mysqli_prepare($BD,'SELECT * FROM usuarios WHERE email = ?;');
+    mysqli_stmt_bind_param($sql, 's', $email);
+    mysqli_stmt_execute($sql);
+    $resultado = mysqli_stmt_get_result($sql); 
+    return mysqli_fetch_assoc($resultado);
+}
+function consultar_usuarios_nombreUsuario($username)
+{
+    global $BD;
+    $sql =  mysqli_prepare($BD,'SELECT * FROM usuarios WHERE username = ?;');
+    mysqli_stmt_bind_param($sql, 's', $username);
+    mysqli_stmt_execute($sql);
+    $resultado = mysqli_stmt_get_result($sql); 
+    return mysqli_fetch_assoc($resultado);
+}
 
 function consultar_usuarios_rol()
 {

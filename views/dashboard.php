@@ -1,3 +1,10 @@
+<?php 
+session_start();
+$logueo = null;
+if (isset($_SESSION['rol'])){
+  $logueo = $_SESSION['rol'];
+}
+?>
 <!doctype html>
 <html lang="es">
   <head>

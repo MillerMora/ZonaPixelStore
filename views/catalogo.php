@@ -1,3 +1,10 @@
+<?php 
+session_start();
+$logueo = null;
+if (isset($_SESSION['rol'])){
+  $logueo = $_SESSION['rol'];
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,33 +17,25 @@
 </head>
 <body>
 
-<nav class="navbar">
-  <div class="container">
-    <a href="../index.html" class="navbar-brand"><span class="logo-dot"></span>ZonaPixel</a>
-    <div class="nav-links">
-      <a href="../index.html">Inicio</a>
-      <a href="./catalogo.html" class="active">Catálogo</a>
-      <a href="./resenas.html">Reseñas</a>
-      <a href="./opiniones.html">Opiniones</a>
-    </div>
-    <div class="nav-actions">
-      <button class="nav-icon-btn"><i class="fas fa-search"></i></button>
-      <a href="carrito.html" class="nav-icon-btn"><i class="fas fa-shopping-cart"></i><span class="badge-count">3</span></a>
-      <a href="login.html" class="btn-nav-login">Iniciar sesión</a>
-    </div>
-    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
-  </div>
-</nav>
+<?php 
+if ($logueo === 1){
+  include './plantillas/navbar_admin.php';
+} elseif ($logueo >= 2 ){
+  include './plantillas/navbar_user.php';
+} else {
+  include './plantillas/navbar_publico.php';
 
+}
+?>
 <div class="mobile-nav" id="mobileNav">
   <div class="mobile-nav-overlay"></div>
   <div class="mobile-nav-drawer">
     <button class="mobile-nav-close" id="mobileNavClose"><i class="fas fa-times"></i></button>
     <div class="mobile-nav-links">
-      <a href="../index.html">Inicio</a>
-      <a href="./catalogo.html">Catálogo</a>
-      <a href="./resenas.html">Reseñas</a>
-      <a href="./opiniones.html">Opiniones</a>
+      <a href="/index.php">Inicio</a>
+      <a href="/views/catalogo.php">Catálogo</a>
+      <a href="/views/resenas.php">Reseñas</a>
+      <a href="/views/opiniones.php">Opiniones</a>
     </div>
   </div>
 </div>
@@ -44,7 +43,7 @@
 <div class="page-hero">
   <div class="container">
     <div class="breadcrumb-nav">
-      <a href="../index.html">Inicio</a><span>/</span><span class="text-white">Catálogo</span>
+      <a href="/index.php">Inicio</a><span>/</span><span class="text-white">Catálogo</span>
     </div>
     <h1 class="page-hero-title">Catálogo completo</h1>
     <p class="page-hero-sub">+8,000 productos — Videojuegos, periféricos y hardware gamer</p>
@@ -274,18 +273,11 @@
   </div>
 </div>
 
-<footer>
-  <div class="container">
-    <div class="footer-bottom pt-0" style="border-top:none;">
-      <span class="footer-copy">© 2025 ZonaPixel. Todos los derechos reservados.</span>
-      <div class="footer-legal">
-        <a href="#">Privacidad</a><a href="#">Términos</a>
-      </div>
-    </div>
-  </div>
-</footer>
+<?php 
+  include './plantillas/footer.php';
+?>
 
-<script type="module" src="../js/main.js"></script>
+  <script type="module" src="../js/main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

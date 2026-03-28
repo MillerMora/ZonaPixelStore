@@ -1,0 +1,486 @@
+<?php 
+session_start();
+$logueo = null;
+if (isset($_SESSION['rol'])){
+  $logueo = $_SESSION['rol'];
+}
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZonaPixel — Tienda de Videojuegos y Tecnología</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+<!-- ============ NAVBAR ============ -->
+<?php 
+if ($logueo === 1){
+  include './views/plantillas/navbar_admin.php';
+} elseif ($logueo >= 2 ){
+  include './views/plantillas/navbar_user.php';
+} else {
+  include './views/plantillas/navbar_publico.php';
+
+}
+?>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-overlay"></div>
+  <div class="mobile-nav-drawer">
+    <button class="mobile-nav-close" id="mobileNavClose"><i class="fas fa-times"></i></button>
+    <div class="mobile-nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="views/catalogo.html">Catálogo</a>
+      <a href="views/resenas.html">Reseñas</a>
+      <a href="views/opiniones.html">Opiniones</a>
+      <a href="views/login.html">Iniciar sesión</a>
+      <a href="views/register.html">Registrarse</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-grid-overlay"></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Novedades 2025</div>
+      <h1 class="hero-title">
+        Tu próximo<br>
+        <span class="line-accent">nivel comienza</span>
+        aquí.
+      </h1>
+      <p class="hero-subtitle">
+        Los mejores videojuegos, periféricos y hardware gamer al mejor precio.
+        Envío rápido, devoluciones sin complicaciones.
+      </p>
+      <div class="hero-ctas">
+        <a href="views/catalogo.html" class="btn-primary">
+          <i class="fas fa-gamepad"></i> Ver catálogo
+        </a>
+        <a href="views/resenas.html" class="btn-secondary">Leer reseñas</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">+8,000</div>
+          <div class="hero-stat-label">Productos</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">+120K</div>
+          <div class="hero-stat-label">Clientes</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">4.9★</div>
+          <div class="hero-stat-label">Calificación</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-product-card">
+        <span class="hero-float-badge">🔥 Más vendido</span>
+        <img src="https://image.api.playstation.com/vulcan/ap/rnd/202302/2321/ba706e54d68d10a0eb6ab7c36cdad9178c58b7fb7bb03d28.png" alt="Baldur's Gate 3" />
+        <div class="hero-product-info">
+          <h3>Baldur's Gate 3</h3>
+          <div class="price">$189.900 COP</div>
+        </div>
+        <div class="hero-rating-pill">
+          <span class="stars">★★★★★</span>
+          <span>9.6 / 10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TICKER ============ -->
+<div class="ticker-strip">
+  <div class="ticker-inner">
+    <span class="ticker-item">Envío gratis desde $150.000</span>
+    <span class="ticker-item">Nuevos juegos cada semana</span>
+    <span class="ticker-item">Pago seguro con SSL</span>
+    <span class="ticker-item">Devoluciones sin costo en 30 días</span>
+    <span class="ticker-item">PlayStation · Xbox · Nintendo · PC</span>
+    <span class="ticker-item">Envío gratis desde $150.000</span>
+    <span class="ticker-item">Nuevos juegos cada semana</span>
+    <span class="ticker-item">Pago seguro con SSL</span>
+    <span class="ticker-item">Devoluciones sin costo en 30 días</span>
+    <span class="ticker-item">PlayStation · Xbox · Nintendo · PC</span>
+  </div>
+</div>
+
+<!-- ============ FEATURED PRODUCTS ============ -->
+<section class="section-gap">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Destacados</div>
+        <h2 class="section-title">Juegos más populares</h2>
+      </div>
+      <a href="pages/catalogo.html" class="section-link">Ver todos <i class="fas fa-arrow-right"></i></a>
+    </div>
+
+    <div class="category-strip">
+      <button class="cat-chip active">Todos</button>
+      <button class="cat-chip">PlayStation 5</button>
+      <button class="cat-chip">Xbox</button>
+      <button class="cat-chip">Nintendo Switch</button>
+      <button class="cat-chip">PC / Steam</button>
+      <button class="cat-chip">Ofertas</button>
+    </div>
+
+    <div class="products-grid">
+      <!-- Card 1 -->
+      <a href="pages/producto.html" class="product-card">
+        <div class="product-img-wrap">
+          <span class="product-badge"><span class="badge badge-new">Nuevo</span></span>
+          <button class="product-wishlist"><i class="far fa-heart"></i></button>
+          <img src="https://upload.wikimedia.org/wikipedia/en/f/fb/The_Legend_of_Zelda_Tears_of_the_Kingdom_cover.jpg" alt="Zelda TotK" />
+          <div class="product-overlay">
+            <button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button>
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-platform">Nintendo Switch</div>
+          <div class="product-name">Zelda: Tears of the Kingdom</div>
+          <div class="product-footer">
+            <div><span class="product-price">$219.900</span></div>
+            <div class="product-rating"><span class="star">★</span> 9.8 (2.1k)</div>
+          </div>
+        </div>
+      </a>
+      <!-- Card 2 -->
+      <a href="pages/producto.html" class="product-card">
+        <div class="product-img-wrap">
+          <span class="product-badge"><span class="badge badge-sale">-25%</span></span>
+          <button class="product-wishlist"><i class="far fa-heart"></i></button>
+          <img src="https://image.api.playstation.com/vulcan/ap/rnd/202306/1219/e66c4ae18c5d8e3986a24599b293162a6f5c9eba22968d2c.jpg" alt="Spider-Man 2" />
+          <div class="product-overlay">
+            <button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button>
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-platform">PlayStation 5</div>
+          <div class="product-name">Marvel's Spider-Man 2</div>
+          <div class="product-footer">
+            <div><span class="product-price">$179.900</span> <span class="product-price-old">$239.900</span></div>
+            <div class="product-rating"><span class="star">★</span> 9.1 (1.4k)</div>
+          </div>
+        </div>
+      </a>
+      <!-- Card 3 -->
+      <a href="pages/producto.html" class="product-card">
+        <div class="product-img-wrap">
+          <span class="product-badge"><span class="badge badge-hot">Hot</span></span>
+          <button class="product-wishlist"><i class="far fa-heart"></i></button>
+          <img src="https://image.api.playstation.com/vulcan/ap/rnd/202302/2321/ba706e54d68d10a0eb6ab7c36cdad9178c58b7fb7bb03d28.png" alt="Baldur's Gate 3" />
+          <div class="product-overlay">
+            <button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button>
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-platform">PC / PS5</div>
+          <div class="product-name">Baldur's Gate 3</div>
+          <div class="product-footer">
+            <div><span class="product-price">$189.900</span></div>
+            <div class="product-rating"><span class="star">★</span> 9.6 (3.8k)</div>
+          </div>
+        </div>
+      </a>
+      <!-- Card 4 -->
+      <a href="pages/producto.html" class="product-card">
+        <div class="product-img-wrap">
+          <button class="product-wishlist"><i class="far fa-heart"></i></button>
+          <img src="https://cdn1.epicgames.com/offer/c4763f236d08423eb47b4c3008779c84/EGS_AlanWake2_RemedyEntertainment_S2_1200x1600-c7c8091ddac0f9669c8e5905bca88aaa" alt="Alan Wake 2" />
+          <div class="product-overlay">
+            <button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button>
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-platform">PC / PS5 / Xbox</div>
+          <div class="product-name">Alan Wake 2</div>
+          <div class="product-footer">
+            <div><span class="product-price">$159.900</span></div>
+            <div class="product-rating"><span class="star">★</span> 9.0 (987)</div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURED BANNER ============ -->
+<section style="padding:0 0 80px;">
+  <div class="container">
+    <div class="featured-banner">
+      <div class="fb-bg">
+        <img src="https://image.api.playstation.com/vulcan/ap/rnd/202210/0706/EVWyZD63pahuh95eKloFaJuC.png" alt="" />
+      </div>
+      <div class="fb-content">
+        <div class="fb-tag">⚡ Oferta especial</div>
+        <h2 class="fb-title">Resident Evil 4<br>Remake</h2>
+        <p class="fb-desc">Revive el terror clásico completamente reconstruido. Gráficos de nueva generación, combate renovado.</p>
+        <div class="fb-price">$139.900 COP</div>
+        <a href="pages/producto.html" class="btn-primary">
+          <i class="fas fa-shopping-cart"></i> Comprar ahora
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PERIFÉRICOS ============ -->
+<section class="section-gap" style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Tecnología</div>
+        <h2 class="section-title">Periféricos y hardware</h2>
+      </div>
+      <a href="pages/catalogo.html" class="section-link">Ver todos <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="products-grid">
+      <a href="pages/producto.html" class="product-card">
+        <div class="product-img-wrap">
+          <span class="product-badge"><span class="badge badge-new">Nuevo</span></span>
+          <button class="product-wishlist"><i class="far fa-heart"></i></button>
+          <img src="https://images.unsplash.com/photo-1527814050087-3793815479db?w=500&q=80" alt="Teclado gamer" />
+          <div class="product-overlay">
+            <button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button>
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-platform">Teclado Mecánico</div>
+          <div class="product-name">HyperX Alloy Origins Core TKL</div>
+          <div class="product-footer">
+            <div><span class="product-price">$289.900</span></div>
+            <div class="product-rating"><span class="star">★</span> 9.2 (542)</div>
+          </div>
+        </div>
+      </a>
+      <a href="pages/producto.html" class="product-card">
+        <div class="product-img-wrap">
+          <span class="product-badge"><span class="badge badge-sale">-20%</span></span>
+          <button class="product-wishlist"><i class="far fa-heart"></i></button>
+          <img src="https://images.unsplash.com/photo-1596443686812-2f45229eebc3?w=500&q=80" alt="Mouse gamer" />
+          <div class="product-overlay">
+            <button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button>
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-platform">Mouse Gaming</div>
+          <div class="product-name">Logitech G Pro X Superlight 2</div>
+          <div class="product-footer">
+            <div><span class="product-price">$359.900</span> <span class="product-price-old">$449.900</span></div>
+            <div class="product-rating"><span class="star">★</span> 9.5 (1.2k)</div>
+          </div>
+        </div>
+      </a>
+      <a href="pages/producto.html" class="product-card">
+        <div class="product-img-wrap">
+          <button class="product-wishlist"><i class="far fa-heart"></i></button>
+          <img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500&q=80" alt="Audífonos" />
+          <div class="product-overlay">
+            <button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button>
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-platform">Headset Gaming</div>
+          <div class="product-name">SteelSeries Arctis Nova Pro</div>
+          <div class="product-footer">
+            <div><span class="product-price">$619.900</span></div>
+            <div class="product-rating"><span class="star">★</span> 9.3 (876)</div>
+          </div>
+        </div>
+      </a>
+      <a href="pages/producto.html" class="product-card">
+        <div class="product-img-wrap">
+          <span class="product-badge"><span class="badge badge-hot">Hot</span></span>
+          <button class="product-wishlist"><i class="far fa-heart"></i></button>
+          <img src="https://images.unsplash.com/photo-1616763355603-9755a640a287?w=500&q=80" alt="Monitor" />
+          <div class="product-overlay">
+            <button class="btn-add-cart"><i class="fas fa-cart-plus"></i> Añadir</button>
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-platform">Monitor 144Hz</div>
+          <div class="product-name">LG 27GP83B-B 27" QHD IPS</div>
+          <div class="product-footer">
+            <div><span class="product-price">$1.189.900</span></div>
+            <div class="product-rating"><span class="star">★</span> 9.4 (430)</div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEALS ============ -->
+<section class="section-gap" style="padding-top:0">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Precios increíbles</div>
+        <h2 class="section-title">Ofertas del día</h2>
+      </div>
+      <a href="pages/catalogo.html" class="section-link">Más ofertas <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="deals-grid">
+      <a href="pages/producto.html" class="deal-card">
+        <img src="https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/store/software/switch/70010000068688/1c5583f6bbce5bccdc923c25c35ba8f42128b55df84f4a2fbeea74b6d1d1516e" alt="Mario Wonder" />
+        <div class="deal-info">
+          <div class="deal-name">Super Mario Bros. Wonder</div>
+          <div class="deal-platform">Nintendo Switch</div>
+          <div class="deal-price-row">
+            <span class="deal-price">$199.900</span>
+            <span class="deal-old-price">$249.900</span>
+            <span class="deal-discount">-20%</span>
+          </div>
+        </div>
+      </a>
+      <a href="pages/producto.html" class="deal-card">
+        <img src="https://image.api.playstation.com/vulcan/ap/rnd/202210/0706/EVWyZD63pahuh95eKloFaJuC.png" alt="RE4" />
+        <div class="deal-info">
+          <div class="deal-name">Resident Evil 4 Remake</div>
+          <div class="deal-platform">PS5 / Xbox</div>
+          <div class="deal-price-row">
+            <span class="deal-price">$139.900</span>
+            <span class="deal-old-price">$199.900</span>
+            <span class="deal-discount">-30%</span>
+          </div>
+        </div>
+      </a>
+      <a href="pages/producto.html" class="deal-card">
+        <img src="https://images.unsplash.com/photo-1527814050087-3793815479db?w=500&q=80" alt="Teclado" />
+        <div class="deal-info">
+          <div class="deal-name">HyperX Alloy Origins TKL</div>
+          <div class="deal-platform">Periférico</div>
+          <div class="deal-price-row">
+            <span class="deal-price">$289.900</span>
+            <span class="deal-old-price">$369.900</span>
+            <span class="deal-discount">-22%</span>
+          </div>
+        </div>
+      </a>
+      <a href="pages/producto.html" class="deal-card">
+        <img src="https://image.api.playstation.com/vulcan/ap/rnd/202302/2321/ba706e54d68d10a0eb6ab7c36cdad9178c58b7fb7bb03d28.png" alt="BG3" />
+        <div class="deal-info">
+          <div class="deal-name">Baldur's Gate 3 — Deluxe</div>
+          <div class="deal-platform">PC / PS5</div>
+          <div class="deal-price-row">
+            <span class="deal-price">$229.900</span>
+            <span class="deal-old-price">$299.900</span>
+            <span class="deal-discount">-23%</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REVIEWS PREVIEW ============ -->
+<section class="section-gap" style="background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding-top:60px; padding-bottom:60px;">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Editorial</div>
+        <h2 class="section-title">Reseñas recientes</h2>
+      </div>
+      <a href="pages/resenas.html" class="section-link">Ver todas <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="reviews-grid">
+      <a href="pages/resena.html" class="review-card" style="display:block;">
+        <div class="review-card-header">
+          <img src="https://upload.wikimedia.org/wikipedia/en/f/fb/The_Legend_of_Zelda_Tears_of_the_Kingdom_cover.jpg" class="review-game-img" alt="Zelda" />
+          <div class="review-score">9.8</div>
+        </div>
+        <div class="review-title">Una obra maestra de diseño abierto</div>
+        <div class="review-game-name">The Legend of Zelda: Tears of the Kingdom · Nintendo Switch</div>
+        <p class="review-excerpt">Nintendo volvió a superar lo imposible. La libertad creativa que ofrece TotK es inigualable en cualquier juego de mundo abierto...</p>
+        <div class="review-footer">
+          <span class="review-author">Por <strong>ZonaPixel Staff</strong></span>
+          <span class="review-stars">★★★★★</span>
+        </div>
+      </a>
+      <a href="pages/resena.html" class="review-card" style="display:block;">
+        <div class="review-card-header">
+          <img src="https://image.api.playstation.com/vulcan/ap/rnd/202302/2321/ba706e54d68d10a0eb6ab7c36cdad9178c58b7fb7bb03d28.png" class="review-game-img" alt="BG3" />
+          <div class="review-score">9.6</div>
+        </div>
+        <div class="review-title">El RPG que redefinió el género</div>
+        <div class="review-game-name">Baldur's Gate 3 · PC / PS5</div>
+        <p class="review-excerpt">Larian Studios ha creado el juego de rol más completo y ambicioso en décadas. Una experiencia que te consume completamente...</p>
+        <div class="review-footer">
+          <span class="review-author">Por <strong>ZonaPixel Staff</strong></span>
+          <span class="review-stars">★★★★★</span>
+        </div>
+      </a>
+      <a href="pages/resena.html" class="review-card" style="display:block;">
+        <div class="review-card-header">
+          <img src="https://cdn1.epicgames.com/offer/c4763f236d08423eb47b4c3008779c84/EGS_AlanWake2_RemedyEntertainment_S2_1200x1600-c7c8091ddac0f9669c8e5905bca88aaa" class="review-game-img" alt="Alan Wake 2" />
+          <div class="review-score">9.0</div>
+        </div>
+        <div class="review-title">Terror narrativo sin precedentes</div>
+        <div class="review-game-name">Alan Wake 2 · PC / PS5 / Xbox</div>
+        <p class="review-excerpt">Remedy Entertainment entrega su obra más ambiciosa: una fusión de terror psicológico, metaficción y acción cinematográfica...</p>
+        <div class="review-footer">
+          <span class="review-author">Por <strong>ZonaPixel Staff</strong></span>
+          <span class="review-stars">★★★★½</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST ============ -->
+<section class="trust-strip">
+  <div class="container">
+    <div class="trust-items">
+      <div class="trust-item">
+        <div class="trust-icon">🚀</div>
+        <div>
+          <div class="trust-label">Envío express</div>
+          <div class="trust-sub">Recibe en 24–48 h</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🔒</div>
+        <div>
+          <div class="trust-label">Pago 100% seguro</div>
+          <div class="trust-sub">SSL encriptado</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">↩️</div>
+        <div>
+          <div class="trust-label">Devoluciones gratis</div>
+          <div class="trust-sub">Hasta 30 días</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🎧</div>
+        <div>
+          <div class="trust-label">Soporte 24/7</div>
+          <div class="trust-sub">Chat y correo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<?php 
+  include './views/plantillas/footer.php';
+?>
+
+<script type="module" src="js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

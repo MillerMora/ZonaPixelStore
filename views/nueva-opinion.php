@@ -1,3 +1,10 @@
+<?php 
+session_start();
+$logueo = null;
+if (isset($_SESSION['rol'])){
+  $logueo = $_SESSION['rol'];
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,14 +16,16 @@
 </head>
 <body>
 
-<nav class="navbar">
-  <div class="container">
-    <a href="../index.html" class="navbar-brand"><span class="logo-dot"></span>ZonaPixel</a>
-    <div class="nav-links"><a href="../index.html">Inicio</a><a href="./catalogo.html">Catálogo</a><a href="./opiniones.html">Opiniones</a></div>
-    <div class="nav-actions"><a href="carrito.html" class="nav-icon-btn"><i class="fas fa-shopping-cart"></i></a></div>
-  </div>
-</nav>
+<?php 
+if ($logueo === 1){
+  include './plantillas/navbar_admin.php';
+} elseif ($logueo >= 2 ){
+  include './plantillas/navbar_user.php';
+} else {
+  include './plantillas/navbar_publico.php';
 
+}
+?>
 <div class="page-hero py-4">
   <div class="container">
     <div class="breadcrumb-nav">
@@ -85,14 +94,9 @@
   </div>
 </section>
 
-<footer>
-  <div class="container">
-    <div class="footer-bottom" style="border-top:1px solid var(--border); padding-top:24px">
-      <span class="footer-copy">© 2025 ZonaPixel.</span>
-      <div class="footer-legal"><a href="#">Privacidad</a><a href="#">Términos</a></div>
-    </div>
-  </div>
-</footer>
+<?php 
+  include './plantillas/footer.php';
+?>
 
 <script type="module" src="../js/main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

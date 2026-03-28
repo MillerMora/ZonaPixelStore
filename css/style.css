@@ -1001,6 +1001,51 @@ footer {
 
 .me-auto { margin-left: auto; }
 
+
+
+/* ---- USER DROPDOWN (navbar_admin) ---- */
+.user-dropdown { position: relative; }
+.user-dropdown-toggle { position: relative; }
+.user-dropdown-menu {
+  position: absolute;
+  top: 100%; right: 0;
+  min-width: 220px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+  opacity: 0; visibility: hidden; transform: translateY(-10px);
+  transition: all var(--transition);
+  z-index: 950;
+  overflow: hidden;
+}
+.user-dropdown.active .user-dropdown-menu {
+  opacity: 1; visibility: visible; transform: translateY(0);
+}
+.user-dropdown-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px;
+  color: var(--white);
+  font-size: 14px; font-weight: 500;
+  text-decoration: none;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.user-dropdown-item:hover { 
+  background: var(--surface-2); 
+  color: var(--accent); 
+}
+.user-dropdown-item.logout { 
+  border-top: 1px solid var(--border); 
+  margin-top: 0; 
+}
+.dropdown-divider {
+  height: 1px; 
+  background: var(--border); 
+  border: none; 
+  margin: 4px 0; 
+}
+
 /* ---- RESPONSIVE ---- */
 @media (max-width:1024px) {
   .hero .container { grid-template-columns:1fr; }

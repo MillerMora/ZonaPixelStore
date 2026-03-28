@@ -16,6 +16,7 @@ import { initDashboardNav } from './modules/dashboardNav.js';
 import { initFilterAccordion } from './modules/filterAccordion.js';
 import { initCartInteractions } from './modules/cartInteractions.js';
 import { initStarRating } from './modules/starRating.js';
+import { initUserDropdown } from './modules/userDropdown.js';
 
 initMobileNav();
 initNavbarShadow();
@@ -29,3 +30,4 @@ initDashboardNav();
 initFilterAccordion();
 initCartInteractions();
 initStarRating();
+initUserDropdown();

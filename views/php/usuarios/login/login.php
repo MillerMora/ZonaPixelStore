@@ -9,11 +9,11 @@ function iniciar_sesion($usuario, $password)
             $consulta = consultar_usuarios_correo($usuario);
             if (!$consulta) {
                 echo 'correo incorrecto';
-                return;
+                return header('location: ../../../../index.php');
             }
             if ($consulta['password_hash'] != $password) {
                 echo 'contraseña incorrecta';
-                return;
+                return header('location: ../../../../index.php');
             }
 
             $_SESSION['rol'] = $consulta['rol_id'];
@@ -22,18 +22,18 @@ function iniciar_sesion($usuario, $password)
             $_SESSION['username'] = $consulta['username'];
             $_SESSION['password'] = $consulta['password_hash'];
             echo 'inicio de sesion exitoso';
-            return;
+            return header('location: ../../../../index.php');
         }
 
 
         $consulta = consultar_usuarios_nombreUsuario($usuario);
         if (!$consulta) {
             echo 'nombre de usuario incorrecto';
-            return;
+            return header('location: ../../../../index.php') ;
         }
         if ($consulta['password_hash'] != $password) {
             echo 'contraseña incorrecta';
-            return;
+            return header('location: ../../../../index.php');
         }
 
         $_SESSION['rol'] = $consulta['rol_id'];
@@ -42,10 +42,10 @@ function iniciar_sesion($usuario, $password)
         $_SESSION['username'] = $consulta['username'];
         $_SESSION['password'] = $consulta['password_hash'];
         echo 'inicio de sesion exitoso';
-        return;
+        return header('location: ../../../../index.php');
     }
     echo 'error datos nulos';
-    return;
+    return header('location: ../../../../index.php');
 }
 
 function cerrar_sesion (){
@@ -54,7 +54,12 @@ function cerrar_sesion (){
 
     session_destroy();
 
+    return header('location: ../../../../index.php');
+
 }
 if (isset($_GET['iniciar'])) {
     iniciar_sesion($usuario= $_POST['login'], $password = $_POST['password']);
+}
+if (isset($_GET['cerrar'])) {
+    cerrar_sesion();
 }

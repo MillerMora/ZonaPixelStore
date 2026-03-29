@@ -47,7 +47,7 @@ $fila = consultar_usuarios_id($id);
             </a>
         </div>
 
-        <form action="editar_usuario.php" method="POST">
+        <form action="actualizar_usuario" method="POST">
             <input type="hidden" name="id_usuario" value="<?= $fila['id_usuario'] ?>">
             
             <div class="form-field">

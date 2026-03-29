@@ -4,6 +4,10 @@ $logueo = null;
 if (isset($_SESSION['rol'])){
   $logueo = $_SESSION['rol'];
 }
+
+if ($logueo != 1){
+  header('location: ./404.php') ;
+}
 ?>
 <!doctype html>
 <html lang="es">

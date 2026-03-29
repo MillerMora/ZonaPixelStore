@@ -1,4 +1,13 @@
 <?php 
+session_start();
+$logueo = null;
+if (isset($_SESSION['rol'])){
+  $logueo = $_SESSION['rol'];
+}
+
+if ($logueo != 1){
+  header('location: /views/404.php') ;
+}
 include './productoModel.php';
 
 $consulta = consultar_productos() ;

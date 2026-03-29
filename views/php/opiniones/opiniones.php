@@ -1,4 +1,13 @@
 <?php
+session_start();
+$logueo = null;
+if (isset($_SESSION['rol'])){
+  $logueo = $_SESSION['rol'];
+}
+
+if ($logueo != 1){
+  header('location: /views/404.php') ;
+}
 include './opinionModel.php';
 require_once '../usuarios/usuarioModel.php';
 require_once '../productos/productoModel.php';

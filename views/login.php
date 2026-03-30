@@ -2,7 +2,15 @@
 
 session_start();
 
-?>
+if (isset($_SESSION['login_error'])): ?>
+<div style="background: linear-gradient(90deg, #dc3545, #c82333); color: white; padding: 1rem 0; text-align: center; font-weight: 600; font-size: 1.1rem; box-shadow: 0 2px 10px rgba(220,53,69,0.3); margin-bottom: 2rem; border: none;">
+  <div class="container">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    <?php echo htmlspecialchars($_SESSION['login_error']); 
+    unset($_SESSION['login_error']); ?>
+  </div>
+</div>
+<?php endif; ?>
 
 <!DOCTYPE html>
 <html lang="es">

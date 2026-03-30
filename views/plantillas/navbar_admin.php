@@ -23,7 +23,7 @@
                     <a href="/views/dashboard.php" class="user-dropdown-item">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
-                    <a href="/views/php/usuarios/usuario.php" class="user-dropdown-item">
+                    <a href="/views/php/usuarios/editar_usuario_cliente.php" class="user-dropdown-item">
                         <i class="fas fa-user-circle"></i> Perfil
                     </a>
                     <a href="#" class="user-dropdown-item">

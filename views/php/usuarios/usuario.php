@@ -66,7 +66,7 @@ $usuario = consultar_usuarios_rol();
                             </span>
                         </td>
                         <td class="table-actions">
-                            <a href="./actualizar_usuario.php?id=<?= $filas['id_usuario'] ?>" class="action-icon-btn" title="Editar">
+                            <a href="./editar_usuario.php?id=<?= $filas['id_usuario'] ?>" class="action-icon-btn" title="Editar">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <a href="./usuarioModel.php?eliminar=<?= $filas['id_usuario'] ?>" 

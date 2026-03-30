@@ -30,6 +30,14 @@ function actualizar_usuario($id, $nombre, $apellido, $usuario, $correo, $contras
     return $resultado;
 }
 
+function actualizar_contraseña ($username, $password){
+    global $BD;
+    $sql = mysqli_prepare($BD,'UPDATE usuarios SET password_hash = ? WHERE username = ?' );
+    mysqli_stmt_bind_param($sql, 'ss', $password, $username);
+    $resultado = mysqli_stmt_execute($sql);
+    return $resultado;
+}
+
 function eliminar_usuario($id)
 {
     global $BD;
@@ -37,7 +45,7 @@ function eliminar_usuario($id)
     $sql = mysqli_prepare($BD, 'DELETE FROM usuarios WHERE id_usuario = ?');
     mysqli_stmt_bind_param($sql, 'i', $id);
     $resultado = mysqli_stmt_execute($sql);
-    mysqli_query($BD,"SET FOREIGN_KEY_CHECKS = 0");
+    mysqli_query($BD,"SET FOREIGN_KEY_CHECKS = 1");
     return $resultado;
 }
 

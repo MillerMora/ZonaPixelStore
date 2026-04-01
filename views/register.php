@@ -1,3 +1,10 @@
+<?php 
+session_start();
+$logueo = null;
+if (isset($_SESSION['rol'])){
+  $logueo = $_SESSION['rol'];
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -11,19 +18,32 @@
 </head>
 
 <body>
+<?php if (isset($_SESSION['login_error'])): ?>
+<div style="background: linear-gradient(90deg, #dc3545, #c82333); color: white; padding: 1rem 0; text-align: center; font-weight: 600; font-size: 1.1rem; box-shadow: 0 2px 10px rgba(220,53,69,0.3); margin-bottom: 2rem; border: none;">
+  <div class="container">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    <?php echo htmlspecialchars($_SESSION['login_error']); 
+    unset($_SESSION['login_error']); ?>
+  </div>
+</div>
+<?php endif; ?>
 
-  <nav class="navbar">
-    <div class="container">
-      <a href="../index.html" class="navbar-brand"><span class="logo-dot"></span>ZonaPixel</a>
-      <div class="nav-links"><a href="../index.html">Inicio</a><a href="./catalogo.html">Catálogo</a></div>
-      <div class="nav-actions"><a href="carrito.html" class="nav-icon-btn"><i class="fas fa-shopping-cart"></i></a></div>
-    </div>
-  </nav>
+<?php 
+if ($logueo === 1){
+  include './plantillas/navbar_admin.php';
+} elseif ($logueo >= 2 ){
+  include './plantillas/navbar_user.php';
+} else {
+  include './plantillas/navbar_publico.php';
+
+}
+?>
+
 
   <section class="auth-page py-5">
     <div class="container">
       <div class="auth-card">
-        <form action="./php/usuarios/editar_usuario.php?crear=1" method="post">
+        <form action="./php/usuarios/actualizar_usuario.php?crear=1" method="post">
 
           <div class="auth-logo">
             <span class="logo-dot" style="width:10px;height:10px"></span>
@@ -35,44 +55,44 @@
           <div class="row g-3">
             <div class="form-field col-md-6">
               <label>Nombre</label>
-              <input type="text" class="form-input" name ="nombre"  placeholder="Juan" />
+              <input type="text" class="form-input" name ="nombre"  placeholder="Juan" required />
             </div>
             <div class="form-field col-md-6">
               <label>Apellido</label>
-              <input type="text" class="form-input" name="apellido" placeholder="Pérez" />
+              <input type="text" class="form-input" name="apellido" placeholder="Pérez" required/>
             </div>
           </div>
           <div class="form-field">
             <label>Correo electrónico</label>
             <div class="input-icon-wrap">
               <i class="fas fa-envelope"></i>
-              <input type="email" class="form-input" name="email" placeholder="juan@correo.com" />
+              <input type="email" class="form-input" name="email" placeholder="juan@correo.com" required/>
             </div>
           </div>
           <div class="form-field">
             <label>Nombre de usuario</label>
             <div class="input-icon-wrap">
               <i class="fas fa-at"></i>
-              <input type="text" class="form-input" name="username" placeholder="@juangamer" />
+              <input type="text" class="form-input" name="username" placeholder="@juangamer" required/>
             </div>
           </div>
           <div class="form-field">
             <label>Contraseña</label>
             <div class="input-icon-wrap">
               <i class="fas fa-lock"></i>
-              <input type="password" class="form-input" name="password" placeholder="Mínimo 8 caracteres" />
+              <input type="password" class="form-input" name="password" placeholder="Mínimo 8 caracteres" required/>
             </div>
           </div>
           <div class="form-field">
             <label>Confirmar Contraseña</label>
             <div class="input-icon-wrap">
               <i class="fas fa-lock"></i>
-              <input type="confirm_password" class="form-input" name="confirm_password" placeholder="Mínimo 8 caracteres" />
+              <input type="confirm_password" class="form-input" name="confirm_password" placeholder="Mínimo 8 caracteres" required />
             </div>
           </div>
 
           <div class="d-flex align-items-start gap-2 mb-3" style="font-size:12px; color:var(--muted)">
-            <input type="checkbox" class="form-check-input mt-1" style="accent-color:var(--accent); flex-shrink:0" />
+            <input type="checkbox" class="form-check-input mt-1" style="accent-color:var(--accent); flex-shrink:0" required />
             <span>Acepto los <a href="#" style="color:var(--accent)">Términos de servicio</a> y la <a href="#" style="color:var(--accent)">Política de privacidad</a> de ZonaPixel.</span>
           </div>
 
@@ -92,7 +112,9 @@
     </div>
     </form>
   </section>
-
+<?php 
+  include './plantillas/footer.php';
+?>
   <script type="module" src="../js/main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

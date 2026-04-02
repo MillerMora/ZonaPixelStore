@@ -49,10 +49,44 @@ function eliminar_pedido ($id){
     return $resultado ;
 }
 
+function total_pedidos() {
+    global $BD;
+    $sql = mysqli_query($BD, 'SELECT COUNT(*) as total FROM pedidos');
+    $row = mysqli_fetch_assoc($sql);
+    return $row['total'];
+}
+
+function pedidos_mes() {
+    global $BD;
+    $sql = mysqli_query($BD, 'SELECT COUNT(*) as total FROM pedidos WHERE MONTH(creado_en) = MONTH(CURDATE()) AND YEAR(creado_en) = YEAR(CURDATE())');
+    $row = mysqli_fetch_assoc($sql);
+    return $row['total'];
+}
+
+function ingresos_mes() {
+    global $BD;
+    $sql = mysqli_query($BD, 'SELECT COALESCE(SUM(total), 0) as total FROM pedidos WHERE MONTH(creado_en) = MONTH(CURDATE()) AND YEAR(creado_en) = YEAR(CURDATE())');
+    $row = mysqli_fetch_assoc($sql);
+    return $row['total'];
+}
+
+function ingresos_totales() {
+    global $BD;
+    $sql = mysqli_query($BD, 'SELECT COALESCE(SUM(total), 0) as total FROM pedidos');
+    $row = mysqli_fetch_assoc($sql);
+    return $row['total'];
+}
+
+function pedidos_recientes($limit = 5) {
+    global $BD;
+    $sql = mysqli_query($BD, "SELECT * FROM pedidos ORDER BY creado_en DESC LIMIT $limit");
+    return $sql;
+}
+
 if (isset($_GET["eliminar"])){
     eliminar_pedido($_GET["eliminar"]);
     header("location: pedidos.php");
 }
-
 ?>
+
 

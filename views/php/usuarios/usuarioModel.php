@@ -57,6 +57,12 @@ function consultar_usuarios()
     $sql = mysqli_query($BD, 'SELECT * FROM usuarios;');
     return $sql;
 }
+function consultar_usuarios_recientes( $limit = 5)
+{
+    global $BD;
+    $sql = mysqli_query($BD, "SELECT * FROM usuarios ORDER BY creado_en DESC LIMIT $limit;");
+    return $sql;
+}
 
 function consultar_usuarios_id($id)
 {
@@ -91,6 +97,22 @@ function consultar_usuarios_rol()
     global $BD;
     $sql = mysqli_query($BD, 'SELECT U.*, R.nombre AS nombre_rol FROM usuarios as U LEFT JOIN roles as R ON U.rol_id = R.id_rol;');
     return $sql;
+}
+
+function total_usuarios()
+{
+    global $BD;
+    $sql = mysqli_query($BD, 'SELECT COUNT(*) as total FROM usuarios');
+    $row = mysqli_fetch_assoc($sql);
+    return $row['total'];
+}
+
+function usuarios_mes()
+{
+    global $BD;
+    $sql = mysqli_query($BD, 'SELECT COUNT(*) as total FROM usuarios WHERE MONTH(creado_en) = MONTH(CURDATE()) AND YEAR(creado_en) = YEAR(CURDATE())');
+    $row = mysqli_fetch_assoc($sql);
+    return $row['total'];
 }
 
 

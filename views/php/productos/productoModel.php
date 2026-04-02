@@ -54,10 +54,36 @@ function eliminar_producto ($id){
     return $resultado ;
 }
 
+function total_productos () {
+    global $BD;
+    $sql = mysqli_query($BD, 'SELECT COUNT(*) as total FROM productos');
+    $row = mysqli_fetch_assoc($sql);
+    return $row['total'];
+}
+
+function productos_recientes($limit = 5) {
+    global $BD;
+    $sql = mysqli_query($BD, "SELECT * FROM productos ORDER BY id_producto DESC LIMIT $limit");
+    return $sql;
+}
+
+function productos_mas_vendidos($limit = 5) {
+    global $BD;
+    $sql = mysqli_query($BD, "
+        SELECT p.nombre, p.imagen_principal, COALESCE(COUNT(pi.cantidad), 0) as unidades, COALESCE(SUM(pi.subtotal), 0) as ventas_total
+        FROM productos p 
+        LEFT JOIN pedido_items pi ON p.id_producto = pi.producto_id
+        LEFT JOIN pedidos pe ON pi.pedido_id = pe.id_pedido AND pe.estado_id = 4
+        GROUP BY p.id_producto, p.nombre, p.imagen_principal
+        ORDER BY unidades DESC 
+        LIMIT $limit
+    ");
+    return $sql;
+}
+
 if (isset($_GET["eliminar"])){
     eliminar_producto($_GET["eliminar"]);
     header("location: productos.php");
 }
-
 ?>
 

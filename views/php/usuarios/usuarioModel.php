@@ -115,6 +115,18 @@ function usuarios_mes()
     return $row['total'];
 }
 
+function total_clientes()
+{
+    global $BD;
+    $sql = mysqli_query($BD, "
+        SELECT COUNT(*) AS total
+        FROM usuarios u
+        INNER JOIN roles r ON r.id_rol = u.rol_id AND r.nombre = 'cliente'
+    ");
+    $row = mysqli_fetch_assoc($sql);
+    return (int) ($row['total'] ?? 0);
+}
+
 
 if (isset($_GET['eliminar'])){
     eliminar_usuario($_GET['eliminar']);

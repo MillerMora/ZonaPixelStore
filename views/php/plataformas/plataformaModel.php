@@ -46,5 +46,25 @@ function eliminar_plataforma ($id){
     return $resultado ;
 }
 
+function plataformas_con_productos_videojuegos() {
+    global $BD;
+    $sql = mysqli_query($BD, "
+        SELECT DISTINCT pl.id_plataforma, pl.nombre, pl.icono
+        FROM plataformas pl
+        INNER JOIN producto_plataformas pp ON pp.plataforma_id = pl.id_plataforma
+        INNER JOIN productos p ON p.id_producto = pp.producto_id AND p.activo = 1
+        INNER JOIN categorias c ON p.categoria_id = c.id_categoria
+            AND c.nombre = 'Videojuegos' AND c.activa = 1
+        ORDER BY pl.nombre ASC
+    ");
+    $out = [];
+    if ($sql) {
+        while ($row = mysqli_fetch_assoc($sql)) {
+            $out[] = $row;
+        }
+    }
+    return $out;
+}
+
 ?>
 

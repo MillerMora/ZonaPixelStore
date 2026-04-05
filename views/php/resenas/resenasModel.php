@@ -45,6 +45,47 @@ function eliminar_resena($id){
     return mysqli_stmt_execute($sql);
 }
 
+function consultar_resenas_editorial_destacadas($limite = 6) {
+    global $BD;
+    $limite = (int) $limite;
+    if ($limite < 1) {
+        $limite = 6;
+    }
+    $sql = mysqli_query($BD, "
+        SELECT
+            r.id_resena,
+            r.producto_id,
+            r.autor_id,
+            r.titulo,
+            r.contenido,
+            r.calificacion,
+            r.imagen_portada,
+            r.publicada_en,
+            p.nombre AS producto_nombre,
+            u.nombre AS autor_nombre,
+            u.apellido AS autor_apellido,
+            u.username AS autor_username,
+            (SELECT GROUP_CONCAT(pl.nombre ORDER BY pl.nombre SEPARATOR ' · ')
+             FROM producto_plataformas pp2
+             INNER JOIN plataformas pl ON pl.id_plataforma = pp2.plataforma_id
+             WHERE pp2.producto_id = p.id_producto) AS plataformas_txt
+        FROM resenas r
+        INNER JOIN productos p ON p.id_producto = r.producto_id AND p.activo = 1
+        INNER JOIN usuarios u ON u.id_usuario = r.autor_id AND u.activo = 1
+        INNER JOIN roles ro ON ro.id_rol = u.rol_id AND ro.nombre IN ('editor', 'admin')
+        WHERE r.publicada = 1
+        ORDER BY r.calificacion DESC, r.publicada_en DESC
+        LIMIT $limite
+    ");
+    $out = [];
+    if ($sql) {
+        while ($row = mysqli_fetch_assoc($sql)) {
+            $out[] = $row;
+        }
+    }
+    return $out;
+}
+
 if (isset($_GET['eliminar'])){
     eliminar_resena($_GET['eliminar']);
     header("location: resenas.php");

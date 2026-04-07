@@ -1,4 +1,7 @@
 <?php
+/**
+ * Formulario admin para crear opinión ligada a usuario, producto y plataforma opcional.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

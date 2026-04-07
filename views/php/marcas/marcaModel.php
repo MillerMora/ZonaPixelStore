@@ -1,9 +1,14 @@
 <?php
+/**
+ * Modelo de marcas: listado completo y consulta por id para formularios y vistas.
+ */
+
 require_once __DIR__ . '/../conexion/conexion.php';
 if (!isset($BD)){
     $BD = connection();
 }
 
+// Marcas ordenadas alfabéticamente (panel y selects)
 function listar_marcas() {
     global $BD;
     $sql = mysqli_query($BD, 'SELECT * FROM marcas ORDER BY nombre ASC');
@@ -14,6 +19,7 @@ function listar_marcas() {
     return $marcas;
 }
 
+// Detalle de una marca por id
 function consultar_marca_id($id) {
     global $BD;
     $sql = mysqli_prepare($BD, 'SELECT * FROM marcas WHERE id_marca = ?');

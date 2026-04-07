@@ -1,4 +1,7 @@
 <?php
+/**
+ * Edición de opinión existente; incluye flag de aprobación para moderación.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

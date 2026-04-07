@@ -1,4 +1,7 @@
 <?php
+/**
+ * Moderación de opiniones de comunidad: listado admin con FK a usuario, producto y plataforma.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

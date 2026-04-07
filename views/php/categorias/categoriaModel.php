@@ -1,9 +1,14 @@
 <?php
+/**
+ * Modelo de categorías: lectura de categorías activas y detalle por identificador.
+ */
+
 require_once __DIR__ . '/../conexion/conexion.php';
 if (!isset($BD)){
     $BD = connection();
 }
 
+// Todas las categorías marcadas como activas, orden alfabético por nombre
 function listar_categorias() {
     global $BD;
     $sql = mysqli_query($BD, 'SELECT * FROM categorias WHERE activa = 1 ORDER BY nombre ASC');
@@ -14,6 +19,7 @@ function listar_categorias() {
     return $categorias;
 }
 
+// Obtiene una fila de categoría por clave primaria (preparada para evitar inyección SQL)
 function consultar_categoria_id($id) {
     global $BD;
     $sql = mysqli_prepare($BD, 'SELECT * FROM categorias WHERE id_categoria = ?');

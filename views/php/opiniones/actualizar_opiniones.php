@@ -1,4 +1,7 @@
 <?php
+/**
+ * Persistencia de opinión: alta (?crear) o actualización por id_opinion; checkbox aprobada → 0/1.
+ */
 include "./opinionModel.php";
 if (isset($_POST['id_opinion'])){
     $id = $_POST['id_opinion'];
@@ -13,9 +16,11 @@ $aprobada = isset($_POST['aprobada']) ? 1 : 0;
 
 $success = false;
 if (isset($_GET['crear'])){
+    // Inserción desde crear_opinion.php
     $crear_datos = crear_opinion($usuario_id, $producto_id, $plataforma_id, $titulo, $contenido, $calificacion, $aprobada);
     $success = $crear_datos;
 } elseif (isset($id)) {
+    // Actualización de fila moderada
     $actualizar_datos = actualizar_opinion($id, $usuario_id, $producto_id, $plataforma_id, $titulo, $contenido, $calificacion, $aprobada);
     $success = $actualizar_datos;
 } else {

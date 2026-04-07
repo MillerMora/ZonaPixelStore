@@ -40,6 +40,10 @@ $consulta = consultar_resenas() ;
     <div class="dash-card">
         <div class="dashboard-card-header d-flex align-items-center justify-content-between">
             <span class="dashboard-card-title">Lista de Reseñas</span>
+            <div class="dash-search-wrap">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="dash-search" placeholder="Buscar..." />
+                </div>
             <a href="crear_resena.php" class="btn-primary btn btn-sm" style="font-size:13px; padding:8px 20px">
                 <i class="fas fa-plus"></i> Nueva Reseña
             </a>

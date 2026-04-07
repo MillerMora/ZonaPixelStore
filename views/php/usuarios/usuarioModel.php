@@ -150,6 +150,13 @@ function total_clientes()
     return (int) ($row['total'] ?? 0);
 }
 
+// Conteo de pedidos por usuario específico (para dashboard y reportes)
+function pedidos_por_usuario($id_usuario) {
+    global $BD;
+    $sql = mysqli_query($BD, 'SELECT COUNT(*) as total FROM pedidos WHERE usuario_id = ' . (int)$id_usuario);
+    $row = mysqli_fetch_assoc($sql);
+    return (int)$row['total'];
+}
 
 // Invocación directa desde la URL del panel: ?eliminar=id redirige tras borrar
 if (isset($_GET['eliminar'])){

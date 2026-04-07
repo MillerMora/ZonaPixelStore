@@ -1,9 +1,37 @@
 <?php
-/**
- * Ficha de producto de ejemplo (Baldur's Gate 3): galería, opciones, reseñas recientes embebidas.
- * Sirve de plantilla visual; los datos reales vendrían del modelo en una versión dinámica.
- */
 session_start();
+require_once __DIR__ . '/php/productos/productoModel.php';
+
+function producto_fmt_cop($valor)
+{
+  return '$' . number_format((float) $valor, 0, ',', '.');
+}
+
+$producto_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$producto = $producto_id > 0 ? consultar_producto_detalle_id($producto_id) : null;
+$plataformas = $producto ? consultar_producto_plataformas((int) $producto['id_producto']) : [];
+$ediciones = $producto ? consultar_producto_ediciones((int) $producto['id_producto']) : [];
+
+$opiniones = [];
+if ($producto) {
+  global $BD;
+  $sql_op = mysqli_prepare($BD, "
+    SELECT o.calificacion, o.contenido, u.nombre, u.apellido, u.username, pl.nombre AS plataforma
+    FROM opiniones o
+    INNER JOIN usuarios u ON u.id_usuario = o.usuario_id
+    LEFT JOIN plataformas pl ON pl.id_plataforma = o.plataforma_id
+    WHERE o.producto_id = ? AND o.aprobada = 1
+    ORDER BY o.creado_en DESC, o.id_opinion DESC
+    LIMIT 6
+  ");
+  mysqli_stmt_bind_param($sql_op, 'i', $producto_id);
+  mysqli_stmt_execute($sql_op);
+  $res_op = mysqli_stmt_get_result($sql_op);
+  while ($row = mysqli_fetch_assoc($res_op)) {
+    $opiniones[] = $row;
+  }
+}
+
 $logueo = null;
 if (isset($_SESSION['rol'])){
   $logueo = $_SESSION['rol'];
@@ -14,7 +42,7 @@ if (isset($_SESSION['rol'])){
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Baldur's Gate 3 — ZonaPixel</title>
+  <title><?php echo htmlspecialchars($producto['nombre'] ?? 'Producto', ENT_QUOTES, 'UTF-8'); ?> — ZonaPixel</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -50,32 +78,26 @@ if ($logueo === 1){
     <div class="breadcrumb-nav">
       <a href="/index.php">Inicio</a><span>/</span>
       <a href="/views/catalogo.php">Catálogo</a><span>/</span>
-      <a href="/views/catalogo.php">RPG</a><span>/</span>
-      <span class="text-white">Baldur's Gate 3</span>
+      <a href="/views/catalogo.php"><?php echo htmlspecialchars($producto['categoria_nombre'] ?? 'Producto', ENT_QUOTES, 'UTF-8'); ?></a><span>/</span>
+      <span class="text-white"><?php echo htmlspecialchars($producto['nombre'] ?? 'Producto', ENT_QUOTES, 'UTF-8'); ?></span>
     </div>
   </div>
 </div>
 
 <div class="container">
+  <?php if (!$producto): ?>
+    <div class="py-5 text-center text-muted">Producto no encontrado.</div>
+  <?php else: ?>
   <div class="product-detail-grid">
 
     <!-- GALLERY -->
     <div class="product-gallery">
       <div class="gallery-main">
-        <img src="https://image.api.playstation.com/vulcan/ap/rnd/202302/2321/ba706e54d68d10a0eb6ab7c36cdad9178c58b7fb7bb03d28.png" alt="Baldur's Gate 3" id="mainImg" />
+        <img src="<?php echo htmlspecialchars($producto['imagen_principal'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($producto['nombre'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" id="mainImg" />
       </div>
       <div class="gallery-thumbs">
         <div class="gallery-thumb active">
-          <img src="https://image.api.playstation.com/vulcan/ap/rnd/202302/2321/ba706e54d68d10a0eb6ab7c36cdad9178c58b7fb7bb03d28.png" alt="" />
-        </div>
-        <div class="gallery-thumb">
-          <img src="https://upload.wikimedia.org/wikipedia/en/f/fb/The_Legend_of_Zelda_Tears_of_the_Kingdom_cover.jpg" alt="" />
-        </div>
-        <div class="gallery-thumb">
-          <img src="https://cdn1.epicgames.com/offer/c4763f236d08423eb47b4c3008779c84/EGS_AlanWake2_RemedyEntertainment_S2_1200x1600-c7c8091ddac0f9669c8e5905bca88aaa" alt="" />
-        </div>
-        <div class="gallery-thumb">
-          <img src="https://image.api.playstation.com/vulcan/ap/rnd/202210/0706/EVWyZD63pahuh95eKloFaJuC.png" alt="" />
+          <img src="<?php echo htmlspecialchars($producto['imagen_principal'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" alt="" />
         </div>
       </div>
     </div>
@@ -83,37 +105,54 @@ if ($logueo === 1){
     <!-- INFO -->
     <div class="product-detail-info">
       <div class="product-detail-platform">
-        <span>RPG</span> <span class="text-muted">·</span>
-        <span class="badge badge-hot">GOTY 2023</span>
+        <span><?php echo htmlspecialchars($producto['categoria_nombre'] ?? '', ENT_QUOTES, 'UTF-8'); ?></span>
+        <?php if (!empty($producto['destacado'])): ?>
+          <span class="text-muted">·</span><span class="badge badge-hot">Destacado</span>
+        <?php endif; ?>
       </div>
-      <h1 class="product-detail-title">Baldur's Gate 3</h1>
+      <h1 class="product-detail-title"><?php echo htmlspecialchars($producto['nombre'] ?? '', ENT_QUOTES, 'UTF-8'); ?></h1>
       <div class="product-detail-rating">
-        <div class="stars-row">
-          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <?php
+          $prom = isset($producto['calificacion_promedio']) ? (float) $producto['calificacion_promedio'] : 0;
+          $stars = max(0, min(5, (int) round($prom)));
+          $total_op = (int) ($producto['total_opiniones'] ?? 0);
+        ?>
+        <div class="stars-row" id="productStars">
+          <?php for ($i = 1; $i <= 5; $i++): ?>
+            <i class="<?php echo $i <= $stars ? 'fas' : 'far'; ?> fa-star"></i>
+          <?php endfor; ?>
         </div>
-        <span class="rating-count">9.6 · 3,842 reseñas</span>
+        <span class="rating-count" id="ratingCount"><?php echo number_format($prom, 1, ',', '.'); ?> · <?php echo $total_op; ?> reseñas</span>
       </div>
 
-      <div class="product-detail-price">$189.900 COP</div>
-      <div class="product-detail-price-old">Precio original: <s>$239.900</s> — Ahorras $50.000</div>
+      <div class="product-detail-price"><?php echo producto_fmt_cop($producto['precio'] ?? 0); ?> COP</div>
+      <?php if ((float) ($producto['precio_original'] ?? 0) > (float) ($producto['precio'] ?? 0)): ?>
+      <div class="product-detail-price-old">Precio original: <s><?php echo producto_fmt_cop($producto['precio_original']); ?></s></div>
+      <?php endif; ?>
 
       <p class="product-detail-desc">
-        Baldur's Gate 3 es un juego de rol de aventura por turnos desarrollado y publicado por Larian Studios. Explora el mundo de Faerûn con hasta cuatro jugadores en cooperativo, tomando decisiones que impactan la historia de maneras inesperadas.
+        <?php echo htmlspecialchars($producto['descripcion'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
       </p>
 
+      <?php if (!empty($plataformas)): ?>
       <div class="product-options-title">Plataforma</div>
       <div class="option-chips">
-        <button class="option-chip active">PC (Steam)</button>
-        <button class="option-chip">PlayStation 5</button>
-        <button class="option-chip">Xbox Series X</button>
+        <?php foreach ($plataformas as $idx => $pl): ?>
+          <button class="option-chip<?php echo $idx === 0 ? ' active' : ''; ?>"><?php echo htmlspecialchars($pl['nombre'], ENT_QUOTES, 'UTF-8'); ?></button>
+        <?php endforeach; ?>
       </div>
+      <?php endif; ?>
 
+      <?php if (!empty($ediciones)): ?>
       <div class="product-options-title">Edición</div>
       <div class="option-chips">
-        <button class="option-chip active">Estándar — $189.900</button>
-        <button class="option-chip">Deluxe — $229.900</button>
+        <?php foreach ($ediciones as $idx => $ed): ?>
+          <button class="option-chip<?php echo $idx === 0 ? ' active' : ''; ?>" data-edicion-id="<?php echo (int) $ed['id_producto_edicion']; ?>">
+            <?php echo htmlspecialchars($ed['nombre'], ENT_QUOTES, 'UTF-8'); ?> — <?php echo producto_fmt_cop($ed['precio']); ?>
+          </button>
+        <?php endforeach; ?>
       </div>
+      <?php endif; ?>
 
       <div class="qty-cart-row">
         <div class="qty-control">
@@ -121,19 +160,16 @@ if ($logueo === 1){
           <input type="number" class="qty-input" value="1" min="1" />
           <button class="qty-btn qty-plus">+</button>
         </div>
-        <button class="btn-add-to-cart">
+        <button class="btn-add-to-cart" data-producto-id="<?php echo (int) $producto['id_producto']; ?>">
           <i class="fas fa-shopping-cart"></i> Agregar al carrito
         </button>
         <button class="btn-wishlist-lg"><i class="far fa-heart"></i></button>
       </div>
 
       <ul class="product-meta-list">
-        <li><span class="meta-key">Desarrollador</span> Larian Studios</li>
-        <li><span class="meta-key">Género</span> RPG por turnos</li>
-        <li><span class="meta-key">Lanzamiento</span> 3 agosto 2023</li>
-        <li><span class="meta-key">Idioma</span> Español incluido</li>
-        <li><span class="meta-key">Multijugador</span> Co-op hasta 4 jugadores</li>
-        <li><span class="meta-key">Envío</span> <span class="fg-success"><i class="fas fa-check"></i> Gratis · 24–48 h</span></li>
+        <li><span class="meta-key">Marca</span> <?php echo htmlspecialchars($producto['marca_nombre'] ?? 'N/A', ENT_QUOTES, 'UTF-8'); ?></li>
+        <li><span class="meta-key">Categoría</span> <?php echo htmlspecialchars($producto['categoria_nombre'] ?? 'N/A', ENT_QUOTES, 'UTF-8'); ?></li>
+        <li><span class="meta-key">Stock</span> <?php echo (int) ($producto['stock'] ?? 0); ?> disponible(s)</li>
       </ul>
     </div>
   </div>
@@ -145,48 +181,43 @@ if ($logueo === 1){
         <div class="section-label">Comunidad</div>
         <h2 class="section-title">Opiniones de usuarios</h2>
       </div>
-      <a href="nueva-opinion.html" class="btn-primary text-decoration-none">
+      <a href="nueva-opinion.php" class="btn-primary text-decoration-none">
         <i class="fas fa-pen"></i> Escribir opinión
       </a>
     </div>
-    <div class="d-grid gap-3" style="grid-template-columns:repeat(auto-fill, minmax(280px,1fr));">
-      <div class="opinion-card">
-        <div class="opinion-card-header">
-          <div class="opinion-avatar">PM</div>
-          <div>
-            <div class="opinion-username">PixelMaster</div>
-            <div class="opinion-game">★★★★★ · PS5</div>
+    <div class="d-grid gap-3" style="grid-template-columns:repeat(auto-fill, minmax(280px,1fr));" id="opinionesContainer" data-producto-id="<?php echo (int) $producto['id_producto']; ?>">
+      <?php if (empty($opiniones)): ?>
+        <div class="text-muted">Este producto aún no tiene opiniones.</div>
+      <?php else: ?>
+        <?php foreach ($opiniones as $op): ?>
+          <?php
+            $autor = trim(($op['nombre'] ?? '') . ' ' . ($op['apellido'] ?? ''));
+            if ($autor === '') {
+              $autor = $op['username'] ?? 'Usuario';
+            }
+            $ini = strtoupper(substr($autor, 0, 1));
+            $stars_op = max(1, min(5, (int) $op['calificacion']));
+          ?>
+          <div class="opinion-card">
+            <div class="opinion-card-header">
+              <div class="opinion-avatar"><?php echo htmlspecialchars($ini, ENT_QUOTES, 'UTF-8'); ?></div>
+              <div>
+                <div class="opinion-username"><?php echo htmlspecialchars($autor, ENT_QUOTES, 'UTF-8'); ?></div>
+                <div class="opinion-game"><?php echo str_repeat('★', $stars_op) . str_repeat('☆', 5 - $stars_op); ?><?php if (!empty($op['plataforma'])): ?> · <?php echo htmlspecialchars($op['plataforma'], ENT_QUOTES, 'UTF-8'); ?><?php endif; ?></div>
+              </div>
+            </div>
+            <p class="opinion-text">"<?php echo htmlspecialchars($op['contenido'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"</p>
           </div>
-        </div>
-        <p class="opinion-text">"Simplemente el mejor RPG en décadas. La libertad que ofrece es abrumadora en el buen sentido. Larian Studios ha creado algo monumental."</p>
-      </div>
-      <div class="opinion-card">
-        <div class="opinion-card-header">
-          <div class="opinion-avatar">LG</div>
-          <div>
-            <div class="opinion-username">Laura_G</div>
-            <div class="opinion-game">★★★★½ · PC</div>
-          </div>
-        </div>
-        <p class="opinion-text">"Más de 200 horas y todavía descubro cosas nuevas. La historia es increíble y los personajes son de lo mejor que he visto en un videojuego."</p>
-      </div>
-      <div class="opinion-card">
-        <div class="opinion-card-header">
-          <div class="opinion-avatar">AD</div>
-          <div>
-            <div class="opinion-username">AnaDev</div>
-            <div class="opinion-game">★★★★☆ · PC</div>
-          </div>
-        </div>
-        <p class="opinion-text">"El juego que más me ha enganchado en años. Algunos bugs menores al inicio pero Larian los fue arreglando rápido. Muy recomendado."</p>
-      </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
     <div class="text-center mt-4">
-      <a href="opiniones.html" class="btn-secondary d-inline-flex align-items-center gap-2">
+      <a href="opiniones.php" class="btn-secondary d-inline-flex align-items-center gap-2">
         Ver todas las opiniones <i class="fas fa-arrow-right"></i>
       </a>
     </div>
   </section>
+  <?php endif; ?>
 </div>
 
 <?php 
@@ -194,6 +225,37 @@ if ($logueo === 1){
 ?>
 
 <script type="module" src="../js/main.js"></script>
+<script>
+  (function () {
+    var cont = document.getElementById('opinionesContainer');
+    if (cont) {
+      var pid = cont.getAttribute('data-producto-id');
+      fetch('/views/php/carrito/api.php?action=opiniones_producto&producto_id=' + encodeURIComponent(pid))
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (!data || !data.ok || !Array.isArray(data.opiniones)) return;
+          if (data.opiniones.length === 0) return;
+          cont.innerHTML = '';
+          data.opiniones.forEach(function (op) {
+            var nombre = [op.nombre || '', op.apellido || ''].join(' ').trim() || op.username || 'Usuario';
+            var ini = (nombre.charAt(0) || 'U').toUpperCase();
+            var cal = parseInt(op.calificacion || '0', 10);
+            if (!Number.isFinite(cal)) cal = 0;
+            cal = Math.max(1, Math.min(5, cal));
+            var stars = '★'.repeat(cal) + '☆'.repeat(5 - cal);
+            var plataforma = op.plataforma ? ' · ' + op.plataforma : '';
+            var card = document.createElement('div');
+            card.className = 'opinion-card';
+            card.innerHTML = '<div class="opinion-card-header"><div class="opinion-avatar">' + ini + '</div><div><div class="opinion-username"></div><div class="opinion-game"></div></div></div><p class="opinion-text"></p>';
+            card.querySelector('.opinion-username').textContent = nombre;
+            card.querySelector('.opinion-game').textContent = stars + plataforma;
+            card.querySelector('.opinion-text').textContent = '"' + (op.contenido || '') + '"';
+            cont.appendChild(card);
+          });
+        });
+    }
+  })();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

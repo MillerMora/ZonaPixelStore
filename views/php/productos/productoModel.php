@@ -28,6 +28,68 @@ function consultar_producto_id ($id){
     return mysqli_fetch_assoc($resultado) ;    
 }
 
+function consultar_producto_detalle_id($id)
+{
+    global $BD;
+    $sql = mysqli_prepare($BD, "
+        SELECT
+            p.*,
+            c.nombre AS categoria_nombre,
+            m.nombre AS marca_nombre,
+            v.calificacion_promedio,
+            v.total_opiniones
+        FROM productos p
+        INNER JOIN categorias c ON c.id_categoria = p.categoria_id
+        LEFT JOIN marcas m ON m.id_marca = p.marca_id
+        LEFT JOIN v_calificacion_productos v ON v.producto_id = p.id_producto
+        WHERE p.id_producto = ?
+        LIMIT 1
+    ");
+    mysqli_stmt_bind_param($sql, 'i', $id);
+    mysqli_stmt_execute($sql);
+    $resultado = mysqli_stmt_get_result($sql);
+    return mysqli_fetch_assoc($resultado);
+}
+
+function consultar_producto_plataformas($producto_id)
+{
+    global $BD;
+    $sql = mysqli_prepare($BD, "
+        SELECT pl.id_plataforma, pl.nombre
+        FROM producto_plataformas pp
+        INNER JOIN plataformas pl ON pl.id_plataforma = pp.plataforma_id
+        WHERE pp.producto_id = ?
+        ORDER BY pl.nombre ASC
+    ");
+    mysqli_stmt_bind_param($sql, 'i', $producto_id);
+    mysqli_stmt_execute($sql);
+    $res = mysqli_stmt_get_result($sql);
+    $out = [];
+    while ($row = mysqli_fetch_assoc($res)) {
+        $out[] = $row;
+    }
+    return $out;
+}
+
+function consultar_producto_ediciones($producto_id)
+{
+    global $BD;
+    $sql = mysqli_prepare($BD, "
+        SELECT id_producto_edicion, nombre, precio
+        FROM producto_ediciones
+        WHERE producto_id = ?
+        ORDER BY id_producto_edicion ASC
+    ");
+    mysqli_stmt_bind_param($sql, 'i', $producto_id);
+    mysqli_stmt_execute($sql);
+    $res = mysqli_stmt_get_result($sql);
+    $out = [];
+    while ($row = mysqli_fetch_assoc($res)) {
+        $out[] = $row;
+    }
+    return $out;
+}
+
 // --- Altas, bajas y actualizaciones ---
 
 function crear_producto ($categoria, $marca, $nombre, $descripcion, $precio, $precio_original, $stock, $imagen, $destacado, $activo){

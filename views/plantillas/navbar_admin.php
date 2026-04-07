@@ -1,3 +1,9 @@
+<?php
+if (!function_exists('carrito_contar_items_actuales')) {
+    require_once __DIR__ . '/../php/carrito/carritoModel.php';
+}
+$carrito_count = carrito_contar_items_actuales();
+?>
 <!-- Barra para administrador: acceso a dashboard y menú desplegable de cuenta -->
 <nav class="navbar">
     <div class="container">
@@ -14,7 +20,9 @@
             <button class="nav-icon-btn" title="Buscar"><i class="fas fa-search"></i></button>
             <a href="/views/carrito.php" class="nav-icon-btn" title="Carrito">
                 <i class="fas fa-shopping-cart"></i>
-                <span class="badge-count">3</span>
+                <?php if ($carrito_count > 0): ?>
+                <span class="badge-count"><?php echo (int) $carrito_count; ?></span>
+                <?php endif; ?>
             </a>
             <div class="user-dropdown">
                 <button class="nav-icon-btn user-dropdown-toggle" title="Cuenta" aria-expanded="false">

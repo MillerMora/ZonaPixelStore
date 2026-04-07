@@ -1,9 +1,25 @@
 <?php
-/**
- * Vista de carrito de compras (contenido estático de demostración: ítems, resumen, cupón).
- * La interactividad de filas y cupón la aporta cartInteractions.js en el cliente.
- */
 session_start();
+require_once __DIR__ . '/php/carrito/carritoModel.php';
+
+function carrito_fmt_cop($valor)
+{
+  return '$' . number_format((float) $valor, 0, ',', '.');
+}
+
+$items = carrito_items_actuales();
+$cantidad_total = carrito_contar_items_actuales();
+$subtotal = 0.0;
+foreach ($items as $it) {
+  $subtotal += (float) ($it['subtotal'] ?? 0);
+}
+$descuento = isset($_SESSION['carrito_descuento']) ? (float) $_SESSION['carrito_descuento'] : 0.0;
+if ($descuento > $subtotal) {
+  $descuento = $subtotal;
+}
+$total = $subtotal - $descuento;
+$codigo_aplicado = $_SESSION['carrito_codigo'] ?? '';
+
 $logueo = null;
 if (isset($_SESSION['rol'])){
   $logueo = $_SESSION['rol'];
@@ -48,7 +64,7 @@ if ($logueo === 1){
       <a href="/index.php">Inicio</a><span>/</span><span class="text-white">Carrito de compras</span>
     </div>
     <h1 class="page-hero-title">Tu carrito</h1>
-    <p class="page-hero-sub">3 productos seleccionados</p>
+    <p class="page-hero-sub"><span id="cartItemsCount"><?php echo (int) $cantidad_total; ?></span> productos seleccionados</p>
   </div>
 </div>
 
@@ -65,68 +81,34 @@ if ($logueo === 1){
         <span></span>
       </div>
 
-      <div class="cart-item">
-        <div class="cart-item-info">
-          <img src="https://image.api.playstation.com/vulcan/ap/rnd/202302/2321/ba706e54d68d10a0eb6ab7c36cdad9178c58b7fb7bb03d28.png" class="cart-item-img" alt="" />
-          <div>
-            <div class="cart-item-name">Baldur's Gate 3 — Edición Estándar</div>
-            <div class="cart-item-platform">PC (Steam)</div>
+      <?php if (empty($items)): ?>
+        <div class="text-muted py-3" id="cartEmptyMsg">El carrito está vacío</div>
+      <?php else: ?>
+        <?php foreach ($items as $it): ?>
+          <div class="cart-item" data-item-id="<?php echo htmlspecialchars((string) $it['id_item'], ENT_QUOTES, 'UTF-8'); ?>">
+            <div class="cart-item-info">
+              <img src="<?php echo htmlspecialchars($it['imagen'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" class="cart-item-img" alt="" />
+              <div>
+                <div class="cart-item-name"><?php echo htmlspecialchars($it['nombre'] ?? '', ENT_QUOTES, 'UTF-8'); ?></div>
+                <?php if (!empty($it['opcion'])): ?><div class="cart-item-platform"><?php echo htmlspecialchars($it['opcion'], ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
+              </div>
+            </div>
+            <div class="cart-item-price" data-price="<?php echo (float) $it['precio']; ?>"><?php echo carrito_fmt_cop($it['precio']); ?></div>
+            <div>
+              <div class="qty-control">
+                <button class="qty-btn qty-minus h-36">−</button>
+                <input type="number" class="qty-input h-36" value="<?php echo (int) $it['cantidad']; ?>" min="1" />
+                <button class="qty-btn qty-plus h-36">+</button>
+              </div>
+            </div>
+            <div class="cart-item-total"><?php echo carrito_fmt_cop($it['subtotal']); ?></div>
+            <button class="cart-remove"><i class="fas fa-times"></i></button>
           </div>
-        </div>
-        <div class="cart-item-price">$189.900</div>
-        <div>
-          <div class="qty-control">
-            <button class="qty-btn qty-minus h-36">−</button>
-            <input type="number" class="qty-input" value="1" class="h-36" />
-            <button class="qty-btn qty-plus h-36">+</button>
-          </div>
-        </div>
-        <div class="cart-item-total">$189.900</div>
-        <button class="cart-remove"><i class="fas fa-times"></i></button>
-      </div>
-
-      <div class="cart-item">
-        <div class="cart-item-info">
-          <img src="https://upload.wikimedia.org/wikipedia/en/f/fb/The_Legend_of_Zelda_Tears_of_the_Kingdom_cover.jpg" class="cart-item-img" alt="" />
-          <div>
-            <div class="cart-item-name">Zelda: Tears of the Kingdom</div>
-            <div class="cart-item-platform">Nintendo Switch</div>
-          </div>
-        </div>
-        <div class="cart-item-price">$219.900</div>
-        <div>
-          <div class="qty-control">
-            <button class="qty-btn qty-minus h-36">−</button>
-            <input type="number" class="qty-input h-36" value="1" />
-            <button class="qty-btn qty-plus h-36">+</button>
-          </div>
-        </div>
-        <div class="cart-item-total">$219.900</div>
-        <button class="cart-remove"><i class="fas fa-times"></i></button>
-      </div>
-
-      <div class="cart-item">
-        <div class="cart-item-info">
-          <img src="https://images.unsplash.com/photo-1596443686812-2f45229eebc3?w=500&q=80" class="cart-item-img" alt="" />
-          <div>
-            <div class="cart-item-name">Logitech G Pro X Superlight 2</div>
-            <div class="cart-item-platform">Periférico — Mouse Gaming</div>
-          </div>
-        </div>
-        <div class="cart-item-price">$359.900</div>
-        <div>
-          <div class="qty-control">
-            <button class="qty-btn qty-minus h-36">−</button>
-            <input type="number" class="qty-input h-36" value="1" />
-            <button class="qty-btn qty-plus h-36">+</button>
-          </div>
-        </div>
-        <div class="cart-item-total">$359.900</div>
-        <button class="cart-remove"><i class="fas fa-times"></i></button>
-      </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
 
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4">
-<a href="./catalogo.html" class="btn-secondary d-inline-flex align-items-center gap-2 text-decoration-none">
+<a href="./catalogo.php" class="btn-secondary d-inline-flex align-items-center gap-2 text-decoration-none">
           <i class="fas fa-arrow-left"></i> Seguir comprando
         </a>
       </div>
@@ -136,15 +118,16 @@ if ($logueo === 1){
     <div>
       <div class="order-summary">
         <div class="order-summary-title">Resumen del pedido</div>
-        <div class="summary-row"><span>Subtotal (3 ítems)</span><span>$769.700</span></div>
+        <div class="summary-row"><span>Subtotal (<span id="summaryItemCount"><?php echo (int) $cantidad_total; ?></span> ítems)</span><span id="summarySubtotal"><?php echo carrito_fmt_cop($subtotal); ?></span></div>
         <div class="summary-row"><span>Envío</span><span class="fg-success">Gratis</span></div>
-        <div class="summary-row"><span>Descuento aplicado</span><span class="fg-red">−$50.000</span></div>
-        <div class="summary-row total"><span>Total</span><span>$719.700</span></div>
+        <div class="summary-row"><span>Descuento aplicado</span><span class="fg-red" id="summaryDiscount">−<?php echo carrito_fmt_cop($descuento); ?></span></div>
+        <div class="summary-row total"><span>Total</span><span id="summaryTotal"><?php echo carrito_fmt_cop($total); ?></span></div>
 
         <div class="promo-input-row">
-          <input type="text" class="promo-input" placeholder="Código promocional" />
+          <input type="text" class="promo-input" placeholder="Código promocional" value="<?php echo htmlspecialchars($codigo_aplicado, ENT_QUOTES, 'UTF-8'); ?>" />
           <button class="btn-apply">Aplicar</button>
         </div>
+        <div id="promoMessage" class="small mt-2"></div>
 
         <button class="btn-checkout">
           <i class="fas fa-lock"></i> &nbsp;Proceder al pago
@@ -167,6 +150,18 @@ if ($logueo === 1){
 ?>
 
 <script type="module" src="../js/main.js"></script>
+<script>
+  (function () {
+    var msg = document.getElementById('promoMessage');
+    if (!msg) return;
+    window.zpCartUi = {
+      setMessage: function (text, ok) {
+        msg.textContent = text || '';
+        msg.className = 'small mt-2 ' + (ok ? 'fg-success' : 'fg-red');
+      }
+    };
+  })();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

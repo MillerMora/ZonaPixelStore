@@ -1,5 +1,8 @@
+/**
+ * Detalle de producto: miniaturas de galería, controles de cantidad y favoritos (solo presentación).
+ */
 export function initProductInteractions() {
-  // Gallery thumbs
+  // Miniaturas: copian la imagen principal y marcan la activa
   document.querySelectorAll('.gallery-thumbs').forEach((thumbsEl) => {
     const main = thumbsEl
       .closest('.product-gallery')
@@ -18,7 +21,7 @@ export function initProductInteractions() {
     });
   });
 
-  // Quantity controls
+  // Botones +/- alrededor del input numérico de cantidad
   document.querySelectorAll('.qty-control').forEach((ctrl) => {
     const input = ctrl.querySelector('.qty-input');
     if (!input) return;
@@ -35,7 +38,7 @@ export function initProductInteractions() {
     });
   });
 
-  // Wishlist heart toggle (visual only)
+  // Corazón de lista de deseos: alterna iconos relleno/contorno sin persistencia en servidor
   document
     .querySelectorAll('.product-wishlist, .btn-wishlist-lg')
     .forEach((btn) => {

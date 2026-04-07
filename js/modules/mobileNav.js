@@ -1,3 +1,6 @@
+/**
+ * Drawer de navegación móvil: abrir, cerrar y bloqueo de scroll del body.
+ */
 export function initMobileNav() {
   const toggle = document.getElementById('navToggle');
   const nav = document.getElementById('mobileNav');

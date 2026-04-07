@@ -1,3 +1,6 @@
+/**
+ * Añade clase al entrar en viewport (IntersectionObserver) con retraso escalonado solo visual.
+ */
 export function initScrollReveal() {
   const els = document.querySelectorAll(
     '.product-card, .review-card, .opinion-card, .deal-card, .trust-item, .dash-stat-card',
@@ -19,7 +22,7 @@ export function initScrollReveal() {
 
   els.forEach((el, i) => {
     el.classList.add('reveal-init');
-    // Stagger without business logic (visual only)
+    // Retraso incremental entre tarjetas; solo estética, sin efecto en datos
     el.style.setProperty('--reveal-delay', `${i * 0.05}s`);
     io.observe(el);
   });

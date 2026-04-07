@@ -1,3 +1,6 @@
+/**
+ * Acordeón de filtros en sidebar: alterna clase is-open en el título al hacer clic.
+ */
 export function initFilterAccordion() {
   document.querySelectorAll('.filter-title').forEach((title) => {
     const group = title.nextElementSibling;

@@ -1,7 +1,7 @@
 /**
  * ZonaPixel Store — main.js (ESM)
- * Solo animaciones, mejoras visuales e interacciones simples de interfaz.
- * NO contiene lógica de negocio.
+ * Punto de entrada: registra módulos de UI (navegación, catálogo, carrito, formularios).
+ * Solo animaciones, realce visual e interacciones ligeras; sin reglas de negocio ni llamadas a API.
  */
 
 import { initMobileNav } from './modules/mobileNav.js';

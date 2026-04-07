@@ -1,5 +1,8 @@
+/**
+ * Carrito: animación al quitar filas y respuesta visual al «aplicar» código promocional (sin validación real).
+ */
 export function initCartInteractions() {
-  // Cart remove animation (visual)
+  // Elimina la fila tras una transición CSS
   document.querySelectorAll('.cart-remove').forEach((btn) => {
     btn.addEventListener('click', () => {
       const row = btn.closest('.cart-item');
@@ -9,7 +12,7 @@ export function initCartInteractions() {
     });
   });
 
-  // Promo code feedback (visual)
+  // Cambio de aspecto del botón si el campo no está vacío; no comprueba el cupón en servidor
   const applyBtn = document.querySelector('.btn-apply');
   const promoInput = document.querySelector('.promo-input');
   if (applyBtn && promoInput) {

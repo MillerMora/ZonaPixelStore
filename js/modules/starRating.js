@@ -1,3 +1,6 @@
+/**
+ * Widget de estrellas interactivo: vista previa al pasar el ratón y estado seleccionado al hacer clic.
+ */
 export function initStarRating() {
   const wrap = document.getElementById('starRating');
   if (!wrap) return;

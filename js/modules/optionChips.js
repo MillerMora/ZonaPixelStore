@@ -1,3 +1,6 @@
+/**
+ * Grupos de chips mutuamente excluyentes (un solo .active por .option-chips).
+ */
 export function initOptionChips() {
   document.querySelectorAll('.option-chips').forEach((group) => {
     group

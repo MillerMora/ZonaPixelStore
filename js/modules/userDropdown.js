@@ -1,6 +1,5 @@
 /**
- * ZonaPixel Store — userDropdown.js
- * Maneja el menú desplegable del usuario en navbar_admin
+ * Menú desplegable del usuario en la barra de administración: foco, clic exterior y tecla Escape.
  */
 
 export function initUserDropdown() {
@@ -18,7 +17,7 @@ export function initUserDropdown() {
   
   toggle.addEventListener('click', toggleMenu);
   
-  // Cerrar al hacer click fuera
+  // Cierra el menú si el clic ocurre fuera del contenedor
   document.addEventListener('click', (e) => {
     if (!dropdown.contains(e.target)) {
       dropdown.classList.remove('active');
@@ -26,7 +25,7 @@ export function initUserDropdown() {
     }
   });
   
-  // Cerrar al presionar ESC
+  // Cierra con Escape por accesibilidad
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && dropdown.classList.contains('active')) {
       dropdown.classList.remove('active');

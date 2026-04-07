@@ -1,3 +1,6 @@
+/**
+ * Dashboard admin: muestra u oculta iframes o el panel por defecto según la sección del menú lateral.
+ */
 export function initDashboardNav() {
   const navItems = document.querySelectorAll('.dash-nav-item[data-section]');
   if (!navItems.length) return;
@@ -42,7 +45,7 @@ export function initDashboardNav() {
     });
   });
 
-  // Initial state: if some nav item is marked active, enforce it.
+  // Si el HTML marca un ítem como activo al cargar, sincroniza título y panel visible
   const active = document.querySelector('.dash-nav-item.active[data-section]');
   if (active) {
     const label = active.textContent?.trim();

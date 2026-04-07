@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Panel de administración: métricas resumidas y enlaces a módulos en iframe.
  * Acceso restringido a rol administrador (valor 1 en sesión).
@@ -102,10 +103,6 @@ $top_productos = productos_mas_vendidos(5);
       <div class="dash-topbar">
         <span class="dash-page-title" id="dashPageTitle">Dashboard</span>
         <div class="dash-topbar-actions">
-          <div class="dash-search-wrap">
-            <i class="fas fa-search"></i>
-            <input type="text" class="dash-search" placeholder="Buscar..." />
-          </div>
           <a href="../index.html" class="nav-icon-btn" title="Ver tienda"><i class="fas fa-store"></i></a>
           <button class="nav-icon-btn" title="Notificaciones">
             <i class="fas fa-bell"></i>
@@ -297,13 +294,13 @@ $top_productos = productos_mas_vendidos(5);
                   <tr>
                     <td>
                       <div class="dash-row-user gap-10">
-                        <div class="user-row-avatar">CS</div>
+                        <div class="user-row-avatar"><?= isset($filas['username']) ? substr($filas['username'], 0, 1) : 'NA' ?></div>
                         <strong><?= $filas['username'] ?>.</strong>
                       </div>
                     </td>
                     <td class="dash-td-muted"><?= $filas['email'] ?></td>
                     <td class="dash-td-muted"><?= $filas['creado_en'] ?></td>
-                    <td>8</td>
+                    <td><?= pedidos_por_usuario($filas['id_usuario']) ?></td>
                     <td>
                       <span class="dash-status <?= $resultado = $filas['activo'] == 1 ? 'status-completed' : 'status-pending'; ?>"><?= $resultado = $filas['activo'] == 1 ? 'Activo' : 'Inactivo';  ?></span>
                     </td>

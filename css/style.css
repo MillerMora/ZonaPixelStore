@@ -305,9 +305,31 @@ button, input, select, textarea { font-family: inherit; }
   white-space: nowrap;
 }
 .cat-chip:hover, .cat-chip.active { border-color:var(--accent); color:var(--accent); background:var(--accent-glow); }
+a.cat-chip { text-decoration: none; color: inherit; display: inline-flex; align-items: center; }
 
 /* ---- PRODUCT GRID ---- */
 .products-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:20px; }
+
+.products-grid.products-list-view {
+  grid-template-columns: 1fr;
+}
+.products-grid.products-list-view .product-card {
+  display: grid;
+  grid-template-columns: minmax(120px, 200px) 1fr;
+  align-items: stretch;
+  text-align: left;
+}
+.products-grid.products-list-view .product-img-wrap {
+  aspect-ratio: 1;
+  min-height: 140px;
+}
+.products-grid.products-list-view .product-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.products-grid.products-list-view .product-overlay { display: none; }
+.products-grid.products-list-view .product-wishlist { opacity: 0.35; }
 
 .product-card {
   background: var(--surface);
@@ -491,6 +513,7 @@ footer {
 .breadcrumb-nav span { color:var(--border-light); }
 
 .catalog-layout { display:grid; grid-template-columns:240px 1fr; gap:32px; padding:40px 0 80px; }
+#catalogoFiltroForm { display: contents; }
 .filters-sidebar { flex-shrink:0; }
 .filter-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; margin-bottom:16px; }
 .filter-title { font-family:var(--font-display); font-weight:700; font-size:.9rem; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
@@ -498,6 +521,13 @@ footer {
 .filter-check { display:flex; align-items:center; gap:10px; cursor:pointer; font-size:.88rem; color:var(--muted); transition:color var(--transition); }
 .filter-check:hover { color:var(--white); }
 .filter-check input[type="checkbox"] { accent-color:var(--accent); width:14px; height:14px; }
+.filter-check input[type="radio"] { accent-color:var(--accent); width:14px; height:14px; flex-shrink:0; }
+
+.catalog-precio-rango .catalog-precio-range {
+  width:100%;
+  accent-color:var(--accent);
+}
+.catalog-busqueda .btn:focus { box-shadow:0 0 0 2px var(--accent-glow); }
 .price-range-wrap { padding:8px 0; }
 .price-range { width:100%; accent-color:var(--accent); }
 .price-labels { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-top:8px; }
@@ -520,11 +550,15 @@ footer {
 }
 .view-btn.active, .view-btn:hover { background:var(--surface-3); color:var(--white); border-color:var(--border-light); }
 
-.pagination-wrap { display:flex; justify-content:center; gap:6px; margin-top:48px; }
+.pagination-wrap { display:flex; justify-content:center; gap:6px; margin-top:48px; flex-wrap:wrap; }
+a.page-btn {
+  text-decoration: none;
+  color: inherit;
+}
 .page-btn {
   width:38px; height:38px; border-radius:8px;
   background:var(--surface); border:1px solid var(--border);
-  color:var(--muted); display:flex; align-items:center; justify-content:center;
+  color:var(--muted); display:inline-flex; align-items:center; justify-content:center;
   cursor:pointer; font-size:13px; font-weight:500;
   transition:all var(--transition);
 }

@@ -109,139 +109,147 @@ $ficha_todos_activa = $tipo_producto === '' && count($filtro_plataformas) === 0 
       <p class="page-hero-sub"><?php echo (int) $total_resultados; ?> reseña(s) publicada(s) con los filtros actuales</p>
     </div>
   </div>
-
-  <section class="section-gap">
-    <div class="container">
-      <form method="get" action="resenas.php" id="resenasFiltroForm">
-        <div class="category-strip align-items-center w-100">
-          <div class="input-group flex-grow-1 min-w-0" style="min-width:min(100%,240px)">
-            <input type="search" name="q" id="resenasBusquedaInput" class="form-control" autocomplete="off"
-              style="background:var(--surface-2);border-color:var(--border);color:var(--white)"
-              placeholder="Producto, marca, plataforma, género, título, autor…"
-              value="<?php echo htmlspecialchars($texto_busqueda, ENT_QUOTES, 'UTF-8'); ?>" />
-            <button type="submit" class="btn" id="resenasBusquedaBtn" style="background:var(--accent);color:var(--black);border:none;font-weight:700;" aria-label="Buscar" title="Buscar">
-              <i class="fas fa-search" aria-hidden="true"></i>
-            </button>
-          </div>
+  <?php if ($logueo === 3 || $logueo === 1): ?>
+    <section class="section-gap">
+      <div class="container">
+        <div class="d-flex justify-content-end mb-3">
+          <a href="#" class="btn-primary text-decoration-none">
+            <i class="fas fa-pen"></i> Escribir reseña
+          </a>
         </div>
-
-        <div class="row g-4">
-          <div class="col-lg-3">
-            <div class="filter-card mb-3">
-              <div class="filter-title">Tipo de producto</div>
-              <div class="filter-group">
-                <label class="filter-check">
-                  <input type="radio" name="tipo_producto" value="" <?php echo $tipo_producto === '' ? ' checked' : ''; ?> /> Todos
-                </label>
-                <?php if (!empty($tipos_existen['software'])): ?>
-                  <label class="filter-check">
-                    <input type="radio" name="tipo_producto" value="software" <?php echo $tipo_producto === 'software' ? ' checked' : ''; ?> /> Software
-                  </label>
-                <?php endif; ?>
-                <?php if (!empty($tipos_existen['hardware'])): ?>
-                  <label class="filter-check">
-                    <input type="radio" name="tipo_producto" value="hardware" <?php echo $tipo_producto === 'hardware' ? ' checked' : ''; ?> /> Hardware
-                  </label>
-                <?php endif; ?>
+      <?php endif; ?>
+      <section class="section-gap">
+        <div class="container">
+          <form method="get" action="resenas.php" id="resenasFiltroForm">
+            <div class="category-strip align-items-center w-100">
+              <div class="input-group flex-grow-1 min-w-0" style="min-width:min(100%,240px)">
+                <input type="search" name="q" id="resenasBusquedaInput" class="form-control" autocomplete="off"
+                  style="background:var(--surface-2);border-color:var(--border);color:var(--white)"
+                  placeholder="Producto, marca, plataforma, género, título, autor…"
+                  value="<?php echo htmlspecialchars($texto_busqueda, ENT_QUOTES, 'UTF-8'); ?>" />
+                <button type="submit" class="btn" id="resenasBusquedaBtn" style="background:var(--accent);color:var(--black);border:none;font-weight:700;" aria-label="Buscar" title="Buscar">
+                  <i class="fas fa-search" aria-hidden="true"></i>
+                </button>
               </div>
             </div>
 
-            <?php if (!empty($opciones_plataforma)): ?>
-              <div class="filter-card mb-3">
-                <div class="filter-title">Plataforma</div>
-                <div class="filter-group">
-                  <?php foreach ($opciones_plataforma as $plataforma_fila): ?>
+            <div class="row g-4">
+              <div class="col-lg-3">
+                <div class="filter-card mb-3">
+                  <div class="filter-title">Tipo de producto</div>
+                  <div class="filter-group">
                     <label class="filter-check">
-                      <input type="checkbox" name="plataforma[]" value="<?php echo (int) $plataforma_fila['id_plataforma']; ?>"
-                        <?php echo in_array((int) $plataforma_fila['id_plataforma'], $filtro_plataformas, true) ? ' checked' : ''; ?> />
-                      <?php echo htmlspecialchars($plataforma_fila['nombre'], ENT_QUOTES, 'UTF-8'); ?>
+                      <input type="radio" name="tipo_producto" value="" <?php echo $tipo_producto === '' ? ' checked' : ''; ?> /> Todos
                     </label>
-                  <?php endforeach; ?>
+                    <?php if (!empty($tipos_existen['software'])): ?>
+                      <label class="filter-check">
+                        <input type="radio" name="tipo_producto" value="software" <?php echo $tipo_producto === 'software' ? ' checked' : ''; ?> /> Software
+                      </label>
+                    <?php endif; ?>
+                    <?php if (!empty($tipos_existen['hardware'])): ?>
+                      <label class="filter-check">
+                        <input type="radio" name="tipo_producto" value="hardware" <?php echo $tipo_producto === 'hardware' ? ' checked' : ''; ?> /> Hardware
+                      </label>
+                    <?php endif; ?>
+                  </div>
                 </div>
-              </div>
-            <?php endif; ?>
 
-            <?php if (!empty($opciones_marca)): ?>
-              <div class="filter-card mb-3">
-                <div class="filter-title">Marca</div>
-                <div class="filter-group">
-                  <?php foreach ($opciones_marca as $marca_fila): ?>
-                    <label class="filter-check">
-                      <input type="checkbox" name="marca[]" value="<?php echo (int) $marca_fila['id_marca']; ?>"
-                        <?php echo in_array((int) $marca_fila['id_marca'], $filtro_marcas, true) ? ' checked' : ''; ?> />
-                      <?php echo htmlspecialchars($marca_fila['nombre'], ENT_QUOTES, 'UTF-8'); ?>
-                    </label>
-                  <?php endforeach; ?>
-                </div>
-              </div>
-            <?php endif; ?>
-
-            <?php if (!empty($opciones_calificacion)): ?>
-              <div class="filter-card mb-3">
-                <div class="filter-title">Calificación (1–5)</div>
-                <div class="filter-group">
-                  <label class="filter-check">
-                    <input type="radio" name="estrellas" value="" <?php echo $filtro_estrellas_editorial === 0 ? ' checked' : ''; ?> />
-                    Todas
-                  </label>
-                  <?php foreach ($opciones_calificacion as $opcion_cal): ?>
-                    <label class="filter-check">
-                      <input type="radio" name="estrellas" value="<?php echo (int) $opcion_cal['valor']; ?>"
-                        <?php echo $filtro_estrellas_editorial === (int) $opcion_cal['valor'] ? ' checked' : ''; ?> />
-                      <?php echo htmlspecialchars($opcion_cal['etiqueta'], ENT_QUOTES, 'UTF-8'); ?>
-                    </label>
-                  <?php endforeach; ?>
-                </div>
-              </div>
-            <?php endif; ?>
-
-            <button type="submit" class="btn btn-sm w-100" style="background:var(--accent);color:var(--black);font-weight:700;border:none;">Aplicar filtros</button>
-          </div>
-
-          <div class="col-lg-9">
-            <div class="reviews-grid">
-              <?php if (empty($filas_resenas)): ?>
-                <p class="text-muted">No hay reseñas que coincidan con los filtros.</p>
-              <?php else: ?>
-                <?php foreach ($filas_resenas as $resena_fila):
-                  $autor_completo = trim(($resena_fila['autor_nombre'] ?? '') . ' ' . ($resena_fila['autor_apellido'] ?? ''));
-                  if ($autor_completo === '') {
-                    $autor_completo = $resena_fila['autor_username'] ?? 'Editorial';
-                  }
-                  $linea_producto = htmlspecialchars($resena_fila['producto_nombre'] ?? '', ENT_QUOTES, 'UTF-8');
-                  if (!empty($resena_fila['plataformas_txt'])) {
-                    $linea_producto .= ' · ' . htmlspecialchars($resena_fila['plataformas_txt'], ENT_QUOTES, 'UTF-8');
-                  }
-                  $imagen_portada = $resena_fila['imagen_portada'] ?? '';
-                ?>
-                  <a href="/views/resena.php?id=<?php echo (int) $resena_fila['id_resena']; ?>" class="review-card text-decoration-none text-reset" style="display:block">
-                    <div class="review-card-header">
-                      <img src="<?php echo htmlspecialchars($imagen_portada, ENT_QUOTES, 'UTF-8'); ?>" class="review-game-img" alt="" />
-                      <div class="review-score"><?php echo number_format((float) $resena_fila['calificacion'], 1, ',', '.'); ?></div>
+                <?php if (!empty($opciones_plataforma)): ?>
+                  <div class="filter-card mb-3">
+                    <div class="filter-title">Plataforma</div>
+                    <div class="filter-group">
+                      <?php foreach ($opciones_plataforma as $plataforma_fila): ?>
+                        <label class="filter-check">
+                          <input type="checkbox" name="plataforma[]" value="<?php echo (int) $plataforma_fila['id_plataforma']; ?>"
+                            <?php echo in_array((int) $plataforma_fila['id_plataforma'], $filtro_plataformas, true) ? ' checked' : ''; ?> />
+                          <?php echo htmlspecialchars($plataforma_fila['nombre'], ENT_QUOTES, 'UTF-8'); ?>
+                        </label>
+                      <?php endforeach; ?>
                     </div>
-                    <div class="review-title"><?php echo htmlspecialchars($resena_fila['titulo'] ?? '', ENT_QUOTES, 'UTF-8'); ?></div>
-                    <div class="review-game-name"><?php echo $linea_producto; ?></div>
-                    <p class="review-excerpt"><?php echo htmlspecialchars(publico_texto_resumen($resena_fila['contenido'] ?? '', 200), ENT_QUOTES, 'UTF-8'); ?></p>
-                    <div class="review-footer">
-                      <span class="review-author">Por <strong><?php echo htmlspecialchars($autor_completo, ENT_QUOTES, 'UTF-8'); ?></strong></span>
-                      <span class="review-stars"><?php echo publico_estrellas_texto_editorial_10($resena_fila['calificacion']); ?></span>
+                  </div>
+                <?php endif; ?>
+
+                <?php if (!empty($opciones_marca)): ?>
+                  <div class="filter-card mb-3">
+                    <div class="filter-title">Marca</div>
+                    <div class="filter-group">
+                      <?php foreach ($opciones_marca as $marca_fila): ?>
+                        <label class="filter-check">
+                          <input type="checkbox" name="marca[]" value="<?php echo (int) $marca_fila['id_marca']; ?>"
+                            <?php echo in_array((int) $marca_fila['id_marca'], $filtro_marcas, true) ? ' checked' : ''; ?> />
+                          <?php echo htmlspecialchars($marca_fila['nombre'], ENT_QUOTES, 'UTF-8'); ?>
+                        </label>
+                      <?php endforeach; ?>
                     </div>
-                  </a>
-                <?php endforeach; ?>
-              <?php endif; ?>
+                  </div>
+                <?php endif; ?>
+
+                <?php if (!empty($opciones_calificacion)): ?>
+                  <div class="filter-card mb-3">
+                    <div class="filter-title">Calificación (1–5)</div>
+                    <div class="filter-group">
+                      <label class="filter-check">
+                        <input type="radio" name="estrellas" value="" <?php echo $filtro_estrellas_editorial === 0 ? ' checked' : ''; ?> />
+                        Todas
+                      </label>
+                      <?php foreach ($opciones_calificacion as $opcion_cal): ?>
+                        <label class="filter-check">
+                          <input type="radio" name="estrellas" value="<?php echo (int) $opcion_cal['valor']; ?>"
+                            <?php echo $filtro_estrellas_editorial === (int) $opcion_cal['valor'] ? ' checked' : ''; ?> />
+                          <?php echo htmlspecialchars($opcion_cal['etiqueta'], ENT_QUOTES, 'UTF-8'); ?>
+                        </label>
+                      <?php endforeach; ?>
+                    </div>
+                  </div>
+                <?php endif; ?>
+
+                <button type="submit" class="btn btn-sm w-100" style="background:var(--accent);color:var(--black);font-weight:700;border:none;">Aplicar filtros</button>
+              </div>
+
+              <div class="col-lg-9">
+                <div class="reviews-grid">
+                  <?php if (empty($filas_resenas)): ?>
+                    <p class="text-muted">No hay reseñas que coincidan con los filtros.</p>
+                  <?php else: ?>
+                    <?php foreach ($filas_resenas as $resena_fila):
+                      $autor_completo = trim(($resena_fila['autor_nombre'] ?? '') . ' ' . ($resena_fila['autor_apellido'] ?? ''));
+                      if ($autor_completo === '') {
+                        $autor_completo = $resena_fila['autor_username'] ?? 'Editorial';
+                      }
+                      $linea_producto = htmlspecialchars($resena_fila['producto_nombre'] ?? '', ENT_QUOTES, 'UTF-8');
+                      if (!empty($resena_fila['plataformas_txt'])) {
+                        $linea_producto .= ' · ' . htmlspecialchars($resena_fila['plataformas_txt'], ENT_QUOTES, 'UTF-8');
+                      }
+                      $imagen_portada = $resena_fila['imagen_portada'] ?? '';
+                    ?>
+                      <a href="/views/resena.php?id=<?php echo (int) $resena_fila['id_resena']; ?>" class="review-card text-decoration-none text-reset" style="display:block">
+                        <div class="review-card-header">
+                          <img src="<?php echo htmlspecialchars($imagen_portada, ENT_QUOTES, 'UTF-8'); ?>" class="review-game-img" alt="" />
+                          <div class="review-score"><?php echo number_format((float) $resena_fila['calificacion'], 1, ',', '.'); ?></div>
+                        </div>
+                        <div class="review-title"><?php echo htmlspecialchars($resena_fila['titulo'] ?? '', ENT_QUOTES, 'UTF-8'); ?></div>
+                        <div class="review-game-name"><?php echo $linea_producto; ?></div>
+                        <p class="review-excerpt"><?php echo htmlspecialchars(publico_texto_resumen($resena_fila['contenido'] ?? '', 200), ENT_QUOTES, 'UTF-8'); ?></p>
+                        <div class="review-footer">
+                          <span class="review-author">Por <strong><?php echo htmlspecialchars($autor_completo, ENT_QUOTES, 'UTF-8'); ?></strong></span>
+                          <span class="review-stars"><?php echo publico_estrellas_texto_editorial_10($resena_fila['calificacion']); ?></span>
+                        </div>
+                      </a>
+                    <?php endforeach; ?>
+                  <?php endif; ?>
+                </div>
+
+                <?php publico_renderizar_paginacion('resenas.php', $pagina_actual, $total_resultados, $elementos_por_pagina); ?>
+              </div>
             </div>
-
-            <?php publico_renderizar_paginacion('resenas.php', $pagina_actual, $total_resultados, $elementos_por_pagina); ?>
-          </div>
+          </form>
         </div>
-      </form>
-    </div>
-  </section>
+      </section>
 
-  <?php include './plantillas/footer.php'; ?>
+      <?php include './plantillas/footer.php'; ?>
 
-  <script type="module" src="../js/main.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+      <script type="module" src="../js/main.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

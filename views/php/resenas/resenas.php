@@ -1,4 +1,7 @@
 <?php
+/**
+ * ABM de reseñas editoriales (admin): listado con acceso a crear/editar y borrado por modelo.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

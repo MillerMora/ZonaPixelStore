@@ -1,10 +1,16 @@
 <?php
 
+/**
+ * Modelo de productos: CRUD administrativo, consultas de escaparate (inicio y catálogo)
+ * y agregaciones para ranking, filtros y estadísticas de comunidad.
+ */
+
 require_once __DIR__ . '/../conexion/conexion.php';
 if (!isset($BD)){
     $BD = connection() ;
 }
-//consultas
+
+// --- Lectura administrativa ---
 
 function consultar_productos (){
     
@@ -22,7 +28,7 @@ function consultar_producto_id ($id){
     return mysqli_fetch_assoc($resultado) ;    
 }
 
-// CRUD
+// --- Altas, bajas y actualizaciones ---
 
 function crear_producto ($categoria, $marca, $nombre, $descripcion, $precio, $precio_original, $stock, $imagen, $destacado, $activo){
     
@@ -46,6 +52,7 @@ function actualizar_producto ($id, $categoria, $marca, $nombre, $descripcion, $p
 
 function eliminar_producto ($id){
     global $BD;
+    // Borrado con integridad referencial relajada (relaciones plataforma/género/opiniones)
     mysqli_query($BD, "SET FOREIGN_KEY_CHECKS = 0");
     $sql = mysqli_prepare($BD, "DELETE FROM productos WHERE id_producto = ?");
     mysqli_stmt_bind_param($sql, "i", $id);
@@ -53,6 +60,8 @@ function eliminar_producto ($id){
     mysqli_query($BD, "SET FOREIGN_KEY_CHECKS = 1");
     return $resultado ;
 }
+
+// --- Contadores globales ---
 
 function total_productos () {
     global $BD;
@@ -68,6 +77,7 @@ function total_productos_activos() {
     return (int) ($row['total'] ?? 0);
 }
 
+// Promedio de estrellas (1–5) solo entre opiniones con aprobada = 1; null si no hay datos
 function promedio_calificacion_opiniones_aprobadas() {
     global $BD;
     $sql = mysqli_query($BD, '
@@ -82,6 +92,7 @@ function promedio_calificacion_opiniones_aprobadas() {
     return (float) $row['promedio'];
 }
 
+// Porcentaje de rebaja respecto al precio tachado; 0 si no aplica oferta válida
 function producto_porcentaje_descuento($precio, $precio_original) {
     $precio = (float) $precio;
     $orig = (float) $precio_original;
@@ -91,6 +102,10 @@ function producto_porcentaje_descuento($precio, $precio_original) {
     return ($orig - $precio) / $orig * 100.0;
 }
 
+/**
+ * Videojuego activo con más unidades vendidas en pedidos en estado completado (estado_id = 4).
+ * Incluye vista de calificaciones y texto de plataformas para la tarjeta destacada del inicio.
+ */
 function index_videojuego_mas_vendido() {
     global $BD;
     $sql = mysqli_query($BD, "
@@ -122,6 +137,7 @@ function index_videojuego_mas_vendido() {
     return mysqli_fetch_assoc($sql);
 }
 
+// Carrusel o rejilla de videojuegos activos con datos de plataforma y rating agregado
 function index_productos_videojuegos_destacados($limite = 12) {
     global $BD;
     $limite = (int) $limite;
@@ -157,6 +173,7 @@ function index_productos_videojuegos_destacados($limite = 12) {
     return $out;
 }
 
+// Una oferta aleatoria de videojuego con descuento real, con opiniones y nota media alta (umbral en SQL)
 function index_oferta_especial_videojuego() {
     global $BD;
     $sql = mysqli_query($BD, "
@@ -185,6 +202,7 @@ function index_oferta_especial_videojuego() {
     return mysqli_fetch_assoc($sql);
 }
 
+// Productos de categorías distintas a «Videojuegos» (hardware u otros), para bloque «tecnología»
 function index_productos_tecnologia($limite = 4) {
     global $BD;
     $limite = (int) $limite;
@@ -214,6 +232,7 @@ function index_productos_tecnologia($limite = 4) {
     return $out;
 }
 
+// Conjunto de productos en oferta (precio < original) con etiqueta de categoría y % calculado en SQL; opcional exclusión por id
 function index_candidatos_ofertas_catalogo($excluir_id = null) {
     global $BD;
     $excluir_id = $excluir_id !== null ? (int) $excluir_id : 0;
@@ -251,6 +270,10 @@ function index_candidatos_ofertas_catalogo($excluir_id = null) {
     return $out;
 }
 
+/**
+ * Ofertas «secundarias» respecto al banner principal: quedan las que tienen menor descuento
+ * o igual descuento pero peor valoración; el resultado se ordena por % desc y luego por rating.
+ */
 function index_filtrar_ofertas_secundarias(array $candidatos, $pct_especial, $rating_especial) {
     $pct_especial = (float) $pct_especial;
     $rating_especial = (float) $rating_especial;
@@ -259,6 +282,7 @@ function index_filtrar_ofertas_secundarias(array $candidatos, $pct_especial, $ra
         $pct = (float) $row['pct_descuento'];
         $rating = isset($row['calificacion_promedio']) && $row['calificacion_promedio'] !== null
             ? (float) $row['calificacion_promedio'] : 0.0;
+        // Comparaciones con margen numérico para no depender de igualdad exacta en flotantes
         $menor_desc = $pct < $pct_especial - 0.005;
         $igual_desc_peor_rating = abs($pct - $pct_especial) < 0.005 && $rating < $rating_especial - 0.005;
         if ($menor_desc || $igual_desc_peor_rating) {
@@ -278,12 +302,14 @@ function index_filtrar_ofertas_secundarias(array $candidatos, $pct_especial, $ra
     return $filtrados;
 }
 
+// Últimos productos dados de alta (orden por id descendente)
 function productos_recientes($limit = 5) {
     global $BD;
     $sql = mysqli_query($BD, "SELECT * FROM productos ORDER BY id_producto DESC LIMIT $limit");
     return $sql;
 }
 
+// Ranking por unidades en ítems de pedidos completados (estado_id = 4)
 function productos_mas_vendidos($limit = 5) {
     global $BD;
     $sql = mysqli_query($BD, "
@@ -298,9 +324,332 @@ function productos_mas_vendidos($limit = 5) {
     return $sql;
 }
 
-if (isset($_GET["eliminar"])){
-    eliminar_producto($_GET["eliminar"]);
-    header("location: productos.php");
+// --- Facetas y catálogo público (filtros, rangos, búsqueda) ---
+
+function catalogo_categorias_con_productos_activos() {
+    global $BD;
+    $sql = mysqli_query($BD, "
+        SELECT DISTINCT c.id_categoria, c.nombre
+        FROM categorias c
+        INNER JOIN productos p ON p.categoria_id = c.id_categoria AND p.activo = 1
+        WHERE c.activa = 1
+        ORDER BY c.nombre ASC
+    ");
+    $filas = [];
+    if ($sql) {
+        while ($row = mysqli_fetch_assoc($sql)) {
+            $filas[] = $row;
+        }
+    }
+    return $filas;
+}
+
+/**
+ * Plataformas que tienen al menos un producto activo enlazado (tabla producto_plataformas).
+ */
+function catalogo_plataformas_con_productos_activos() {
+    global $BD;
+    $sql = mysqli_query($BD, "
+        SELECT DISTINCT pl.id_plataforma, pl.nombre
+        FROM plataformas pl
+        INNER JOIN producto_plataformas pp ON pp.plataforma_id = pl.id_plataforma
+        INNER JOIN productos p ON p.id_producto = pp.producto_id AND p.activo = 1
+        INNER JOIN categorias c ON c.id_categoria = p.categoria_id AND c.activa = 1
+        ORDER BY pl.nombre ASC
+    ");
+    $filas = [];
+    if ($sql) {
+        while ($row = mysqli_fetch_assoc($sql)) {
+            $filas[] = $row;
+        }
+    }
+    return $filas;
+}
+
+/**
+ * Marcas con al menos un producto activo (campo marca_id en productos).
+ */
+function catalogo_marcas_con_productos_activos() {
+    global $BD;
+    $sql = mysqli_query($BD, "
+        SELECT DISTINCT m.id_marca, m.nombre
+        FROM marcas m
+        INNER JOIN productos p ON p.marca_id = m.id_marca AND p.activo = 1
+        INNER JOIN categorias c ON c.id_categoria = p.categoria_id AND c.activa = 1
+        ORDER BY m.nombre ASC
+    ");
+    $filas = [];
+    if ($sql) {
+        while ($row = mysqli_fetch_assoc($sql)) {
+            $filas[] = $row;
+        }
+    }
+    return $filas;
+}
+
+// Mínimo y máximo de precio actual entre productos activos y categorías activas (control deslizante del filtro)
+function catalogo_rango_precios_activos() {
+    global $BD;
+    $sql = mysqli_query($BD, '
+        SELECT COALESCE(MIN(p.precio), 0) AS precio_min, COALESCE(MAX(p.precio), 0) AS precio_max
+        FROM productos p
+        INNER JOIN categorias c ON c.id_categoria = p.categoria_id AND c.activa = 1
+        WHERE p.activo = 1
+    ');
+    $row = mysqli_fetch_assoc($sql);
+    return [
+        'precio_min' => (float) ($row['precio_min'] ?? 0),
+        'precio_max' => (float) ($row['precio_max'] ?? 0),
+    ];
+}
+
+// Indica si la vista de calificaciones tiene al menos un producto con opiniones aprobadas agregadas
+function catalogo_existen_calificaciones_comunidad() {
+    global $BD;
+    $sql = mysqli_query($BD, 'SELECT COUNT(*) AS n FROM v_calificacion_productos WHERE total_opiniones > 0');
+    $row = mysqli_fetch_assoc($sql);
+    return ((int) ($row['n'] ?? 0)) > 0;
+}
+
+/**
+ * Fragmento de condición LIKE reutilizable con cinco marcadores ? (nombre, descripción, marca, categoría, plataforma en tabla puente).
+ */
+function catalogo_busqueda_sql_preparada() {
+    return '(p.nombre LIKE CONCAT(\'%\', ?, \'%\') OR p.descripcion LIKE CONCAT(\'%\', ?, \'%\')'
+        . ' OR (m.id_marca IS NOT NULL AND m.nombre LIKE CONCAT(\'%\', ?, \'%\'))'
+        . ' OR c.nombre LIKE CONCAT(\'%\', ?, \'%\')'
+        . ' OR EXISTS ('
+        . 'SELECT 1 FROM producto_plataformas ppq'
+        . ' INNER JOIN plataformas plq ON plq.id_plataforma = ppq.plataforma_id'
+        . ' WHERE ppq.producto_id = p.id_producto AND plq.nombre LIKE CONCAT(\'%\', ?, \'%\')))';
+}
+
+/**
+ * Misma condición de búsqueda con el término escapado para consultas no preparadas (compatibilidad sin mysqli_stmt_get_result).
+ */
+function catalogo_busqueda_sql_escapada($conexion, $busqueda) {
+    $esc = mysqli_real_escape_string($conexion, $busqueda);
+    return "(p.nombre LIKE '%$esc%' OR p.descripcion LIKE '%$esc%'"
+        . " OR (m.id_marca IS NOT NULL AND m.nombre LIKE '%$esc%')"
+        . " OR c.nombre LIKE '%$esc%'"
+        . ' OR EXISTS ('
+        . 'SELECT 1 FROM producto_plataformas ppq'
+        . ' INNER JOIN plataformas plq ON plq.id_plataforma = ppq.plataforma_id'
+        . " WHERE ppq.producto_id = p.id_producto AND plq.nombre LIKE '%$esc%'))";
+}
+
+/**
+ * Lista paginada de productos para el catálogo con filtros múltiples y orden configurable.
+ * Retorna claves 'productos' (filas) y 'total' (conteo para paginación) respetando mismos criterios WHERE.
+ */
+function catalogo_productos_filtrados(array $opciones) {
+    global $BD;
+
+    // Límite de página acotado y offset no negativo
+    $limite = isset($opciones['limite']) ? (int) $opciones['limite'] : 12;
+    $offset = isset($opciones['offset']) ? (int) $opciones['offset'] : 0;
+    $limite = max(1, min(48, $limite));
+    $offset = max(0, $offset);
+
+    $filtro_categorias = isset($opciones['filtro_categorias']) ? $opciones['filtro_categorias'] : [];
+    $filtro_plataformas = isset($opciones['filtro_plataformas']) ? $opciones['filtro_plataformas'] : [];
+    $filtro_marcas = isset($opciones['filtro_marcas']) ? $opciones['filtro_marcas'] : [];
+    $filtro_generos = isset($opciones['filtro_generos']) ? $opciones['filtro_generos'] : [];
+    $calificacion_estrellas = isset($opciones['calificacion_estrellas']) ? (int) $opciones['calificacion_estrellas'] : 0;
+
+    $tipo_producto = isset($opciones['tipo_producto']) ? $opciones['tipo_producto'] : '';
+    $solo_ofertas = !empty($opciones['solo_ofertas']);
+    $busqueda = isset($opciones['busqueda']) ? trim((string) $opciones['busqueda']) : '';
+    $orden = isset($opciones['orden']) ? $opciones['orden'] : 'popular';
+
+    // Rango de precios opcional; se concatena como literal numérico tras cast (ids de filtros ya enteros)
+    $precio_min = isset($opciones['precio_min']) ? (float) $opciones['precio_min'] : null;
+    $precio_max = isset($opciones['precio_max']) ? (float) $opciones['precio_max'] : null;
+
+    // Siempre restrictivo a catálogo visible: producto y categoría activos
+    $where = ['p.activo = 1', 'c.activa = 1'];
+
+    if ($tipo_producto === 'software') {
+        $where[] = "c.nombre = 'Videojuegos'";
+    } elseif ($tipo_producto === 'hardware') {
+        $where[] = "c.nombre <> 'Videojuegos'";
+    }
+
+    if ($solo_ofertas) {
+        $where[] = 'p.precio < p.precio_original';
+    }
+
+    if (!empty($filtro_categorias)) {
+        $ids = implode(',', array_map('intval', $filtro_categorias));
+        $where[] = "p.categoria_id IN ($ids)";
+    }
+
+    if (!empty($filtro_marcas)) {
+        $ids = implode(',', array_map('intval', $filtro_marcas));
+        $where[] = "p.marca_id IN ($ids)";
+    }
+
+    if (!empty($filtro_plataformas)) {
+        $ids = implode(',', array_map('intval', $filtro_plataformas));
+        $where[] = "EXISTS (
+            SELECT 1 FROM producto_plataformas ppf
+            WHERE ppf.producto_id = p.id_producto AND ppf.plataforma_id IN ($ids)
+        )";
+    }
+
+    if (!empty($filtro_generos)) {
+        $ids = implode(',', array_map('intval', $filtro_generos));
+        $where[] = "EXISTS (
+            SELECT 1 FROM producto_generos pgf
+            WHERE pgf.producto_id = p.id_producto AND pgf.genero_id IN ($ids)
+        )";
+    }
+
+    if ($precio_min !== null) {
+        $where[] = 'p.precio >= ' . (float) $precio_min;
+    }
+    if ($precio_max !== null) {
+        $where[] = 'p.precio <= ' . (float) $precio_max;
+    }
+
+    // Filtro por estrellas: traduce a rangos de promedio en vista v_calificacion_productos (franjas tipo TripAdvisor)
+    if ($calificacion_estrellas >= 1 && $calificacion_estrellas <= 5) {
+        $where[] = 'v.total_opiniones > 0';
+        if ($calificacion_estrellas === 5) {
+            $where[] = 'v.calificacion_promedio >= 4.5';
+        } elseif ($calificacion_estrellas === 4) {
+            $where[] = 'v.calificacion_promedio >= 3.5 AND v.calificacion_promedio < 4.5';
+        } elseif ($calificacion_estrellas === 3) {
+            $where[] = 'v.calificacion_promedio >= 2.5 AND v.calificacion_promedio < 3.5';
+        } elseif ($calificacion_estrellas === 2) {
+            $where[] = 'v.calificacion_promedio >= 1.5 AND v.calificacion_promedio < 2.5';
+        } else {
+            $where[] = 'v.calificacion_promedio >= 1 AND v.calificacion_promedio < 1.5';
+        }
+    }
+
+    $busqueda_activa = $busqueda !== '';
+    $busqueda_sql_preparada = catalogo_busqueda_sql_preparada();
+    if ($busqueda_activa) {
+        $where[] = $busqueda_sql_preparada;
+    }
+
+    $where_sql = implode(' AND ', $where);
+
+    // Subconsulta de unidades vendidas solo en pedidos completados, para orden «popular»
+    $join_ventas = "
+        LEFT JOIN (
+            SELECT pi.producto_id, SUM(pi.cantidad) AS unidades_vendidas
+            FROM pedido_items pi
+            INNER JOIN pedidos pe ON pe.id_pedido = pi.pedido_id AND pe.estado_id = 4
+            GROUP BY pi.producto_id
+        ) ventas ON ventas.producto_id = p.id_producto
+    ";
+
+    $order_sql = 'p.id_producto DESC';
+    if ($orden === 'precio_asc') {
+        $order_sql = 'p.precio ASC, p.id_producto ASC';
+    } elseif ($orden === 'precio_desc') {
+        $order_sql = 'p.precio DESC, p.id_producto DESC';
+    } elseif ($orden === 'nuevo') {
+        $order_sql = 'p.creado_en DESC, p.id_producto DESC';
+    } elseif ($orden === 'rating') {
+        $order_sql = 'v.calificacion_promedio IS NULL, v.calificacion_promedio DESC, p.id_producto DESC';
+    } elseif ($orden === 'popular') {
+        $order_sql = 'COALESCE(ventas.unidades_vendidas, 0) DESC, p.id_producto DESC';
+    }
+
+    $from_sql = "
+        FROM productos p
+        INNER JOIN categorias c ON c.id_categoria = p.categoria_id
+        LEFT JOIN marcas m ON m.id_marca = p.marca_id
+        LEFT JOIN v_calificacion_productos v ON v.producto_id = p.id_producto
+        $join_ventas
+        WHERE $where_sql
+    ";
+
+    $sql_count = 'SELECT COUNT(DISTINCT p.id_producto) AS total ' . $from_sql;
+    $sql_lista = "
+        SELECT
+            p.id_producto,
+            p.categoria_id,
+            p.marca_id,
+            p.nombre,
+            p.descripcion,
+            p.precio,
+            p.precio_original,
+            p.stock,
+            p.imagen_principal,
+            p.destacado,
+            p.activo,
+            p.creado_en,
+            c.nombre AS categoria_nombre,
+            v.calificacion_promedio,
+            v.total_opiniones,
+            COALESCE(ventas.unidades_vendidas, 0) AS unidades_vendidas,
+            (SELECT GROUP_CONCAT(pl.nombre ORDER BY pl.nombre SEPARATOR ' · ')
+             FROM producto_plataformas pp2
+             INNER JOIN plataformas pl ON pl.id_plataforma = pp2.plataforma_id
+             WHERE pp2.producto_id = p.id_producto) AS plataformas_txt
+        $from_sql
+        ORDER BY $order_sql
+        LIMIT $offset, $limite
+    ";
+
+    $total = 0;
+    $filas = [];
+
+    // Ejecuta conteo o listado: con búsqueda usa prepare + cinco parámetros idénticos; si falla get_result, vuelve a consulta escapada
+    $ejecutar_consulta_catalogo = function ($sql_texto) use ($BD, $busqueda_activa, $busqueda, $busqueda_sql_preparada) {
+        if (!$busqueda_activa) {
+            return mysqli_query($BD, $sql_texto);
+        }
+        $stmt = mysqli_prepare($BD, $sql_texto);
+        if (!$stmt) {
+            $sql_fallback = str_replace($busqueda_sql_preparada, catalogo_busqueda_sql_escapada($BD, $busqueda), $sql_texto);
+            return mysqli_query($BD, $sql_fallback);
+        }
+        $param1 = $busqueda;
+        $param2 = $busqueda;
+        $param3 = $busqueda;
+        $param4 = $busqueda;
+        $param5 = $busqueda;
+        mysqli_stmt_bind_param($stmt, 'sssss', $param1, $param2, $param3, $param4, $param5);
+        mysqli_stmt_execute($stmt);
+        $resultado = null;
+        if (function_exists('mysqli_stmt_get_result')) {
+            $resultado = mysqli_stmt_get_result($stmt);
+        }
+        if ($resultado !== false && $resultado !== null) {
+            mysqli_stmt_close($stmt);
+            return $resultado;
+        }
+        mysqli_stmt_close($stmt);
+        $sql_fallback = str_replace($busqueda_sql_preparada, catalogo_busqueda_sql_escapada($BD, $busqueda), $sql_texto);
+        return mysqli_query($BD, $sql_fallback);
+    };
+
+    $res_count = $ejecutar_consulta_catalogo($sql_count);
+    if ($res_count) {
+        $row_count = mysqli_fetch_assoc($res_count);
+        $total = (int) ($row_count['total'] ?? 0);
+    }
+
+    $res_lista = $ejecutar_consulta_catalogo($sql_lista);
+    if ($res_lista) {
+        while ($row = mysqli_fetch_assoc($res_lista)) {
+            $filas[] = $row;
+        }
+    }
+
+    return ['productos' => $filas, 'total' => $total];
+}
+
+// Invocación directa desde la URL del panel: ?eliminar=id redirige tras borrar
+if (isset($_GET['eliminar'])) {
+    eliminar_producto($_GET['eliminar']);
+    header('location: productos.php');
+    exit;
 }
 ?>
 

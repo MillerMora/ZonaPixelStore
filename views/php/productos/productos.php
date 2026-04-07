@@ -1,4 +1,7 @@
-<?php 
+<?php
+/**
+ * ABM de productos (solo admin): tabla con enlace a edición y borrado vía modelo.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Alta de reseña editorial: elige producto y autor (staff) desde listados mysqli.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

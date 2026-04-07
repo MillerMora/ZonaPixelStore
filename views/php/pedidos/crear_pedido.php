@@ -1,4 +1,7 @@
-<?php 
+<?php
+/**
+ * Alta manual de pedido: rellena selects con usuarios, estados y métodos de pago.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

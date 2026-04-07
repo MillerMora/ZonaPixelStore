@@ -1,8 +1,15 @@
 <?php
+/**
+ * Modelo de usuarios: registro, actualización, búsquedas y métricas del panel.
+ * Las contraseñas deben llegar ya hasheadas desde la capa de presentación o controlador.
+ */
+
 require_once __DIR__ . "/../conexion/conexion.php";
 if (!isset($BD)){
     $BD = connection() ;
 }
+
+// Registro de cliente: fija rol_id = 2 (cliente) según el esquema actual
 function crear_usuario($nombre, $apellido, $username, $email, $password_hash)
 {
     global $BD;
@@ -12,6 +19,7 @@ function crear_usuario($nombre, $apellido, $username, $email, $password_hash)
     return $resultado;
 }
 
+// Alta de usuario con rol explícito (administración: staff u otros roles)
 function crear_usuario_rol($nombre, $apellido, $username, $email, $password_hash,$id_rol)
 {
     global $BD;
@@ -21,6 +29,7 @@ function crear_usuario_rol($nombre, $apellido, $username, $email, $password_hash
     return $resultado;
 }
 
+// Actualiza perfil completo incluyendo hash de contraseña y rol
 function actualizar_usuario($id, $nombre, $apellido, $usuario, $correo, $contrasena, $id_rol)
 {
     global $BD;
@@ -30,6 +39,7 @@ function actualizar_usuario($id, $nombre, $apellido, $usuario, $correo, $contras
     return $resultado;
 }
 
+// Cambio de contraseña identificando al usuario por nombre de usuario
 function actualizar_contraseña ($username, $password){
     global $BD;
     $sql = mysqli_prepare($BD,'UPDATE usuarios SET password_hash = ? WHERE username = ?' );
@@ -41,6 +51,7 @@ function actualizar_contraseña ($username, $password){
 function eliminar_usuario($id)
 {
     global $BD;
+    // Desactiva comprobación de claves foráneas mientras se elimina la fila (evita error si hay referencias mal gestionadas)
     mysqli_query($BD,"SET FOREIGN_KEY_CHECKS = 0");
     $sql = mysqli_prepare($BD, 'DELETE FROM usuarios WHERE id_usuario = ?');
     mysqli_stmt_bind_param($sql, 'i', $id);
@@ -49,14 +60,17 @@ function eliminar_usuario($id)
     return $resultado;
 }
 
-// Consultas
+// --- Lecturas y agregados para listados y reportes ---
 
+// Resultado mysqli con todas las filas de usuarios (el llamador itera)
 function consultar_usuarios()
 {
     global $BD;
     $sql = mysqli_query($BD, 'SELECT * FROM usuarios;');
     return $sql;
 }
+
+// Últimos registros ordenados por fecha de creación (widgets del dashboard)
 function consultar_usuarios_recientes( $limit = 5)
 {
     global $BD;
@@ -64,6 +78,7 @@ function consultar_usuarios_recientes( $limit = 5)
     return $sql;
 }
 
+// Detalle de un usuario por id
 function consultar_usuarios_id($id)
 {
     global $BD;
@@ -73,6 +88,8 @@ function consultar_usuarios_id($id)
     $resultado = mysqli_stmt_get_result($sql); 
     return mysqli_fetch_assoc($resultado);
 }
+
+// Busca usuario por email (inicio de sesión, recuperación o validación de duplicados)
 function consultar_usuarios_correo($email)
 {
     global $BD;
@@ -82,6 +99,8 @@ function consultar_usuarios_correo($email)
     $resultado = mysqli_stmt_get_result($sql); 
     return mysqli_fetch_assoc($resultado);
 }
+
+// Busca usuario por nombre de usuario único
 function consultar_usuarios_nombreUsuario($username)
 {
     global $BD;
@@ -92,6 +111,7 @@ function consultar_usuarios_nombreUsuario($username)
     return mysqli_fetch_assoc($resultado);
 }
 
+// Listado con nombre de rol resuelto por JOIN (vista de administración de usuarios)
 function consultar_usuarios_rol()
 {
     global $BD;
@@ -99,6 +119,7 @@ function consultar_usuarios_rol()
     return $sql;
 }
 
+// Conteo total de filas en usuarios
 function total_usuarios()
 {
     global $BD;
@@ -107,6 +128,7 @@ function total_usuarios()
     return $row['total'];
 }
 
+// Altas de usuario en el mes calendario actual (métrica del dashboard)
 function usuarios_mes()
 {
     global $BD;
@@ -115,6 +137,7 @@ function usuarios_mes()
     return $row['total'];
 }
 
+// Usuarios cuyo rol se denomina 'cliente' en la tabla roles
 function total_clientes()
 {
     global $BD;
@@ -128,6 +151,7 @@ function total_clientes()
 }
 
 
+// Invocación directa desde la URL del panel: ?eliminar=id redirige tras borrar
 if (isset($_GET['eliminar'])){
     eliminar_usuario($_GET['eliminar']);
     header("location: usuario.php");

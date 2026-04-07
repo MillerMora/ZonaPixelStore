@@ -1,4 +1,7 @@
 <?php
+/**
+ * Listado administrativo de usuarios con rol resuelto; solo rol id 1.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

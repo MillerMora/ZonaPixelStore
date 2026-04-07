@@ -1,7 +1,12 @@
 <?php
+/**
+ * Punto de autenticación: valida credenciales contra usuarioModel y rellena $_SESSION.
+ * Acepta email o nombre de usuario; rutas relativas según ubicación del script en /login/.
+ */
 include_once "../usuarioModel.php";
 session_start();
 
+/** Carga de sesión y redirección a inicio; mensajes en sesión si falla la validación */
 function iniciar_sesion($usuario, $password)
 {
     if (empty($usuario) || empty($password)) {
@@ -9,6 +14,7 @@ function iniciar_sesion($usuario, $password)
         return header('location: ../../../../index.php');
     }
 
+    // Rama email: consulta por correo
     if (filter_var($usuario, FILTER_VALIDATE_EMAIL)) {
         $consulta = consultar_usuarios_correo($usuario);
         if (!$consulta) {
@@ -39,6 +45,7 @@ function iniciar_sesion($usuario, $password)
     return header('location: ../../../../index.php');
 }
 
+/** Limpia variables de sesión y destruye la cookie de sesión en el servidor */
 function cerrar_sesion (){
 
     session_unset();
@@ -48,6 +55,7 @@ function cerrar_sesion (){
     return header('location: ../../../../index.php');
 
 }
+// Entradas por querystring para no mezclar verbos en el mismo fichier sin router
 if (isset($_GET['iniciar'])) {
     iniciar_sesion($_POST['login'], $_POST['password']);
 }

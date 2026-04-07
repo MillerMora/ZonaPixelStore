@@ -1,4 +1,7 @@
-<?php 
+<?php
+/**
+ * Edición de usuario existente (admin): carga la fila por id en ?id= y envía a actualizar_usuario.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

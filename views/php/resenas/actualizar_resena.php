@@ -1,4 +1,7 @@
 <?php
+/**
+ * Guarda reseña: si viene id_resena en POST se actualiza; si no, se crea registro nuevo.
+ */
 include "./resenasModel.php";
 
 if (isset($_POST['id_resena'])){
@@ -14,8 +17,10 @@ $publicada = $_POST['publicada'] ?? '0';
 
 $success = false;
 if (isset($id_resena)) {
+    // Edición desde editar_resena.php
     $success = actualizar_resena($id_resena, $imagen, $id_producto, $autor, $titulo, $contenido, $calificacion, $publicada);
 } else {
+    // Alta desde crear_resena.php
     $success = crear_resena($imagen, $id_producto, $autor, $titulo, $contenido, $calificacion, $publicada);
 }
 

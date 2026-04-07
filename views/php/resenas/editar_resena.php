@@ -1,4 +1,7 @@
 <?php
+/**
+ * Edición de reseña: consultar_resenas_id devuelve result mysqli; aquí se convierte a fila única.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

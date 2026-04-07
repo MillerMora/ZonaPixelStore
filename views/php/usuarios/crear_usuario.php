@@ -1,4 +1,7 @@
 <?php
+/**
+ * Formulario de creación de usuario en panel admin; POST lo procesa editar_usuario con ?crear=1.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Persistencia de pedido: creación con ?crear o actualización con id_pedido en POST.
+ */
 include "./pedidoModel.php";
 if (isset($_POST['id_pedido'])){
     $id = $_POST['id_pedido'];
@@ -18,9 +21,11 @@ $notas = $_POST['notas'] ?? null;
 
 $success = false;
 if (isset($_GET['crear'])){
+    // Inserción desde crear_pedido.php
     $crear_datos = crear_pedido($usuario_id, $estado_id, $metodo_pago_id, $subtotal, $descuento, $total, $codigo_promo, $envio_nombre, $envio_direccion, $envio_ciudad, $envio_pais, $notas);
     $success = $crear_datos;
 } elseif (isset($id)) {
+    // Modificación de pedido existente
     $actualizar_datos = actualizar_pedido($id, $usuario_id, $estado_id, $metodo_pago_id, $subtotal, $descuento, $total, $codigo_promo, $envio_nombre, $envio_direccion, $envio_ciudad, $envio_pais, $notas);
     $success = $actualizar_datos;
 } else {

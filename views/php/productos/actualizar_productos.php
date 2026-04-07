@@ -1,4 +1,8 @@
 <?php
+/**
+ * Backend de persistencia de producto: inserta si ?crear o actualiza si llega id_producto.
+ * Campos checkboxes mapeados con isset; precio_original fijo a null en esta ruta.
+ */
 include "./productoModel.php";
 if (isset($_POST['id_producto'])){
     $id = $_POST['id_producto'];
@@ -17,9 +21,11 @@ $activo = isset($_POST['activo']) ?? 0;
 
 $success = false;
 if (isset($_GET['crear'])){
+    // Alta desde formulario de crear_producto.php
     $crear_datos = crear_producto($categoria, $marca, $nombre, $descripcion, $precio, $precio_original, $stock, $imagen, $destacado, $activo);
     $success = $crear_datos;
 } elseif (isset($id)) {
+    // Actualización de fila existente
     $actualizar_datos = actualizar_producto($id, $categoria, $marca, $nombre, $descripcion, $precio, $precio_original, $stock, $imagen, $destacado, $activo);
     $success = $actualizar_datos;
 } else {

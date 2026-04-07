@@ -1,4 +1,7 @@
-<?php 
+<?php
+/**
+ * Edición de pedido: precarga fila y catálogos para selects dependientes.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

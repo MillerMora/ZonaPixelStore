@@ -1,4 +1,8 @@
 <?php
+/**
+ * Flujo en dos pasos: verificar contraseña actual (?validacion=1) y luego mostrar formulario de la nueva.
+ * Requiere sesión iniciada; comparación de hash en claro según el esquema actual del proyecto.
+ */
 session_start();
 if (!isset($_SESSION['username'])) {
   header('location: /views/404.php');
@@ -12,6 +16,7 @@ include './usuarioModel.php';
 if (isset($_GET['validacion'])) {
   $contraseña_actual = $_POST['current_password'];
   $fila = consultar_usuarios_correo($_SESSION['email']);
+  // Nota: validación directa contra hash almacenado (sin password_verify) por coherencia con login legacy
   if ($contraseña_actual === $fila['password_hash']) {
     $validacion = $_GET['validacion'];
   } else {

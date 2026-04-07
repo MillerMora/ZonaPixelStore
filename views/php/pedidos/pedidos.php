@@ -1,4 +1,7 @@
 <?php
+/**
+ * Listado de pedidos en panel admin; modelos de usuario, estado y método cargados para etiquetas en tabla.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

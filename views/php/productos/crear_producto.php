@@ -1,4 +1,8 @@
 <?php
+/**
+ * Formulario de alta de producto; selects de categoría y marca desde sus modelos.
+ * El POST lo procesa actualizar_productos con ?crear=1 o similar según action del form.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

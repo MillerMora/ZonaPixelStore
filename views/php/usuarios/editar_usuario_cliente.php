@@ -1,4 +1,7 @@
-<?php 
+<?php
+/**
+ * Perfil del cliente autenticado: identifica al usuario por email en sesión (variable $id mal nombrada pero es email).
+ */
 session_start();
 
 if (!isset($_SESSION['rol'])){

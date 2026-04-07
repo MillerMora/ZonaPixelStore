@@ -1,4 +1,7 @@
 <?php
+/**
+ * Formulario de edición de producto existente; precarga categorías, marcas y la fila por ?id=.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){

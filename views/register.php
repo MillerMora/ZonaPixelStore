@@ -1,4 +1,8 @@
-<?php 
+<?php
+/**
+ * Registro de nuevo cliente: formulario que envía a actualizar_usuario.php con ?crear=1.
+ * Reutiliza el mismo banner de error de sesión que el login si existe login_error.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){
@@ -18,6 +22,7 @@ if (isset($_SESSION['rol'])){
 </head>
 
 <body>
+<?php // Aviso de validación o duplicidad propagado desde el procesador del formulario ?>
 <?php if (isset($_SESSION['login_error'])): ?>
 <div style="background: linear-gradient(90deg, #dc3545, #c82333); color: white; padding: 1rem 0; text-align: center; font-weight: 600; font-size: 1.1rem; box-shadow: 0 2px 10px rgba(220,53,69,0.3); margin-bottom: 2rem; border: none;">
   <div class="container">
@@ -28,7 +33,8 @@ if (isset($_SESSION['rol'])){
 </div>
 <?php endif; ?>
 
-<?php 
+<?php
+// Barra superior según rol autenticado (invitado usa navbar público)
 if ($logueo === 1){
   include './plantillas/navbar_admin.php';
 } elseif ($logueo >= 2 ){
@@ -40,6 +46,7 @@ if ($logueo === 1){
 ?>
 
 
+  <!-- Formulario de alta: POST hacia actualizar_usuario con flag crear -->
   <section class="auth-page py-5">
     <div class="container">
       <div class="auth-card">

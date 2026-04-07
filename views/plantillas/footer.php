@@ -1,3 +1,4 @@
+<!-- Pie de página: marca, enlaces por columnas y legales -->
 <footer>
   <div class="container">
     <div class="footer-grid">

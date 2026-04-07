@@ -1,4 +1,8 @@
 <?php
+/**
+ * Panel de administración: métricas resumidas y enlaces a módulos en iframe.
+ * Acceso restringido a rol administrador (valor 1 en sesión).
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])) {
@@ -14,7 +18,7 @@ include './php/pedidos/pedidoModel.php';
 
 $consulta = consultar_usuarios_recientes();
 
-
+// --- KPI y listas recientes para tarjetas del tablero ---
 $total_usuarios = total_usuarios();
 $usuarios_mes_actual = usuarios_mes();
 $pedidos_mes = pedidos_mes() ?: 0;
@@ -47,7 +51,7 @@ $top_productos = productos_mas_vendidos(5);
     <aside class="dashboard-sidebar">
       <div class="dash-logo">
         <span class="dash-logo-dot"></span>
-        <a href="../index.html" class="dash-logo-text">ZonaPixel</a>
+        <a href="../index.php" class="dash-logo-text">ZonaPixel</a>
         <span class="text-caption me-auto">Admin</span>
       </div>
 
@@ -211,7 +215,9 @@ $top_productos = productos_mas_vendidos(5);
                   </tr>
                 </thead>
                 <tbody>
-                  <?php while ($fila = mysqli_fetch_assoc($pedidos_recientes_consulta)):
+                  <?php
+                  // Muestra pedidos recientes: resuelve cliente y etiqueta de estado según ids del modelo
+                  while ($fila = mysqli_fetch_assoc($pedidos_recientes_consulta)):
                     $usuario = consultar_usuarios_id($fila['usuario_id']);
                     $estado_nombre = 'Pendiente';
                     if ($fila['estado_id'] == 1) $estado_nombre = 'Completado';
@@ -238,7 +244,9 @@ $top_productos = productos_mas_vendidos(5);
           <div class="dash-card">
             <div class="dash-card-title">Productos más vendidos</div>
             <div class="dash-list-col gap-12">
-              <?php while ($prod = mysqli_fetch_assoc($top_productos)): ?>
+              <?php
+              // Ranking desde productos_mas_vendidos(): unidades y subtotales agregados
+              while ($prod = mysqli_fetch_assoc($top_productos)): ?>
                 <div class="dash-row-user gap-12">
                   <img
                     src="<?= $prod['imagen_principal'] ?: 'https://via.placeholder.com/60x60?text=? ' ?>"
@@ -283,7 +291,9 @@ $top_productos = productos_mas_vendidos(5);
                 </tr>
               </thead>
               <tbody>
-                <?php while ($filas = mysqli_fetch_assoc($consulta)): ?>
+                <?php
+                // Vista previa de consultar_usuarios_recientes(); columnas «Pedidos»/estado son placeholders en UI
+                while ($filas = mysqli_fetch_assoc($consulta)): ?>
                   <tr>
                     <td>
                       <div class="dash-row-user gap-10">

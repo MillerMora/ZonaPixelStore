@@ -1,4 +1,7 @@
-<?php 
+<?php
+/**
+ * Formulario de nueva opinión (demo): selectores estáticos y widget de estrellas #starRating.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){
@@ -16,7 +19,7 @@ if (isset($_SESSION['rol'])){
 </head>
 <body>
 
-<?php 
+<?php
 if ($logueo === 1){
   include './plantillas/navbar_admin.php';
 } elseif ($logueo >= 2 ){
@@ -26,6 +29,8 @@ if ($logueo === 1){
 
 }
 ?>
+
+<!-- Hero y bloque de formulario (sin action a back-end en esta maqueta) -->
 <div class="page-hero py-4">
   <div class="container">
     <div class="breadcrumb-nav">

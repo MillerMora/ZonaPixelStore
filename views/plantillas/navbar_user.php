@@ -1,3 +1,4 @@
+<!-- Barra para usuario registrado (cliente): perfil y cierre de sesión -->
 <nav class="navbar">
     <div class="container">
         <a href="/index.php" class="navbar-brand">

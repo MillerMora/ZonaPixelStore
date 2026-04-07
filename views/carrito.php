@@ -1,4 +1,8 @@
-<?php 
+<?php
+/**
+ * Vista de carrito de compras (contenido estático de demostración: ítems, resumen, cupón).
+ * La interactividad de filas y cupón la aporta cartInteractions.js en el cliente.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){
@@ -17,7 +21,7 @@ if (isset($_SESSION['rol'])){
 </head>
 <body>
 
-<?php 
+<?php
 if ($logueo === 1){
   include './plantillas/navbar_admin.php';
 } elseif ($logueo >= 2 ){
@@ -28,6 +32,7 @@ if ($logueo === 1){
 }
 ?>
 
+<!-- Navegación móvil auxiliar (mismo patrón que otras vistas públicas) -->
 <div class="mobile-nav" id="mobileNav">
   <div class="mobile-nav-overlay"></div>
   <div class="mobile-nav-drawer">
@@ -36,6 +41,7 @@ if ($logueo === 1){
   </div>
 </div>
 
+<!-- Cabecera de página con migas de pan -->
 <div class="page-hero pt-0 pb-20">
   <div class="container">
     <div class="breadcrumb-nav">

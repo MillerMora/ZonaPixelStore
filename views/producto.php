@@ -1,4 +1,8 @@
-<?php 
+<?php
+/**
+ * Ficha de producto de ejemplo (Baldur's Gate 3): galería, opciones, reseñas recientes embebidas.
+ * Sirve de plantilla visual; los datos reales vendrían del modelo en una versión dinámica.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){
@@ -17,7 +21,7 @@ if (isset($_SESSION['rol'])){
 </head>
 <body>
 
-<?php 
+<?php
 if ($logueo === 1){
   include './plantillas/navbar_admin.php';
 } elseif ($logueo >= 2 ){
@@ -29,6 +33,7 @@ if ($logueo === 1){
 ?>
 
 
+<!-- Drawer móvil (enlaces de muestra; conviene alinear con .php reales) -->
 <div class="mobile-nav" id="mobileNav">
   <div class="mobile-nav-overlay"></div>
   <div class="mobile-nav-drawer">

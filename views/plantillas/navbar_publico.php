@@ -1,3 +1,4 @@
+<!-- Barra de navegación: visitante sin sesión (login y registro visibles) -->
 <nav class="navbar">
     <div class="container">
         <a href="/index.php" class="navbar-brand">
@@ -13,7 +14,6 @@
             <button class="nav-icon-btn" title="Buscar"><i class="fas fa-search"></i></button>
             <a href="/views/carrito.php" class="nav-icon-btn" title="Carrito">
                 <i class="fas fa-shopping-cart"></i>
-                <span class="badge-count">3</span>
             </a>
             <a href="/views/login.php" class="btn-nav-login">Iniciar sesión</a>
             <a href="/views/register.php" class="btn-nav-login">Registrarse</a>

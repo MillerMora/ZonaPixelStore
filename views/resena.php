@@ -1,4 +1,7 @@
-<?php 
+<?php
+/**
+ * Artículo de reseña editorial de muestra (BG3): layout largo con cabecera, cuerpo y pie.
+ */
 session_start();
 $logueo = null;
 if (isset($_SESSION['rol'])){
@@ -16,7 +19,7 @@ if (isset($_SESSION['rol'])){
 </head>
 <body>
 
-<?php 
+<?php
 if ($logueo === 1){
   include './plantillas/navbar_admin.php';
 } elseif ($logueo >= 2 ){

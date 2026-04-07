@@ -1,4 +1,7 @@
 <?php
+/**
+ * Formulario de inicio de sesión y barra de navegación acorde al rol ya autenticado.
+ */
 
 session_start();
 $logueo = null;
@@ -6,6 +9,7 @@ if (isset($_SESSION['rol'])){
   $logueo = $_SESSION['rol'];
 }
 
+// Mensaje de error puntual tras intento fallido (se consume al mostrar)
 if (isset($_SESSION['login_error'])): ?>
 <div style="background: linear-gradient(90deg, #dc3545, #c82333); color: white; padding: 1rem 0; text-align: center; font-weight: 600; font-size: 1.1rem; box-shadow: 0 2px 10px rgba(220,53,69,0.3); margin-bottom: 2rem; border: none;">
   <div class="container">
@@ -30,7 +34,8 @@ if (isset($_SESSION['login_error'])): ?>
 
 <body>
 
-<?php 
+<?php
+// Navbar acorde al usuario ya autenticado (si llegara con sesión activa)
 if ($logueo === 1){
   include './plantillas/navbar_admin.php';
 } elseif ($logueo >= 2 ){
@@ -41,6 +46,7 @@ if ($logueo === 1){
 }
 ?>
 
+  <!-- POST hacia login.php?iniciar=1 (iniciar_sesion en servidor) -->
   <section class="auth-page py-5">
     <div class="container">
       <div class="auth-card">

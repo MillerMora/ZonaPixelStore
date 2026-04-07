@@ -1,3 +1,4 @@
+<!-- Barra para administrador: acceso a dashboard y menú desplegable de cuenta -->
 <nav class="navbar">
     <div class="container">
         <a href="/index.php" class="navbar-brand">

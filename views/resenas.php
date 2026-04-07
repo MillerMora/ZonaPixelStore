@@ -1,155 +1,247 @@
-<?php 
+<?php
+
+/**
+ * Listado público de reseñas editoriales con facetas, búsqueda y paginación.
+ */
 session_start();
+
+require_once __DIR__ . '/php/resenas/resenasModel.php';
+require_once __DIR__ . '/php/publico/paginacion_helper.php';
+require_once __DIR__ . '/php/publico/listado_publico_helpers.php';
+require_once __DIR__ . '/php/publico/listado_reseñas_opiniones_shared.php';
+
 $logueo = null;
-if (isset($_SESSION['rol'])){
+if (isset($_SESSION['rol'])) {
   $logueo = $_SESSION['rol'];
 }
+
+// Opciones de filtro derivadas solo de reseñas ya publicadas y productos visibles
+$opciones_plataforma = resenas_publicas_opciones_plataforma();
+$opciones_marca = resenas_publicas_opciones_marca();
+$tipos_existen = resenas_publicas_existen_por_tipo_producto();
+$opciones_calificacion = resenas_publicas_opciones_calificacion();
+
+$filtro_plataformas = publico_parametros_get_array('plataforma');
+$filtro_marcas = publico_parametros_get_array('marca');
+
+// Solo acepta estrellas presentes en $opciones_calificacion (evita filtros vacíos en UI)
+$estrellas_permitidas = array_map('intval', array_column($opciones_calificacion, 'valor'));
+$filtro_estrellas_editorial = 0;
+if (isset($_GET['estrellas']) && (string) $_GET['estrellas'] !== '') {
+  $estrellas_solicitadas = (int) $_GET['estrellas'];
+  if (in_array($estrellas_solicitadas, $estrellas_permitidas, true)) {
+    $filtro_estrellas_editorial = $estrellas_solicitadas;
+  }
+}
+
+$tipo_producto = '';
+if (isset($_GET['tipo_producto']) && in_array($_GET['tipo_producto'], ['software', 'hardware'], true)) {
+  $tipo_producto = $_GET['tipo_producto'];
+}
+
+$texto_busqueda = publico_texto_busqueda_get('q');
+
+$pagina_actual = isset($_GET['pagina']) ? (int) $_GET['pagina'] : 1;
+$pagina_actual = max(1, $pagina_actual);
+$elementos_por_pagina = 9;
+
+$resultado_listado = resenas_publicas_listado([
+  'filtro_plataformas' => $filtro_plataformas,
+  'filtro_marcas' => $filtro_marcas,
+  'filtro_estrellas_editorial' => $filtro_estrellas_editorial,
+  'tipo_producto' => $tipo_producto,
+  'busqueda' => $texto_busqueda,
+  'offset' => ($pagina_actual - 1) * $elementos_por_pagina,
+  'limite' => $elementos_por_pagina,
+]);
+
+$filas_resenas = $resultado_listado['filas'];
+$total_resultados = (int) $resultado_listado['total'];
+
+// Estado «sin chips» para resaltar la ficha agregada «Todos»
+$claves_ficha_rapida = ['tipo_producto', 'plataforma', 'marca', 'estrellas'];
+$ficha_todos_activa = $tipo_producto === '' && count($filtro_plataformas) === 0 && count($filtro_marcas) === 0 && $filtro_estrellas_editorial === 0;
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reseñas — ZonaPixel</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
+
 <body>
 
-<?php 
-if ($logueo === 1){
-  include './plantillas/navbar_admin.php';
-} elseif ($logueo >= 2 ){
-  include './plantillas/navbar_user.php';
-} else {
-  include './plantillas/navbar_publico.php';
+  <?php
+  // Navegación según sesión
+  if ($logueo === 1) {
+    include './plantillas/navbar_admin.php';
+  } elseif ($logueo >= 2) {
+    include './plantillas/navbar_user.php';
+  } else {
+    include './plantillas/navbar_publico.php';
+  }
+  ?>
 
-}
-?>
-
-
-<div class="mobile-nav" id="mobileNav">
-  <div class="mobile-nav-overlay"></div>
-  <div class="mobile-nav-drawer">
-    <button class="mobile-nav-close" id="mobileNavClose"><i class="fas fa-times"></i></button>
-<a href="../index.html">Inicio</a><a href="./catalogo.html">Catálogo</a><a href="./resenas.html">Reseñas</a><a href="./opiniones.html">Opiniones</a></div>
-  </div>
-</div>
-
-<div class="page-hero">
-  <div class="container">
-    <div class="breadcrumb-nav">
-      <a href="../index.html">Inicio</a><span>/</span><span class="text-white">Reseñas</span>
-    </div>
-    <h1 class="page-hero-title">Reseñas editoriales</h1>
-    <p class="page-hero-sub">Análisis profundos escritos por nuestro equipo de expertos</p>
-  </div>
-</div>
-
-<section class="section-gap">
-  <div class="container">
-    <div class="category-strip">
-      <button class="cat-chip active">Todas</button>
-      <button class="cat-chip">PlayStation 5</button>
-      <button class="cat-chip">Xbox</button>
-      <button class="cat-chip">Nintendo Switch</button>
-      <button class="cat-chip">PC</button>
-      <button class="cat-chip">Periféricos</button>
-    </div>
-    <div class="reviews-grid">
-      <a href="resena.html" class="review-card" style="display:block">
-        <div class="review-card-header">
-          <img src="https://upload.wikimedia.org/wikipedia/en/f/fb/The_Legend_of_Zelda_Tears_of_the_Kingdom_cover.jpg" class="review-game-img" alt="" />
-          <div class="review-score">9.8</div>
-        </div>
-        <div class="review-title">Una obra maestra de diseño abierto</div>
-        <div class="review-game-name">Zelda: Tears of the Kingdom · Nintendo Switch</div>
-        <p class="review-excerpt">Nintendo volvió a superar lo imposible. La libertad creativa que ofrece TotK es inigualable en cualquier juego de mundo abierto...</p>
-        <div class="review-footer">
-          <span class="review-author">Por <strong>ZonaPixel Staff</strong></span>
-          <span class="review-stars">★★★★★</span>
-        </div>
-      </a>
-      <a href="resena.html" class="review-card" style="display:block">
-        <div class="review-card-header">
-          <img src="https://image.api.playstation.com/vulcan/ap/rnd/202302/2321/ba706e54d68d10a0eb6ab7c36cdad9178c58b7fb7bb03d28.png" class="review-game-img" alt="" />
-          <div class="review-score">9.6</div>
-        </div>
-        <div class="review-title">El RPG que redefinió el género</div>
-        <div class="review-game-name">Baldur's Gate 3 · PC / PS5</div>
-        <p class="review-excerpt">Larian Studios ha creado el juego de rol más completo y ambicioso en décadas. Una experiencia que te consume completamente...</p>
-        <div class="review-footer">
-          <span class="review-author">Por <strong>ZonaPixel Staff</strong></span>
-          <span class="review-stars">★★★★★</span>
-        </div>
-      </a>
-      <a href="resena.html" class="review-card" style="display:block">
-        <div class="review-card-header">
-          <img src="https://cdn1.epicgames.com/offer/c4763f236d08423eb47b4c3008779c84/EGS_AlanWake2_RemedyEntertainment_S2_1200x1600-c7c8091ddac0f9669c8e5905bca88aaa" class="review-game-img" alt="" />
-          <div class="review-score">9.0</div>
-        </div>
-        <div class="review-title">Terror narrativo sin precedentes</div>
-        <div class="review-game-name">Alan Wake 2 · PC / PS5 / Xbox</div>
-        <p class="review-excerpt">Remedy Entertainment entrega su obra más ambiciosa. Una fusión de terror psicológico, metaficción y acción cinematográfica magistral...</p>
-        <div class="review-footer">
-          <span class="review-author">Por <strong>ZonaPixel Staff</strong></span>
-          <span class="review-stars">★★★★½</span>
-        </div>
-      </a>
-      <a href="resena.html" class="review-card" style="display:block">
-        <div class="review-card-header">
-          <img src="https://image.api.playstation.com/vulcan/ap/rnd/202210/0706/EVWyZD63pahuh95eKloFaJuC.png" class="review-game-img" alt="" />
-          <div class="review-score">9.3</div>
-        </div>
-        <div class="review-title">El survival horror reinventado</div>
-        <div class="review-game-name">Resident Evil 4 Remake · PS5 / Xbox / PC</div>
-        <p class="review-excerpt">Capcom tomó uno de los juegos más influyentes de la historia y lo reconstruyó con maestría para las audiencias modernas...</p>
-        <div class="review-footer">
-          <span class="review-author">Por <strong>ZonaPixel Staff</strong></span>
-          <span class="review-stars">★★★★½</span>
-        </div>
-      </a>
-      <a href="resena.html" class="review-card" style="display:block">
-        <div class="review-card-header">
-          <img src="https://image.api.playstation.com/vulcan/ap/rnd/202306/1219/e66c4ae18c5d8e3986a24599b293162a6f5c9eba22968d2c.jpg" class="review-game-img" alt="" />
-          <div class="review-score">9.1</div>
-        </div>
-        <div class="review-title">El hombre araña más espectacular</div>
-        <div class="review-game-name">Spider-Man 2 · PlayStation 5</div>
-        <p class="review-excerpt">Insomniac Games eleva la franquicia a nuevas alturas con un juego más grande, más fluido y emocionalmente maduro...</p>
-        <div class="review-footer">
-          <span class="review-author">Por <strong>ZonaPixel Staff</strong></span>
-          <span class="review-stars">★★★★½</span>
-        </div>
-      </a>
-      <a href="resena.html" class="review-card" style="display:block">
-        <div class="review-card-header">
-          <img src="https://images.unsplash.com/photo-1527814050087-3793815479db?w=500&q=80" class="review-game-img" alt="" />
-          <div class="review-score">9.2</div>
-        </div>
-        <div class="review-title">Precisión y durabilidad excepcionales</div>
-        <div class="review-game-name">HyperX Alloy Origins TKL · Teclado mecánico</div>
-        <p class="review-excerpt">Un teclado mecánico que combina switches de calidad, construcción sólida y precio competitivo para gamers exigentes...</p>
-        <div class="review-footer">
-          <span class="review-author">Por <strong>ZonaPixel Staff</strong></span>
-          <span class="review-stars">★★★★½</span>
-        </div>
-      </a>
-    </div>
-    <div class="pagination-wrap">
-      <button class="page-btn active">1</button>
-      <button class="page-btn">2</button>
-      <button class="page-btn">3</button>
-      <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+  <div class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-overlay"></div>
+    <div class="mobile-nav-drawer">
+      <button class="mobile-nav-close" id="mobileNavClose"><i class="fas fa-times"></i></button>
+      <div class="mobile-nav-links">
+        <a href="/index.php">Inicio</a>
+        <a href="/views/catalogo.php">Catálogo</a>
+        <a href="/views/resenas.php">Reseñas</a>
+        <a href="/views/opiniones.php">Opiniones</a>
+      </div>
     </div>
   </div>
-</section>
 
-<?php 
-  include './plantillas/footer.php';
-?>
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb-nav">
+        <a href="/index.php">Inicio</a><span>/</span><span class="text-white">Reseñas</span>
+      </div>
+      <h1 class="page-hero-title">Reseñas editoriales</h1>
+      <p class="page-hero-sub"><?php echo (int) $total_resultados; ?> reseña(s) publicada(s) con los filtros actuales</p>
+    </div>
+  </div>
 
-<script type="module" src="../js/main.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <section class="section-gap">
+    <div class="container">
+      <form method="get" action="resenas.php" id="resenasFiltroForm">
+        <div class="category-strip align-items-center w-100">
+          <div class="input-group flex-grow-1 min-w-0" style="min-width:min(100%,240px)">
+            <input type="search" name="q" id="resenasBusquedaInput" class="form-control" autocomplete="off"
+              style="background:var(--surface-2);border-color:var(--border);color:var(--white)"
+              placeholder="Producto, marca, plataforma, género, título, autor…"
+              value="<?php echo htmlspecialchars($texto_busqueda, ENT_QUOTES, 'UTF-8'); ?>" />
+            <button type="submit" class="btn" id="resenasBusquedaBtn" style="background:var(--accent);color:var(--black);border:none;font-weight:700;" aria-label="Buscar" title="Buscar">
+              <i class="fas fa-search" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-lg-3">
+            <div class="filter-card mb-3">
+              <div class="filter-title">Tipo de producto</div>
+              <div class="filter-group">
+                <label class="filter-check">
+                  <input type="radio" name="tipo_producto" value="" <?php echo $tipo_producto === '' ? ' checked' : ''; ?> /> Todos
+                </label>
+                <?php if (!empty($tipos_existen['software'])): ?>
+                  <label class="filter-check">
+                    <input type="radio" name="tipo_producto" value="software" <?php echo $tipo_producto === 'software' ? ' checked' : ''; ?> /> Software
+                  </label>
+                <?php endif; ?>
+                <?php if (!empty($tipos_existen['hardware'])): ?>
+                  <label class="filter-check">
+                    <input type="radio" name="tipo_producto" value="hardware" <?php echo $tipo_producto === 'hardware' ? ' checked' : ''; ?> /> Hardware
+                  </label>
+                <?php endif; ?>
+              </div>
+            </div>
+
+            <?php if (!empty($opciones_plataforma)): ?>
+              <div class="filter-card mb-3">
+                <div class="filter-title">Plataforma</div>
+                <div class="filter-group">
+                  <?php foreach ($opciones_plataforma as $plataforma_fila): ?>
+                    <label class="filter-check">
+                      <input type="checkbox" name="plataforma[]" value="<?php echo (int) $plataforma_fila['id_plataforma']; ?>"
+                        <?php echo in_array((int) $plataforma_fila['id_plataforma'], $filtro_plataformas, true) ? ' checked' : ''; ?> />
+                      <?php echo htmlspecialchars($plataforma_fila['nombre'], ENT_QUOTES, 'UTF-8'); ?>
+                    </label>
+                  <?php endforeach; ?>
+                </div>
+              </div>
+            <?php endif; ?>
+
+            <?php if (!empty($opciones_marca)): ?>
+              <div class="filter-card mb-3">
+                <div class="filter-title">Marca</div>
+                <div class="filter-group">
+                  <?php foreach ($opciones_marca as $marca_fila): ?>
+                    <label class="filter-check">
+                      <input type="checkbox" name="marca[]" value="<?php echo (int) $marca_fila['id_marca']; ?>"
+                        <?php echo in_array((int) $marca_fila['id_marca'], $filtro_marcas, true) ? ' checked' : ''; ?> />
+                      <?php echo htmlspecialchars($marca_fila['nombre'], ENT_QUOTES, 'UTF-8'); ?>
+                    </label>
+                  <?php endforeach; ?>
+                </div>
+              </div>
+            <?php endif; ?>
+
+            <?php if (!empty($opciones_calificacion)): ?>
+              <div class="filter-card mb-3">
+                <div class="filter-title">Calificación (1–5)</div>
+                <div class="filter-group">
+                  <label class="filter-check">
+                    <input type="radio" name="estrellas" value="" <?php echo $filtro_estrellas_editorial === 0 ? ' checked' : ''; ?> />
+                    Todas
+                  </label>
+                  <?php foreach ($opciones_calificacion as $opcion_cal): ?>
+                    <label class="filter-check">
+                      <input type="radio" name="estrellas" value="<?php echo (int) $opcion_cal['valor']; ?>"
+                        <?php echo $filtro_estrellas_editorial === (int) $opcion_cal['valor'] ? ' checked' : ''; ?> />
+                      <?php echo htmlspecialchars($opcion_cal['etiqueta'], ENT_QUOTES, 'UTF-8'); ?>
+                    </label>
+                  <?php endforeach; ?>
+                </div>
+              </div>
+            <?php endif; ?>
+
+            <button type="submit" class="btn btn-sm w-100" style="background:var(--accent);color:var(--black);font-weight:700;border:none;">Aplicar filtros</button>
+          </div>
+
+          <div class="col-lg-9">
+            <div class="reviews-grid">
+              <?php if (empty($filas_resenas)): ?>
+                <p class="text-muted">No hay reseñas que coincidan con los filtros.</p>
+              <?php else: ?>
+                <?php foreach ($filas_resenas as $resena_fila):
+                  $autor_completo = trim(($resena_fila['autor_nombre'] ?? '') . ' ' . ($resena_fila['autor_apellido'] ?? ''));
+                  if ($autor_completo === '') {
+                    $autor_completo = $resena_fila['autor_username'] ?? 'Editorial';
+                  }
+                  $linea_producto = htmlspecialchars($resena_fila['producto_nombre'] ?? '', ENT_QUOTES, 'UTF-8');
+                  if (!empty($resena_fila['plataformas_txt'])) {
+                    $linea_producto .= ' · ' . htmlspecialchars($resena_fila['plataformas_txt'], ENT_QUOTES, 'UTF-8');
+                  }
+                  $imagen_portada = $resena_fila['imagen_portada'] ?? '';
+                ?>
+                  <a href="/views/resena.php?id=<?php echo (int) $resena_fila['id_resena']; ?>" class="review-card text-decoration-none text-reset" style="display:block">
+                    <div class="review-card-header">
+                      <img src="<?php echo htmlspecialchars($imagen_portada, ENT_QUOTES, 'UTF-8'); ?>" class="review-game-img" alt="" />
+                      <div class="review-score"><?php echo number_format((float) $resena_fila['calificacion'], 1, ',', '.'); ?></div>
+                    </div>
+                    <div class="review-title"><?php echo htmlspecialchars($resena_fila['titulo'] ?? '', ENT_QUOTES, 'UTF-8'); ?></div>
+                    <div class="review-game-name"><?php echo $linea_producto; ?></div>
+                    <p class="review-excerpt"><?php echo htmlspecialchars(publico_texto_resumen($resena_fila['contenido'] ?? '', 200), ENT_QUOTES, 'UTF-8'); ?></p>
+                    <div class="review-footer">
+                      <span class="review-author">Por <strong><?php echo htmlspecialchars($autor_completo, ENT_QUOTES, 'UTF-8'); ?></strong></span>
+                      <span class="review-stars"><?php echo publico_estrellas_texto_editorial_10($resena_fila['calificacion']); ?></span>
+                    </div>
+                  </a>
+                <?php endforeach; ?>
+              <?php endif; ?>
+            </div>
+
+            <?php publico_renderizar_paginacion('resenas.php', $pagina_actual, $total_resultados, $elementos_por_pagina); ?>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <?php include './plantillas/footer.php'; ?>
+
+  <script type="module" src="../js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

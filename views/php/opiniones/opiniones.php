@@ -99,7 +99,7 @@ if ($busqueda !== '') {
                                     <a href="./opinionModel.php?eliminar=<?php echo $filas['id_opinion']; ?>"
                                         class="action-icon-btn action-danger"
                                         title="Eliminar"
-                                        onclick="return confirm('¿Eliminar opinión " <?php echo htmlspecialchars($filas['titulo']); ?> "?">
+                                        onclick="return confirm('¿Eliminar a <?= htmlspecialchars($filas['titulo']) ?>?')">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
@@ -113,7 +113,7 @@ if ($busqueda !== '') {
         </div>
     </div>
 
-    <script type="module Ascertain" src="../../../js/main.js"></script>
+    <script type="module" src="../../../js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

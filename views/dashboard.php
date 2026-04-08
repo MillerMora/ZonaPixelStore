@@ -114,7 +114,7 @@ $top_productos = productos_mas_vendidos(5);
       <div class="dash-topbar">
         <span class="dash-page-title" id="dashPageTitle">Dashboard</span>
         <div class="dash-topbar-actions">
-          <a href="../index.html" class="nav-icon-btn" title="Ver tienda"><i class="fas fa-store"></i></a>
+          <a href="../index.php" class="nav-icon-btn" title="Ver tienda"><i class="fas fa-store"></i></a>
           <button class="nav-icon-btn" title="Notificaciones">
             <i class="fas fa-bell"></i>
             <span class="badge-count">4</span>
@@ -207,9 +207,9 @@ $top_productos = productos_mas_vendidos(5);
           <div class="dash-card">
             <div class="dash-card-title">
               Pedidos recientes
-              <a
-                href="#"
-                class="dash-link-muted-sm">Ver todos →</a>
+              <button class="dash-nav-item dash-link-muted-sm" data-section="pedidos"> 
+                <p >Ver todos →</p>
+              </button>
             </div>
             <div class="dash-scroll-x">
               <table class="dash-table">

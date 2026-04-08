@@ -708,10 +708,20 @@ function catalogo_productos_filtrados(array $opciones) {
 }
 
 // Invocación directa desde la URL del panel: ?eliminar=id redirige tras borrar
+function buscar_productos($busqueda) {
+    global $BD;
+    $busq = "%$busqueda%";
+    $sql = mysqli_prepare($BD, "SELECT * FROM productos WHERE CONCAT(nombre, ' ', descripcion) LIKE ?");
+    mysqli_stmt_bind_param($sql, 's', $busq);
+    mysqli_stmt_execute($sql);
+    return mysqli_stmt_get_result($sql);
+}
+
 if (isset($_GET['eliminar'])) {
     eliminar_producto($_GET['eliminar']);
     header('location: productos.php');
     exit;
 }
 ?>
+
 

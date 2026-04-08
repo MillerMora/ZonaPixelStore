@@ -384,10 +384,19 @@ function resenas_publicas_listado(array $opciones) {
 }
 
 // Invocación directa desde la URL del panel: ?eliminar=id redirige tras borrar
+function buscar_resenas($busqueda) {
+    global $BD;
+    $busq = "%$busqueda%";
+    $sql = mysqli_prepare($BD, "SELECT * FROM resenas WHERE CONCAT(titulo, ' ', contenido) LIKE ?");
+    mysqli_stmt_bind_param($sql, 's', $busq);
+    mysqli_stmt_execute($sql);
+    return mysqli_stmt_get_result($sql);
+}
+
 if (isset($_GET['eliminar'])) {
     eliminar_resena($_GET['eliminar']);
     header('location: resenas.php');
     exit;
 }
-
 ?>
+

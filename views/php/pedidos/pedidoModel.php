@@ -99,10 +99,20 @@ function pedidos_recientes($limit = 5) {
 }
 
 // Borrado vía querystring en el listado administrativo de pedidos
+function buscar_pedidos($busqueda) {
+    global $BD;
+    $busq = "%$busqueda%";
+    $sql = mysqli_prepare($BD, "SELECT p.*, u.nombre as usuario_nombre FROM pedidos p LEFT JOIN usuarios u ON p.usuario_id = u.id_usuario WHERE CONCAT(COALESCE(p.id_pedido,''), ' ', COALESCE(p.total,''), ' ', COALESCE(u.nombre,'')) LIKE ?");
+    mysqli_stmt_bind_param($sql, 's', $busq);
+    mysqli_stmt_execute($sql);
+    return mysqli_stmt_get_result($sql);
+}
+
 if (isset($_GET["eliminar"])){
     eliminar_pedido($_GET["eliminar"]);
     header("location: pedidos.php");
 }
+
 ?>
 
 

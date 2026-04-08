@@ -5,38 +5,42 @@
  */
 
 require_once __DIR__ . '/../conexion/conexion.php';
-if (!isset($BD)){
-    $BD = connection() ;
+if (!isset($BD)) {
+    $BD = connection();
 }
 
 // --- Lecturas administrativas ---
 
-function consultar_opiniones (){
+function consultar_opiniones()
+{
     global $BD;
-    $sql = mysqli_query($BD ,'SELECT * FROM opiniones') ;
-    return $sql ;
-    }
-    
-function consultar_opinion_id ($id){
+    $sql = mysqli_query($BD, 'SELECT * FROM opiniones');
+    return $sql;
+}
+
+function consultar_opinion_id($id)
+{
     global $BD;
-    $sql = mysqli_prepare($BD,"SELECT * FROM opiniones WHERE id_opinion = ?") ;
-    mysqli_stmt_bind_param($sql, 'i', $id );
+    $sql = mysqli_prepare($BD, "SELECT * FROM opiniones WHERE id_opinion = ?");
+    mysqli_stmt_bind_param($sql, 'i', $id);
     mysqli_stmt_execute($sql);
-    $resultado = mysqli_stmt_get_result($sql); 
-    return mysqli_fetch_assoc($resultado) ;    
+    $resultado = mysqli_stmt_get_result($sql);
+    return mysqli_fetch_assoc($resultado);
 }
 
 // --- Altas, bajas y actualizaciones ---
 
-function crear_opinion ($usuario_id, $producto_id, $plataforma_id, $titulo, $contenido, $calificacion, $aprobada){
+function crear_opinion($usuario_id, $producto_id, $plataforma_id, $titulo, $contenido, $calificacion, $aprobada)
+{
     global $BD;
-    $sql = mysqli_prepare($BD, "INSERT INTO `opiniones`(`usuario_id`, `producto_id`, `plataforma_id`, `titulo`, `contenido`, `calificacion`, `aprobada`) VALUES (?,?,?,?,?,?,?)" );  
+    $sql = mysqli_prepare($BD, "INSERT INTO `opiniones`(`usuario_id`, `producto_id`, `plataforma_id`, `titulo`, `contenido`, `calificacion`, `aprobada`) VALUES (?,?,?,?,?,?,?)");
     mysqli_stmt_bind_param($sql, 'iiisssi', $usuario_id, $producto_id, $plataforma_id, $titulo, $contenido, $calificacion, $aprobada);
     $resultado = mysqli_stmt_execute($sql);
     return $resultado;
 }
 
-function actualizar_opinion ($id, $usuario_id, $producto_id, $plataforma_id, $titulo, $contenido, $calificacion, $aprobada){
+function actualizar_opinion($id, $usuario_id, $producto_id, $plataforma_id, $titulo, $contenido, $calificacion, $aprobada)
+{
     global $BD;
     $sql = mysqli_prepare($BD, "UPDATE `opiniones` SET `usuario_id` = ?, `producto_id` = ?, `plataforma_id` = ?, `titulo` = ?, `contenido` = ?, `calificacion` = ?, `aprobada` = ? WHERE `id_opinion` = ?");
     mysqli_stmt_bind_param($sql, 'iiisssii', $usuario_id, $producto_id, $plataforma_id, $titulo, $contenido, $calificacion, $aprobada, $id);
@@ -44,7 +48,8 @@ function actualizar_opinion ($id, $usuario_id, $producto_id, $plataforma_id, $ti
     return $resultado;
 }
 
-function eliminar_opinion ($id){
+function eliminar_opinion($id)
+{
     global $BD;
     // Relajación temporal de FK por posibles enlaces o historial
     mysqli_query($BD, "SET FOREIGN_KEY_CHECKS = 0");
@@ -52,12 +57,13 @@ function eliminar_opinion ($id){
     mysqli_stmt_bind_param($sql, "i", $id);
     $resultado = mysqli_stmt_execute($sql);
     mysqli_query($BD, "SET FOREIGN_KEY_CHECKS = 1");
-    return $resultado ;
+    return $resultado;
 }
 
 // --- Listado público y facetas (opiniones aprobadas) ---
 
-function opiniones_publicas_fetch_all($resultado) {
+function opiniones_publicas_fetch_all($resultado)
+{
     $filas = [];
     if ($resultado) {
         while ($row = mysqli_fetch_assoc($resultado)) {
@@ -68,7 +74,8 @@ function opiniones_publicas_fetch_all($resultado) {
 }
 
 // Plataformas asociadas a productos que tienen al menos una opinión aprobada
-function opiniones_publicas_opciones_plataforma() {
+function opiniones_publicas_opciones_plataforma()
+{
     global $BD;
     $sql = mysqli_query($BD, "
         SELECT DISTINCT pl.id_plataforma, pl.nombre
@@ -83,7 +90,8 @@ function opiniones_publicas_opciones_plataforma() {
 }
 
 // Marcas de productos con opiniones aprobadas
-function opiniones_publicas_opciones_marca() {
+function opiniones_publicas_opciones_marca()
+{
     global $BD;
     $sql = mysqli_query($BD, "
         SELECT DISTINCT m.id_marca, m.nombre
@@ -97,7 +105,8 @@ function opiniones_publicas_opciones_marca() {
 }
 
 // Presencia de opiniones por tipo de categoría (software vs resto) para la navegación por pestañas
-function opiniones_publicas_existen_por_tipo_producto() {
+function opiniones_publicas_existen_por_tipo_producto()
+{
     global $BD;
     $out = ['software' => false, 'hardware' => false];
     $sql = mysqli_query($BD, "
@@ -118,7 +127,8 @@ function opiniones_publicas_existen_por_tipo_producto() {
 }
 
 // Opciones de filtro por calificación exacta 1–5 solo si existen filas en ese valor
-function opiniones_publicas_opciones_calificacion() {
+function opiniones_publicas_opciones_calificacion()
+{
     global $BD;
     $sql = mysqli_query($BD, "
         SELECT
@@ -152,7 +162,8 @@ function opiniones_publicas_opciones_calificacion() {
  * Opiniones aprobadas paginadas con filtros por plataforma (incluye heurística si plataforma_id es NULL),
  * marca, estrellas y búsqueda full-text sobre varias tablas.
  */
-function opiniones_publicas_listado(array $opciones) {
+function opiniones_publicas_listado(array $opciones)
+{
     global $BD;
 
     $limite = isset($opciones['limite']) ? (int) $opciones['limite'] : 9;
@@ -324,11 +335,18 @@ function opiniones_publicas_listado(array $opciones) {
 }
 
 // Solo ejecuta borrado por querystring cuando este archivo es el script principal
+function buscar_opiniones($busqueda)
+{
+    global $BD;
+    $busq = "%$busqueda%";
+    $sql = mysqli_prepare($BD, "SELECT * FROM opiniones WHERE titulo LIKE ? OR contenido LIKE ?");
+    mysqli_stmt_bind_param($sql, 'ss', $busq, $busq);
+    mysqli_stmt_execute($sql);
+    return mysqli_stmt_get_result($sql);
+}
+
 if (isset($_GET['eliminar'])) {
-    eliminar_opinion( $_GET['eliminar']);
+    eliminar_opinion($_GET['eliminar']);
     header('location: opiniones.php');
     exit;
 }
-
-?>
-

@@ -1,22 +1,28 @@
 <?php
+
 /**
  * Moderación de opiniones de comunidad: listado admin con FK a usuario, producto y plataforma.
  */
 session_start();
 $logueo = null;
-if (isset($_SESSION['rol'])){
-  $logueo = $_SESSION['rol'];
+if (isset($_SESSION['rol'])) {
+    $logueo = $_SESSION['rol'];
 }
 
-if ($logueo != 1){
-  header('location: /views/404.php') ;
+if ($logueo != 1) {
+    header('location: /views/404.php');
 }
 include './opinionModel.php';
 require_once '../usuarios/usuarioModel.php';
 require_once '../productos/productoModel.php';
 require_once '../plataformas/plataformaModel.php';
 
-$consulta = consultar_opiniones();
+$busqueda = isset($_GET['q']) ? trim($_GET['q']) : '';
+if ($busqueda !== '') {
+    $consulta = buscar_opiniones($busqueda);
+} else {
+    $consulta = consultar_opiniones();
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -42,10 +48,14 @@ $consulta = consultar_opiniones();
         <div class="dash-card">
             <div Ascertain class="dashboard-card-header d-flex align-items-center justify-content-between">
                 <span class="dashboard-card-title">Lista de Opiniones</span>
-                <div class="dash-search-wrap">
-                    <i class="fas fa-search"></i>
-                    <input type="text" class="dash-search" placeholder="Buscar..." />
-                </div>
+                <form method="GET" style="display: contents;">
+                    <div class="dash-search-wrap position-relative">
+                        <input type="search" name="q" class="dash-search" value="<?php echo htmlspecialchars($busqueda); ?>" placeholder="Buscar opiniones..." autocomplete="off" />
+                        <button type="submit" class="position-absolute top-50 end-0 translate-middle-y btn-unstyled p-0" style="border:none;background:none;line-height:1;color:inherit;" title="Buscar">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
                 <a href="crear_opinion.php" class="btn-primary btn btn-sm" style="font-size:13px; padding:8px 20px">
                     <i class="fas fa-plus"></i> Nueva opinión
                 </a>
@@ -60,7 +70,7 @@ $consulta = consultar_opiniones();
                             <th>Producto</th>
                             <th>Plataforma</th>
                             <th>Título</th>
-                            <th Ascertain >Calificación</th>
+                            <th Ascertain>Calificación</th>
                             <th>Aprobada</th>
                             <th>Fecha creación</th>
                             <th>Acciones</th>
@@ -108,4 +118,3 @@ $consulta = consultar_opiniones();
 </body>
 
 </html>
-

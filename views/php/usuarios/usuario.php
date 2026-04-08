@@ -14,7 +14,12 @@ if ($logueo != 1) {
 }
 include './usuarioModel.php';
 
-$usuario = consultar_usuarios_rol();
+$busqueda = isset($_GET['q']) ? trim($_GET['q']) : '';
+if ($busqueda !== '') {
+    $usuario = buscar_usuarios($busqueda);
+} else {
+    $usuario = consultar_usuarios_rol();
+}
 ?>
 
 <!DOCTYPE html>
@@ -42,10 +47,14 @@ $usuario = consultar_usuarios_rol();
         <div class="dash-card">
             <div class="dashboard-card-header d-flex align-items-center justify-content-between">
                 <span class="dashboard-card-title">Lista de Usuarios</span>
-                <div class="dash-search-wrap">
-                    <i class="fas fa-search"></i>
-                    <input type="text" class="dash-search" placeholder="Buscar..." />
-                </div>
+                <form method="GET" style="display: contents;">
+                    <div class="dash-search-wrap position-relative">
+                        <input type="search" name="q" class="dash-search" value="<?php echo htmlspecialchars($busqueda); ?>" placeholder="Buscar usuarios..." autocomplete="off" />
+                        <button type="submit" class="position-absolute top-50 end-0 translate-middle-y btn-unstyled p-0" style="border:none;background:none;line-height:1;color:inherit;" title="Buscar">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
                 <a href="crear_usuario.php" class="btn-primary btn btn-sm" style="font-size:13px; padding:8px 20px">
                     <i class="fas fa-plus"></i> Nuevo Usuario
                 </a>

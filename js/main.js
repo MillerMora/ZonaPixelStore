@@ -31,3 +31,31 @@ initFilterAccordion();
 initCartInteractions();
 initStarRating();
 initUserDropdown();
+
+// Admin dashboard search: real-time filter ALL table columns + Enter submit
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInputs = document.querySelectorAll('.dash-search');
+  searchInputs.forEach(input => {
+    // Enter key: server-side search
+    input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        input.closest('form').submit();
+      }
+    });
+    
+    // Real-time client-side filter on input
+    input.addEventListener('input', function() {
+      const q = input.value.toLowerCase();
+      const form = input.closest('form');
+      const table = form ? form.closest('.dash-card')?.querySelector('.dash-table') : null;
+      if (table) {
+        const rows = table.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+          const text = Array.from(row.cells).map(cell => cell.textContent.toLowerCase()).join(' ');
+          row.style.display = text.includes(q) ? '' : 'none';
+        });
+      }
+    });
+  });
+});

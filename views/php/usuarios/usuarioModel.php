@@ -159,9 +159,19 @@ function pedidos_por_usuario($id_usuario) {
 }
 
 // Invocación directa desde la URL del panel: ?eliminar=id redirige tras borrar
+function buscar_usuarios($busqueda) {
+    global $BD;
+    $busq = "%$busqueda%";
+    $sql = mysqli_prepare($BD, "SELECT U.*, R.nombre AS nombre_rol FROM usuarios U LEFT JOIN roles R ON U.rol_id = R.id_rol WHERE CONCAT(U.nombre, ' ', U.apellido, ' ', U.username, ' ', U.email) LIKE ?");
+    mysqli_stmt_bind_param($sql, 's', $busq);
+    mysqli_stmt_execute($sql);
+    return mysqli_stmt_get_result($sql);
+}
+
 if (isset($_GET['eliminar'])){
     eliminar_usuario($_GET['eliminar']);
     header("location: usuario.php");
 }
+
 ?>
 

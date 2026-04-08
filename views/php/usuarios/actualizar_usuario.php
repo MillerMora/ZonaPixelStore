@@ -15,6 +15,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     $contrasena = $_POST['password'] ?? $_POST['new_password'];
     $confirmar_contrasena = $_POST['confirm_password'];
     $nombre = $_POST['nombre'];
+    $usuario =  $_POST['username'];
     $apellido = $_POST['apellido'];
     $correo = $_POST['email'];
     $id_rol = $_POST['rol_id'] ?? 2;
@@ -32,7 +33,7 @@ if (isset($confirmar_contrasena)) {
 
     // Username tomado de sesión o del POST según el flujo del formulario
     if ($contrasena === $confirmar_contrasena) {
-        $usuario = $_SESSION['username'] ?? $_POST['username'];;
+        $usuario = $_SESSION['username'] ?? $_POST['username'];
     } else {
         $_SESSION['login_error'] = 'Ambas contraseñas no coinciden';
         header('location: ' . $_SERVER['HTTP_REFERER']);

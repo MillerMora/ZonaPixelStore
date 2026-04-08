@@ -48,7 +48,7 @@ if ($logueo === 1){
 <div class="container dashboard-section">
     <div class="dash-card">
 
-        <form action="actualizar_usuario" method="POST">
+        <form action="actualizar_usuario.php" method="POST">
             <input type="hidden" name="id_usuario" value="<?= $fila['id_usuario'] ?>">
             
             <div class="form-field">

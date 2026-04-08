@@ -80,9 +80,6 @@ $top_productos = productos_mas_vendidos(5);
         <button class="dash-nav-item" data-section="usuarios">
           <i class="fas fa-users"></i> Gestión de usuarios
         </button>
-        <button class="dash-nav-item" data-section="reportes">
-          <i class="fas fa-chart-bar"></i> Reportes
-        </button>
         <button class="dash-nav-item" data-section="config">
           <i class="fas fa-cog"></i> Configuración
         </button>

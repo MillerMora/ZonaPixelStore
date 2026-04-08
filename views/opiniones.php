@@ -109,17 +109,15 @@ $ficha_todos_activa = $tipo_producto === '' && count($filtro_plataformas) === 0 
       <p class="page-hero-sub"><?php echo (int) $total_resultados; ?> opinión(es) con los filtros actuales</p>
     </div>
   </div>
-
-  <?php if ($logueo): ?>
-    <section class="section-gap">
-      <div class="container">
-        <div class="d-flex justify-content-end mb-3">
+  <section class="section-gap">
+    <div class="container">
+      <div class="d-flex justify-content-end mb-3">
+        <?php if ($logueo): ?>
           <a href="#" class="btn-primary text-decoration-none">
             <i class="fas fa-pen"></i> Escribir opinión
           </a>
-        </div>
-      <?php endif; ?>
-
+        <?php endif; ?>
+      </div>
       <form method="get" action="opiniones.php" id="opinionesFiltroForm">
         <div class="category-strip align-items-center w-100">
           <div class="input-group flex-grow-1 min-w-0" style="min-width:min(100%,240px)">
@@ -252,13 +250,13 @@ $ficha_todos_activa = $tipo_producto === '' && count($filtro_plataformas) === 0 
           </div>
         </div>
       </form>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <?php include './plantillas/footer.php'; ?>
+  <?php include './plantillas/footer.php'; ?>
 
-    <script type="module" src="../js/main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="../js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

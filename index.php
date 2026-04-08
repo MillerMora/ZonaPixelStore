@@ -463,7 +463,7 @@ if (isset($_SESSION['index_login_error'])): ?>
               $game_line .= ' · ' . htmlspecialchars($plat_line, ENT_QUOTES, 'UTF-8');
             }
           ?>
-            <a href="/views/resena.php?id=<?php echo (int) $re['id_resena']; ?>" class="review-card" style="display:block;">
+            <a href="#id=<?php echo (int) $re['id_resena']; ?>" class="review-card" style="display:block;">
               <div class="review-card-header">
                 <img src="<?php echo htmlspecialchars($img_rev, ENT_QUOTES, 'UTF-8'); ?>" class="review-game-img" alt="" />
                 <div class="review-score"><?php echo number_format((float) $re['calificacion'], 1, ',', '.'); ?></div>

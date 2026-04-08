@@ -88,11 +88,25 @@ $top_productos = productos_mas_vendidos(5);
         </button>
       </nav>
 
-      <div class="dash-user">
-        <div class="dash-user-avatar">ZP</div>
-        <div>
-          <div class="dash-user-name">Admin ZP</div>
-          <div class="dash-user-role">Administrador</div>
+<div class="user-dropdown">
+        <div class="dash-user user-dropdown-toggle" title="Mi cuenta">
+          <div class="dash-user-avatar"><?php echo substr($_SESSION['username'], 0, 1); ?></div>
+          <div>
+            <div class="dash-user-name"><?php echo $_SESSION['username']; ?></div>
+            <div class="dash-user-role">Administrador</div>
+          </div>
+        </div>
+        <div class="user-dropdown-menu" style="bottom: 100%; top: auto; margin-bottom: 8px;">
+          <a href="/views/php/usuarios/editar_usuario_cliente.php" class="user-dropdown-item">
+            <i class="fas fa-user-circle"></i> Perfil
+          </a>
+          <a href="#" class="user-dropdown-item">
+            <i class="fas fa-cog"></i> Configuración
+          </a>
+          <hr class="dropdown-divider">
+          <a href="/views/php/usuarios/login/login.php?cerrar=1" class="user-dropdown-item logout">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+          </a>
         </div>
       </div>
     </aside>

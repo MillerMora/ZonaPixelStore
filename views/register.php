@@ -94,7 +94,7 @@ if ($logueo === 1){
             <label>Confirmar Contraseña</label>
             <div class="input-icon-wrap">
               <i class="fas fa-lock"></i>
-              <input type="confirm_password" class="form-input" name="confirm_password" placeholder="Mínimo 8 caracteres" required />
+              <input type="password" class="form-input" name="confirm_password" placeholder="Mínimo 8 caracteres" required />
             </div>
           </div>
 

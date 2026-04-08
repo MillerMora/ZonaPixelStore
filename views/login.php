@@ -63,14 +63,14 @@ if ($logueo === 1){
             <label>Usuario o correo</label>
             <div class="input-icon-wrap">
               <i class="fas fa-user"></i>
-              <input type="text" class="form-input" name="login" placeholder="tu@correo.com" />
+              <input type="text" class="form-input" name="login" placeholder="tu@correo.com" required/>
             </div>
           </div>
           <div class="form-field">
             <label>Contraseña</label>
             <div class="input-icon-wrap">
               <i class="fas fa-lock"></i>
-              <input type="password" class="form-input" name="password" placeholder="Tu contraseña" />
+              <input type="password" class="form-input" name="password" placeholder="Tu contraseña" required/>
             </div>
           </div>
 

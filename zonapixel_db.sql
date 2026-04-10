@@ -247,22 +247,20 @@ CONSTRAINT fk_res_autor    FOREIGN KEY (autor_id)    REFERENCES usuarios(id_usua
 -- ============================================================
 --  7. OPINIONES DE COMUNIDAD
 -- ============================================================
-
 CREATE TABLE opiniones (
-  id_opinion  INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  usuario_id  INT UNSIGNED NOT NULL,
-  producto_id INT UNSIGNED NOT NULL,
+  id_opinion    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  usuario_id    INT UNSIGNED NOT NULL,
+  producto_id   INT UNSIGNED NOT NULL,
   plataforma_id SMALLINT UNSIGNED,
-  titulo      VARCHAR(200) NOT NULL,
-  contenido   TEXT NOT NULL,
-  calificacion TINYINT UNSIGNED NOT NULL,         -- 1-5 estrellas
-  aprobada    BOOLEAN NOT NULL DEFAULT FALSE,     -- moderación
-  creado_en   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_op_usuario    FOREIGN KEY (usuario_id)    REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
-  CONSTRAINT fk_op_producto   FOREIGN KEY (producto_id)   REFERENCES productos(id_producto) ON DELETE CASCADE,
+  titulo        VARCHAR(200) NOT NULL,
+  contenido     TEXT NOT NULL,
+  calificacion  TINYINT UNSIGNED NOT NULL,
+  aprobada      BOOLEAN NOT NULL DEFAULT FALSE,
+  creado_en     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_op_usuario    FOREIGN KEY (usuario_id)    REFERENCES usuarios(id_usuario)      ON DELETE CASCADE,
+  CONSTRAINT fk_op_producto   FOREIGN KEY (producto_id)   REFERENCES productos(id_producto)    ON DELETE CASCADE,
   CONSTRAINT fk_op_plataforma FOREIGN KEY (plataforma_id) REFERENCES plataformas(id_plataforma) ON DELETE SET NULL,
-  CONSTRAINT chk_estrellas    CHECK (calificacion BETWEEN 1 AND 5),
-  UNIQUE KEY uq_opinion_usuario_producto (usuario_id, producto_id)
+  CONSTRAINT chk_estrellas    CHECK (calificacion BETWEEN 1 AND 5)
 );
 
 CREATE TABLE opinion_imagenes (
@@ -582,17 +580,13 @@ INSERT INTO `productos` (`id_producto`, `categoria_id`, `marca_id`, `nombre`, `d
 
 -- Ediciones especiales
 INSERT INTO producto_ediciones (producto_id, nombre, precio) VALUES
-  (1, 'Edición Estándar',       189900.00),
-  (1, 'Edición Deluxe',         229900.00),
-  (3, 'Edición Estándar',       179900.00),
-  (3, 'Edición Digital Deluxe', 219900.00);
+  (4, 'Edición Estándar',       189900.00),
+  (5, 'Edición Deluxe',         229900.00),
+  (6, 'Edición Estándar',       179900.00),
+  (7, 'Edición Digital Deluxe', 219900.00);
 
 -- Plataformas por producto
 INSERT INTO `producto_plataformas` (`producto_id`, `plataforma_id`) VALUES
-(1, 1),
-(1, 5),
-(2, 4),
-(3, 1),
 (4, 1),
 (4, 3),
 (4, 5),
@@ -601,20 +595,11 @@ INSERT INTO `producto_plataformas` (`producto_id`, `plataforma_id`) VALUES
 (5, 3),
 (5, 5),
 (6, 4),
-(11, 1),
-(11, 2),
-(11, 3),
-(11, 5),
-(12, 2),
-(12, 3),
-(12, 5),
 (13, 2),
 (13, 3),
 (13, 5),
 (14, 1),
 (14, 5),
-(15, 1),
-(15, 5),
 (16, 1),
 (16, 3),
 (16, 5),
@@ -658,20 +643,11 @@ INSERT INTO `producto_plataformas` (`producto_id`, `plataforma_id`) VALUES
 
 -- Géneros por producto
 INSERT INTO `producto_generos` (`producto_id`, `genero_id`) VALUES
-(1, 2),
-(2, 1),
-(3, 1),
 (4, 3),
 (5, 3),
 (6, 7),
-(11, 1),
-(11, 2),
-(12, 1),
-(12, 2),
-(13, 1),
 (14, 1),
 (14, 3),
-(15, 1),
 (16, 1),
 (16, 2),
 (17, 1),

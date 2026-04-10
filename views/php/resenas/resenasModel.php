@@ -383,6 +383,67 @@ function resenas_publicas_listado(array $opciones) {
     return ['filas' => $filas, 'total' => $total];
 }
 
+// --- Consulta única de reseña por ID para página pública (con joins) ---
+
+/**
+ * Retorna datos completos de UNA reseña publicada por ID (array asociativo o null).
+ * Incluye producto, autor, plataformas concatenadas como en mockup.
+ */
+function consultar_resena_por_id($id_resena) {
+    global $BD;
+    $stmt = mysqli_prepare($BD, "
+        SELECT 
+            r.*,
+            p.nombre AS producto_nombre,
+            p.precio,
+            CONCAT_WS(' ', u.nombre, u.apellido) AS autor_completo,
+            COALESCE(u.username, 'ZonaPixel Staff') AS autor_username,
+            GROUP_CONCAT(pl.nombre ORDER BY pl.nombre SEPARATOR ' · ') AS plataformas_txt,
+            p.imagen_principal
+        FROM resenas r
+        INNER JOIN productos p ON p.id_producto = r.producto_id AND p.activo = 1
+        INNER JOIN usuarios u ON u.id_usuario = r.autor_id AND u.activo = 1
+        LEFT JOIN producto_plataformas pp ON pp.producto_id = r.producto_id
+        LEFT JOIN plataformas pl ON pl.id_plataforma = pp.plataforma_id
+        WHERE r.id_resena = ? AND r.publicada = 1
+        GROUP BY r.id_resena, p.id_producto, u.id_usuario
+    ");
+    mysqli_stmt_bind_param($stmt, 'i', $id_resena);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $resena = mysqli_fetch_assoc($result);
+    mysqli_stmt_close($stmt);
+    return $resena ?: null;
+}
+
+/**
+ * Comentarios aprobados para una reseña específica (array de arrays).
+ */
+function consultar_comentarios_resena($id_resena) {
+    global $BD;
+    $stmt = mysqli_prepare($BD, "
+        SELECT 
+            c.id_comentario,
+            c.contenido,
+            u.username,
+            DATE_FORMAT(c.creado_en, '%e %M') AS fecha_texto
+        FROM comentarios c
+        INNER JOIN usuarios u ON u.id_usuario = c.usuario_id
+        WHERE c.resena_id = ? AND c.aprobado = 1
+        ORDER BY c.creado_en DESC
+        LIMIT 5
+    ");
+    mysqli_stmt_bind_param($stmt, 'i', $id_resena);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $comentarios = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $comentarios[] = $row;
+    }
+    mysqli_stmt_close($stmt);
+    return $comentarios;
+}
+
 // Invocación directa desde la URL del panel: ?eliminar=id redirige tras borrar
 function buscar_resenas($busqueda) {
     global $BD;

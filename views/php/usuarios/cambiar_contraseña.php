@@ -221,17 +221,18 @@ $logueo = $_SESSION['rol'] ?? 0;
               document.getElementById('confirmPwFeedback').textContent = 'No coinciden';
               valid = false;
             }
-    // Validación relajada - cualquier texto si 6+ chars
-    if (newPw.length < 6) {
-      document.getElementById('newPwFeedback').textContent = 'Mín 6 chars';
-      valid = false;
-    }
-  }
+            // Validación relajada - cualquier texto si 6+ chars
+            if (newPw.length < 6) {
+              document.getElementById('newPwFeedback').textContent = 'Mín 6 chars';
+              valid = false;
+            }
+          }
           if (!valid) e.preventDefault();
         });
       }
     });
   </script>
+  <script type="module" src="../../../js/main.js"></script>
 </body>
 
 </html>

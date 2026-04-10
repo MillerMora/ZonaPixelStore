@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Página de inicio: carga métricas y bloques de catálogo (hero, ofertas, tecnología, reseñas).
  * Define helpers locales de formato duplicados del módulo público para no acoplar includes aquí.
@@ -85,9 +86,10 @@ if ($oferta_especial) {
 }
 
 $productos_tecnologia = index_productos_tecnologia(4);
-$resenas_editorial = consultar_resenas_editorial_destacadas(6);
-// Limita a tres tarjetas en el home aunque la consulta traiga más
-$resenas_editorial = array_slice($resenas_editorial, 0, 3);
+$top_resenas = consultar_resenas_editorial_destacadas(5);
+
+// Now shows top 5 directly, no slice needed
+
 
 // Aviso puntual tras error de inicio de sesión desde este mismo archivo
 if (isset($_SESSION['index_login_error'])): ?>
@@ -442,16 +444,20 @@ if (isset($_SESSION['index_login_error'])): ?>
     <div class="container">
       <div class="section-header">
         <div>
-          <div class="section-label">Editorial</div>
-          <h2 class="section-title">Reseñas recientes</h2>
+          <div class="section-label">Top reseñas</div>
+
+          <h2 class="section-title">Las 5 mejores reseñas</h2>
+
         </div>
         <a href="/views/resenas.php" class="section-link">Ver todas <i class="fas fa-arrow-right"></i></a>
       </div>
       <div class="reviews-grid">
-        <?php if (empty($resenas_editorial)): ?>
+        <?php if (empty($top_resenas)): ?>
+
           <p class="text-muted mb-0">No hay reseñas editoriales publicadas.</p>
         <?php else: ?>
-          <?php foreach ($resenas_editorial as $re):
+          <?php foreach ($top_resenas as $re):
+
             $autor = trim(($re['autor_nombre'] ?? '') . ' ' . ($re['autor_apellido'] ?? ''));
             if ($autor === '') {
               $autor = $re['autor_username'] ?? 'Editorial';
@@ -463,7 +469,7 @@ if (isset($_SESSION['index_login_error'])): ?>
               $game_line .= ' · ' . htmlspecialchars($plat_line, ENT_QUOTES, 'UTF-8');
             }
           ?>
-            <a href="#id=<?php echo (int) $re['id_resena']; ?>" class="review-card" style="display:block;">
+            <a href="/views/resena.php?id=<?php echo (int) $re['id_resena']; ?>" class="review-card" style="display:block;">
               <div class="review-card-header">
                 <img src="<?php echo htmlspecialchars($img_rev, ENT_QUOTES, 'UTF-8'); ?>" class="review-game-img" alt="" />
                 <div class="review-score"><?php echo number_format((float) $re['calificacion'], 1, ',', '.'); ?></div>

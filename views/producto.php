@@ -68,8 +68,8 @@ if (isset($_SESSION['rol'])) {
     <div class="mobile-nav-drawer">
       <button class="mobile-nav-close" id="mobileNavClose"><i class="fas fa-times"></i></button>
       <div class="mobile-nav-links">
-        <a href="../index.html">Inicio</a>
-        <a href="catalogo.html">Catálogo</a>
+        <a href="/index.php">Inicio</a>
+        <a href="/views/catalogo.php">Catálogo</a>
       </div>
     </div>
   </div>

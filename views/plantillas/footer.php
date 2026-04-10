@@ -15,18 +15,18 @@
       <div>
         <div class="footer-col-title">Tienda</div>
         <ul class="footer-links">
-          <li><a href="pages/catalogo.html">Catálogo</a></li>
-          <li><a href="pages/catalogo.html">Videojuegos</a></li>
-          <li><a href="pages/catalogo.html">Periféricos</a></li>
-          <li><a href="pages/catalogo.html">Hardware</a></li>
-          <li><a href="pages/catalogo.html">Ofertas</a></li>
+          <li><a href="/views/catalogo.php">Catálogo</a></li>
+          <li><a href="/views/catalogo.php">Videojuegos</a></li>
+          <li><a href="/views/catalogo.php">Periféricos</a></li>
+          <li><a href="/views/catalogo.php">Hardware</a></li>
+          <li><a href="/views/catalogo.php">Ofertas</a></li>
         </ul>
       </div>
       <div>
         <div class="footer-col-title">Comunidad</div>
         <ul class="footer-links">
-          <li><a href="pages/resenas.html">Reseñas</a></li>
-          <li><a href="pages/opiniones.html">Opiniones</a></li>
+          <li><a href="/views/resenas.php">Reseñas</a></li>
+          <li><a href="/views/opiniones.php">Opiniones</a></li>
         </ul>
       </div>
       <div>

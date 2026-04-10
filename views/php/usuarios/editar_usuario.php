@@ -50,7 +50,7 @@ $fila = consultar_usuarios_id($id);
             </a>
         </div>
 
-        <form action="actualizar_usuario" method="POST">
+        <form action="actualizar_usuario.php" method="POST">
             <input type="hidden" name="id_usuario" value="<?= $fila['id_usuario'] ?>">
             
             <div class="form-field">
@@ -74,9 +74,8 @@ $fila = consultar_usuarios_id($id);
             </div>
 
             <div class="form-field">
-                <label class="form-label">Nueva Contraseña (dejar vacía para no cambiar)</label>
-                <input type="password" name="password" placeholder="Nueva contraseña" class="form-control">
-                <small class="form-text">Dejar vacío para mantener la contraseña actual</small>
+                <label class="form-label">Nueva Contraseña </label>
+                <input type="password" name="password" value="<?= htmlspecialchars($fila['password_hash']) ?>" placeholder="Nueva contraseña" class="form-control">
             </div>
 
             <div class="form-field">

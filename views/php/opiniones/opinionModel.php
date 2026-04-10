@@ -33,8 +33,20 @@ function consultar_opinion_id($id)
 function crear_opinion($usuario_id, $producto_id, $plataforma_id, $titulo, $contenido, $calificacion, $aprobada)
 {
     global $BD;
-    $sql = mysqli_prepare($BD, "INSERT INTO `opiniones`(`usuario_id`, `producto_id`, `plataforma_id`, `titulo`, `contenido`, `calificacion`, `aprobada`) VALUES (?,?,?,?,?,?,?)");
-    mysqli_stmt_bind_param($sql, 'iiisssi', $usuario_id, $producto_id, $plataforma_id, $titulo, $contenido, $calificacion, $aprobada);
+    
+    // Handle nullable plataforma_id consistently
+    $sql_base = "INSERT INTO `opiniones`(`usuario_id`, `producto_id`, `titulo`, `contenido`, `calificacion`, `aprobada`) VALUES (?,?,?,?,?,?)";
+    $types = 'iisssi';
+    $params = [$usuario_id, $producto_id, $titulo, $contenido, $calificacion, $aprobada];
+    
+    if ($plataforma_id !== null) {
+        $sql_base = "INSERT INTO `opiniones`(`usuario_id`, `producto_id`, `plataforma_id`, `titulo`, `contenido`, `calificacion`, `aprobada`) VALUES (?,?,?,?,?,?,?)";
+        $types = 'iiisssi';
+        array_splice($params, 1, 0, [$plataforma_id]);
+    }
+    
+    $sql = mysqli_prepare($BD, $sql_base);
+    mysqli_stmt_bind_param($sql, $types, ...$params);
     $resultado = mysqli_stmt_execute($sql);
     return $resultado;
 }
@@ -42,8 +54,26 @@ function crear_opinion($usuario_id, $producto_id, $plataforma_id, $titulo, $cont
 function actualizar_opinion($id, $usuario_id, $producto_id, $plataforma_id, $titulo, $contenido, $calificacion, $aprobada)
 {
     global $BD;
-    $sql = mysqli_prepare($BD, "UPDATE `opiniones` SET `usuario_id` = ?, `producto_id` = ?, `plataforma_id` = ?, `titulo` = ?, `contenido` = ?, `calificacion` = ?, `aprobada` = ? WHERE `id_opinion` = ?");
-    mysqli_stmt_bind_param($sql, 'iiisssii', $usuario_id, $producto_id, $plataforma_id, $titulo, $contenido, $calificacion, $aprobada, $id);
+    
+    // Handle nullable plataforma_id
+    $sql_base = "UPDATE `opiniones` SET `usuario_id` = ?, `producto_id` = ?, `titulo` = ?, `contenido` = ?, `calificacion` = ?, `aprobada` = ?";
+    $types = 'iisssi';
+    $params = [$usuario_id, $producto_id, $titulo, $contenido, $calificacion, $aprobada];
+    
+    if ($plataforma_id !== null) {
+        $sql_base .= ", `plataforma_id` = ?";
+        $types .= 'i';
+        $params[] = $plataforma_id;
+    } else {
+        $sql_base .= ", `plataforma_id` = NULL";
+    }
+    
+    $sql_base .= " WHERE `id_opinion` = ?";
+    $types .= 'i';
+    $params[] = $id;
+    
+    $sql = mysqli_prepare($BD, $sql_base);
+    mysqli_stmt_bind_param($sql, $types, ...$params);
     $resultado = mysqli_stmt_execute($sql);
     return $resultado;
 }

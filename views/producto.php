@@ -183,7 +183,7 @@ if (isset($_SESSION['rol'])) {
             <h2 class="section-title">Opiniones de usuarios</h2>
           </div>
           <?php if ($logueo): ?>
-            <a href="#" class="btn-primary text-decoration-none">
+            <a href="./nueva-opinion.php?id=<?=  $producto_id ?>" class="btn-primary text-decoration-none">
               <i class="fas fa-pen"></i> Escribir opinión
             </a>
             <?php endif; ?>

@@ -17,6 +17,7 @@ import { initFilterAccordion } from './modules/filterAccordion.js';
 import { initCartInteractions } from './modules/cartInteractions.js';
 import { initStarRating } from './modules/starRating.js';
 import { initUserDropdown } from './modules/userDropdown.js';
+import { initCatalogSearch } from './modules/catalogSearch.js';
 
 initMobileNav();
 initNavbarShadow();
@@ -31,9 +32,11 @@ initFilterAccordion();
 initCartInteractions();
 initStarRating();
 initUserDropdown();
+initCatalogSearch();
 
 // Admin dashboard search: real-time filter ALL table columns + Enter submit
 document.addEventListener('DOMContentLoaded', function() {
+  initCatalogSearch();
   const searchInputs = document.querySelectorAll('.dash-search');
   searchInputs.forEach(input => {
     // Enter key: server-side search

@@ -347,9 +347,9 @@ if ($logueo === 1) {
         </div>
       </div>
 
-      <div class="products-grid" id="catalogProductGrid">
+<div class="products-grid" id="catalogProductGrid" data-empty-message="No hay productos que coincidan con la búsqueda.">
         <?php if (empty($productos_lista)): ?>
-        <p class="text-muted">No hay productos que coincidan con los filtros.</p>
+<p class="text-muted" id="catalogNoResults" style="display: none;">No hay productos que coincidan con la búsqueda.</p>
         <?php else: ?>
         <?php foreach ($productos_lista as $producto_fila):
             $precio_producto = (float) $producto_fila['precio'];

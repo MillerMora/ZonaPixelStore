@@ -112,11 +112,6 @@ $ficha_todos_activa = $tipo_producto === '' && count($filtro_plataformas) === 0 
   <section class="section-gap">
     <div class="container">
       <div class="d-flex justify-content-end mb-3">
-        <?php if ($logueo): ?>
-          <a href="#" class="btn-primary text-decoration-none">
-            <i class="fas fa-pen"></i> Escribir opinión
-          </a>
-        <?php endif; ?>
       </div>
       <form method="get" action="opiniones.php" id="opinionesFiltroForm">
         <div class="category-strip align-items-center w-100">

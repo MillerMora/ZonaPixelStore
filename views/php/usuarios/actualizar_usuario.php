@@ -12,13 +12,17 @@ if (isset($_POST['id_usuario'])) {
 }
 // Campos comunes enviados desde registro o edición (rol por defecto cliente = 2)
 if (isset($_POST['email']) && isset($_POST['password'])) {
-    $contrasena = $_POST['password'] ?? $_POST['new_password'];
+    $contrasena = $_POST['password'];
     $confirmar_contrasena = $_POST['confirm_password'];
     $nombre = $_POST['nombre'];
     $usuario =  $_POST['username'];
     $apellido = $_POST['apellido'];
     $correo = $_POST['email'];
     $id_rol = $_POST['rol_id'] ?? 2;
+}
+if (isset($_POST['new_password']) && isset($_POST['confirm_password'])){
+    $contrasena = $_POST['new_password'];
+    $confirmar_contrasena = $_POST['confirm_password'];
 }
 if (isset($contrasena)) {
 

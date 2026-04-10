@@ -110,13 +110,13 @@ $ficha_todos_activa = $tipo_producto === '' && count($filtro_plataformas) === 0 
     </div>
   </div>
   <?php if ($logueo === 3 || $logueo === 1): ?>
-    <section class="section-gap">
+    <!-- <section class="section-gap">
       <div class="container">
         <div class="d-flex justify-content-end mb-3">
           <a href="#" class="btn-primary text-decoration-none">
             <i class="fas fa-pen"></i> Escribir reseña
           </a>
-        </div>
+        </div> -->
       <?php endif; ?>
       <section class="section-gap">
         <div class="container">
